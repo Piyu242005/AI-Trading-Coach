@@ -1,117 +1,78 @@
-Here is a **simple, clear explanation** of what **System of AI Engine (Track 2)** actually wants:
+# 🎯 Track 2 Case Study: System of AI Engine Requirements
+
+> **Core Objective:** Build a **smart, memory-based AI system (not just a chatbot)** that understands trader behavior, retains past session memory, and provides accurate, verifiable, and explainable coaching.
 
 ---
 
-# 🎯 Core Idea
+## 🏗️ 1. Core Architecture Requirements
 
-They want you to build an **AI system (not just a chatbot)** that:
-👉 Understands trader behavior
-👉 Remembers past sessions
-👉 Gives **accurate, explainable coaching**
+### 🧠 Behavioral Understanding
+The system must actively read and analyze trader data to identify specific behavioral pathologies:
+- 📉 **FOMO (Fear Of Missing Out)**
+- 🔁 **Overtrading**
+- 😡 **Revenge Trading**
 
----
+> **🚨 CRITICAL RULE:** Every claim made by the AI MUST include verifiable proof, specifically citing the exact `sessionId` and `tradeId`.
 
-# 🧠 What You MUST Build
-
-## 1. Behavioral Understanding
-
-* Read trader data
-* Identify problems like:
-
-  * FOMO
-  * Overtrading
-  * Revenge trading
-
-👉 Important:
-Every claim must include **proof (sessionId + tradeId)**
+### 💾 Persistent Memory System
+This is the **primary focus of Track 2**. The system must:
+- Store context from past trading sessions.
+- Accurately retrieve this context when relevant.
+- **Maintain persistence** across system restarts (Memory must not be forgotten).
 
 ---
 
-## 2. Memory System (Very Important)
+## ⚙️ 2. Execution & Delivery
 
-* Store past sessions
-* Retrieve when needed
-* Must **not forget after restart**
+### 🗣️ Streaming Coaching Engine
+The AI must react to trades as they happen, delivering context-aware advice based on real data.
+- **Input:** Live trading events.
+- **Output:** Explainable advice. *(e.g., "You are trading right after multiple losses → possible revenge trading detected.")*
 
-👉 This is the main focus of this track
-
----
-
-## 3. Coaching Engine
-
-* Input: trades happening
-* Output: advice
-
-Example:
-“You are trading right after losses → possible revenge trading”
-
-👉 Must be:
-
-* Context-aware
-* Based on real data
+### ⚡ Real-Time Response
+- Coaching must be streamed without delay.
+- Use **Server-Sent Events (SSE)** or **WebSockets** for delivery.
 
 ---
 
-## 4. No Hallucination (Critical)
+## 🛡️ 3. Verification & Validation
 
-* AI should NOT make fake references
-* If it says “Session 123” → it must exist
+### 🚫 No Hallucination Audit (Critical)
+The AI should **NEVER** generate fake references or hallucinate data.
+- If it references "Session 123", Session 123 must verifiably exist in the database.
+- An **Audit System** must be built to mathematically verify these claims.
 
-👉 You must build an **audit system** to verify this
+### 📊 Evaluation System
+The model's effectiveness must be quantified by running it against a labeled dataset. Outputs must include:
+- **Precision**
+- **Recall**
+- **F1 Score**
 
----
-
-## 5. Real-Time Response
-
-* Coaching should stream (not delayed)
-* Use SSE / WebSocket
-
----
-
-## 6. Evaluation System
-
-* Run your model on dataset
-* Output:
-
-  * Precision
-  * Recall
-  * F1 Score
-
-👉 Shows your model works correctly
+*(This provides empirical evidence that the model functions correctly).*
 
 ---
 
-# ⚠️ What They DON’T Want
-
-* ❌ Fancy chatbot without logic
-* ❌ Random LLM answers
-* ❌ No evidence / no memory
-* ❌ Fake or hardcoded results
-
----
-
-# 🧾 In One Line
-
-👉 Build a **smart, memory-based AI coach that gives proven, explainable advice from real data**
+## ⚠️ What They DON’T Want (Anti-Patterns)
+- ❌ **Fancy Chatbots:** LLM wrappers without underlying logic or deterministic validation.
+- ❌ **Random LLM Answers:** Unconstrained text generation.
+- ❌ **Amnesia:** Systems with no memory or evidence backing.
+- ❌ **Hardcoded/Fake Results:** Faked outputs to pass evaluations.
 
 ---
 
-# 🧠 Think Like This
+## 💡 Summary & Mindset
 
-Not:
+### The One-Liner Summary
+> Build a **smart, memory-based AI coach that gives proven, explainable advice from real data.**
 
-> “AI gives advice”
+### 🧠 The Architectural Mindset
+Shift your perspective from simple LLM integration to a comprehensive pipeline:
 
-But:
-
-> “System analyzes → proves → remembers → explains → responds”
-
----
-
-## ✅ Final Understanding
-
-You are building:
-
-* **Data → Logic → Memory → Coaching → Validation**
+**❌ INCORRECT:** *"AI gives advice"*  
+**✅ CORRECT:** *"System analyzes → proves → remembers → explains → responds"*
 
 ---
+
+## ✅ Final Delivery Pipeline
+Your final submission should clearly demonstrate:
+**Data Ingestion ➔ Logic Processing ➔ Memory Retention ➔ Coaching Delivery ➔ Validation & Audit**
