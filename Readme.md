@@ -109,7 +109,8 @@ python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
 ---
 
 ## 📸 Screenshots / Demo
-> *(Add screenshots of the Swagger UI, Evaluation Report HTML, or streaming endpoint in action here)*
+
+![Live Deployment URL](assets/Live%20Deployment%20URL.png)
 
 ---
 
