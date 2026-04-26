@@ -1,123 +1,136 @@
 <div align="center">
-  <h1>📊 AI Trading Coach</h1>
-  <p><b>A smart, memory-based AI coach that gives proven, explainable advice.</b></p>
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=timeAuto&height=150&section=header&text=AI%20Trading%20Coach&fontSize=50" alt="Header Animation"/>
 </div>
 
 <div align="center">
+  <p><b>A smart, memory-based AI system that delivers proven, explainable trading advice.</b></p>
   
-![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=for-the-badge&logo=python)
-![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
-![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb)
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker)
+  ![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=for-the-badge&logo=python)
+  ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
+  ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb)
+  ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker)
 
+  <br>
+  <strong>🔗 <a href="https://ai-trading-coach-2vao.onrender.com/">Live Deployment</a></strong>
 </div>
 
 ---
 
-## 📖 Case Study Overview
-The **AI Trading Coach** is a robust API system designed to monitor streaming trading activity, profile participants, and deliver actionable coaching feedback. Built with persistent memory, it tracks and mitigates emotional and behavioral trading mistakes in real time.
-
-> **Our Mission:** To provide traders with a smart, context-aware coaching system that intervenes during high-risk emotional states, reducing drawdowns and improving long-term profitability.
+## 🎯 Overview
+The **AI Trading Coach** is a robust backend system designed to monitor streaming trading activity, profile participants, and deliver actionable coaching feedback. Built with persistent memory, it tracks and mitigates emotional and behavioral trading mistakes (Overtrading, Revenge Trading, FOMO) in real time.
 
 ---
 
-## 🛑 The Challenge (Problem Statement)
-Traders frequently suffer from psychological pitfalls such as:
-- 📉 **Overtrading:** Forcing trades when no clear edge exists.
-- 😡 **Revenge Trading:** Trying to win back losses immediately.
-- 🤯 **Tilt:** Trading emotionally due to successive losses.
-
-Traditional analytical tools are focused entirely on post-trade PnL, completely ignoring the real-time emotional and behavioral lapses that lead to excessive drawdowns and blown accounts.
-
----
-
-## 💡 The Solution
-The system ingests streams of trades, processing the data through a **deterministic heuristic engine** to detect behavioral pathologies. Utilizing a **persistent MongoDB memory architecture**, it retrieves historical contexts to guarantee that the generated coaching advice is accurate, highly relevant, and **free from hallucination**.
+## 🏗️ System Architecture
+The system follows a modern, event-driven backend design:
+1. **Ingestion Layer:** Accepts streaming trade data via FastAPI endpoints.
+2. **Deterministic Engine:** Analyzes trade sequences and emotional flags to trigger behavioral pathologies using explicit heuristics.
+3. **Memory Store:** Persists user statistics and session data in MongoDB, giving the AI "context" across time.
+4. **Coaching Engine:** Dispatches personalized advice via Server-Sent Events (SSE) based on verified memory constraints.
 
 ---
 
-## ✨ Key Features
-
-| Feature | Description |
-| :--- | :--- |
-| 🚀 **Real-Time Signal Detection** | Autonomously identifies overtrading, revenge trading, and session tilt. |
-| 📡 **Streaming Coaching Engine** | Delivers token-by-token coaching feedback using Server-Sent Events (SSE). |
-| 🧠 **Persistent Memory System** | Safely retains trade summaries and performance metrics across system restarts. |
-| 🔍 **Anti-Hallucination Audit** | Actively cross-verifies all referenced sessions and trades against the core dataset. |
-| 📊 **Automated Evaluation** | Validates detection accuracy (Precision, Recall, F1) against ground-truth labels. |
-| 🔒 **Secure Authentication** | Implements JWT-based access controls to safeguard user-specific data. |
-
----
-
-## 🛠️ Tech Stack & Architecture
-
-- **Languages / Frameworks:** Python, FastAPI
-- **Database:** MongoDB
+## 🛠️ Tech Stack
+- **Backend:** Python, FastAPI (Async web framework)
+- **Database:** MongoDB (Document-oriented memory persistence)
+- **Real-Time Data:** Server-Sent Events (SSE)
 - **Authentication:** PyJWT
-- **Testing & Validation:** Pytest, Mongomock
-- **Infrastructure:** Docker, Docker Compose
+- **Containerization:** Docker & Docker Compose
 
-### 📂 Project Structure
+---
+
+## 🚀 Deployment
+The application is live and accessible at:  
+👉 **[https://ai-trading-coach-2vao.onrender.com/](https://ai-trading-coach-2vao.onrender.com/)**
+
+> Note: Access `/docs` at the deployment URL to test the interactive Swagger UI.
+
+---
+
+## 🔌 API Endpoints
+
+| Endpoint | Method | Purpose |
+| :--- | :---: | :--- |
+| `/api/auth/token` | `POST` | Generates a JWT for secure access. |
+| `/api/ingest` | `POST` | Receives raw trade data and updates the user profile. |
+| `/api/coach/stream` | `GET` | Streams tokenized coaching feedback via SSE. |
+| `/api/memory/{userId}` | `GET` | Retrieves the historical context for a specific user. |
+| `/api/audit` | `GET` | Verifies coaching outputs against database records to prevent hallucination. |
+
+### 📝 Example Request / Response
+
+**Ingest Trade (POST `/api/ingest`)**
+```json
+// Request payload
+{
+  "userId": "f412f236-4edc-47a2-8f54-8763a6ed2ce8",
+  "sessionId": "4f39c2ea-8687-41f7-85a0-1fafd3e976df",
+  "outcome": "loss",
+  "revengeFlag": true,
+  "emotionalState": "anxious"
+}
+```
+
+**Coaching Stream (GET `/api/coach/stream`)**
 ```text
-nevup-api/
-├── app/
-│   ├── routes/          # API endpoints (Coaching, Memory, Profiling, Audit)
-│   ├── services/        # Core business logic and dataset utilities
-│   ├── main.py          # FastAPI application entry point
-│   ├── models.py        # Pydantic schemas for data validation
-│   └── auth.py          # JWT authentication utilities
-├── data/                # Seed datasets with ground truth labels
-├── tests/               # Pytest suite for end-to-end API validation
-├── docker-compose.yml   # Container orchestration configuration
-├── Dockerfile           # Application container image
-└── requirements.txt     # Python dependencies
+data: {"token": "Warning:"}
+data: {"token": " Revenge"}
+data: {"token": " trading"}
+data: {"token": " detected."}
 ```
 
 ---
 
-## 📈 Results & Impact
+## 📊 Evaluation Report
+To prove the system's ability to accurately classify pathologies, we developed an evaluation pipeline measuring **Precision**, **Recall**, and **F1 Score**.
 
-- 🎯 **Algorithmic Accuracy:** Employs rule-based heuristics that achieve high precision and recall on ground-truth labeled datasets.
-- 💰 **Business Value:** Decreases overall drawdown incidence by autonomously intervening during high-risk emotional states.
-- 🗣️ **Explainability:** All coaching messages explicitly cite verifiable data points, including specific Session IDs and Trade IDs.
+- **Precision:** How many flagged pathologies were actually correct.
+- **Recall:** How many actual pathologies the system successfully caught.
+- **F1 Score:** The harmonic mean of Precision and Recall.
+
+*Our heuristic-based approach achieved a highly accurate score, particularly at identifying overtrading and revenge trading by isolating specific session volume thresholds and loss-recovery patterns.*
+
+### 🛠️ How to Reproduce Results
+We have included a reproducible evaluation script inside the repository:
+1. Ensure dependencies are installed (`pip install -r requirements.txt`).
+2. Run the script:
+   ```bash
+   python evaluate.py
+   ```
+3. The metrics will be outputted to the console and saved to `reports/classification_report.json`.
 
 ---
 
-## 🚀 How to Run
+## 💻 Running Locally
 
-**1. Clone the repository**
-```bash
-git clone https://github.com/Piyu242005/AI-Trading-Coach.git
-cd AI-Trading-Coach/nevup-api
-```
+### 🐳 Method 1: Using Docker (Recommended)
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Piyu242005/AI-Trading-Coach.git
+   cd AI-Trading-Coach/nevup-api
+   ```
+2. Build and run the containers:
+   ```bash
+   docker-compose up --build -d
+   ```
+3. Access the API at `http://localhost:8000/docs`
 
-**2. Run with Docker (Recommended)**
-```bash
-docker-compose up --build
-```
-
-**3. Run locally (Alternative)**
-```bash
-pip install -r requirements.txt
-python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
-```
-
-**4. Access the Application**
-- **API Base URL:** `http://localhost:8000`
-- **Swagger UI (Interactive API Docs):** `http://localhost:8000/docs`
+### 🐍 Method 2: Manual Setup
+1. Clone the repository and navigate to `nevup-api`.
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Run the server:
+   ```bash
+   uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+   ```
 
 ---
 
 ## 📸 Screenshots / Demo
 
 ![Live Deployment URL](assets/Live%20Deployment%20URL.png)
-
----
-
-## 🔮 Future Improvements
-- [ ] Implement deep learning models (e.g., LSTMs) for sequence anomaly detection.
-- [ ] Integrate large language models (LLMs) for complex narrative generation over the existing deterministic engine.
-- [ ] Introduce real-time WebSocket connections for live market data ingestion.
 
 ---
 
