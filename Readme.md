@@ -1,6 +1,9 @@
 <div align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=timeAuto&height=150&section=header&text=AI%20Trading%20Coach&fontSize=50" alt="Header Animation"/>
+<!-- Animated Header -->
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=180&section=header&text=AI%20Trading%20Coach&fontSize=42&fontColor=fff&animation=twinkling&fontAlignY=32&desc=Behavioral%20AI%20for%20Smart%20Trading&descSize=18&descAlignY=52" width="100%" />
+
 </div>
+
 
 <div align="center">
   <p><b>A smart, memory-based AI system that delivers proven, explainable trading advice.</b></p>
@@ -18,6 +21,19 @@
 
 ## 🎯 Overview
 The **AI Trading Coach** is a robust backend system designed to monitor streaming trading activity, profile participants, and deliver actionable coaching feedback. Built with persistent memory, it tracks and mitigates emotional and behavioral trading mistakes (Overtrading, Revenge Trading, FOMO) in real time.
+
+---
+
+## ✨ Key Features
+
+| Feature | Description |
+| :--- | :--- |
+| 🚀 **Real-Time Signal Detection** | Autonomously identifies overtrading, revenge trading, and session tilt. |
+| 📡 **Streaming Coaching Engine** | Delivers token-by-token coaching feedback using Server-Sent Events (SSE). |
+| 🧠 **Persistent Memory System** | Safely retains trade summaries and performance metrics across system restarts. |
+| 🔍 **Anti-Hallucination Audit** | Actively cross-verifies all referenced sessions and trades against the core dataset. |
+| 📊 **Automated Evaluation** | Validates detection accuracy (Precision, Recall, F1) against ground-truth labels. |
+| 🔒 **Secure Authentication** | Implements JWT-based access controls to safeguard user-specific data. |
 
 ---
 
