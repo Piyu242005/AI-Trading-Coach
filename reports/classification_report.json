@@ -1,17 +1,74 @@
 {
   "overtrading": {
-    "precision": 1.0,
-    "recall": 1.0,
-    "f1": 1.0
-  },
-  "fomo_entries": {
+    "tp": 1,
+    "fp": 0,
+    "fn": 0,
     "precision": 1.0,
     "recall": 1.0,
     "f1": 1.0
   },
   "revenge_trading": {
+    "tp": 1,
+    "fp": 2,
+    "fn": 0,
+    "precision": 0.3333,
+    "recall": 1.0,
+    "f1": 0.5
+  },
+  "session_tilt": {
+    "tp": 1,
+    "fp": 3,
+    "fn": 0,
+    "precision": 0.25,
+    "recall": 1.0,
+    "f1": 0.4
+  },
+  "fomo_entries": {
+    "tp": 1,
+    "fp": 5,
+    "fn": 0,
+    "precision": 0.1667,
+    "recall": 1.0,
+    "f1": 0.2857
+  },
+  "plan_non_adherence": {
+    "tp": 1,
+    "fp": 7,
+    "fn": 0,
+    "precision": 0.125,
+    "recall": 1.0,
+    "f1": 0.2222
+  },
+  "premature_exit": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 1,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+  },
+  "loss_running": {
+    "tp": 1,
+    "fp": 1,
+    "fn": 0,
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1": 0.6667
+  },
+  "time_of_day_bias": {
+    "tp": 1,
+    "fp": 0,
+    "fn": 0,
     "precision": 1.0,
     "recall": 1.0,
     "f1": 1.0
+  },
+  "position_sizing_inconsistency": {
+    "tp": 1,
+    "fp": 8,
+    "fn": 0,
+    "precision": 0.1111,
+    "recall": 1.0,
+    "f1": 0.2
   }
 }

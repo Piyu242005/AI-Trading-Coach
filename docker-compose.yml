@@ -6,7 +6,7 @@ services:
       - "8000:8000"
     environment:
       - MONGO_URL=mongodb://mongo:27017
-      - JWT_SECRET=nevup-dev-secret
+      - JWT_SECRET=nevup-hackathon-secret
       - JWT_ALGORITHM=HS256
     depends_on:
       - mongo

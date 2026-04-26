@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from app.routes import auth, coaching, evaluation, memory, profiling, traders, audit
+from app.mongodb import client
 
 app = FastAPI(title="NevUp API")
 
@@ -16,7 +17,11 @@ def read_root():
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    try:
+        client.admin.command('ping')
+        return {"status": "ok", "db": "connected"}
+    except Exception as e:
+        raise HTTPException(status_code=503, detail=f"Database connection failed: {str(e)}")
 
 app.include_router(traders.router, prefix="/api")
 app.include_router(profiling.router, prefix="/api/profiling")

@@ -9,11 +9,27 @@ from app.services.dataset_utils import flatten_user_trades, get_ground_truth_map
 
 router = APIRouter()
 
-TARGET_LABELS = ["overtrading", "revenge_trading", "session_tilt"]
+TARGET_LABELS = [
+    "overtrading",
+    "revenge_trading",
+    "session_tilt",
+    "fomo_entries",
+    "plan_non_adherence",
+    "premature_exit",
+    "loss_running",
+    "time_of_day_bias",
+    "position_sizing_inconsistency",
+]
 SIGNAL_TO_LABEL = {
     "overtrading": "overtrading",
     "revenge_trading": "revenge_trading",
     "session_tilt": "session_tilt",
+    "fomo_entries": "fomo_entries",
+    "plan_non_adherence": "plan_non_adherence",
+    "premature_exit": "premature_exit",
+    "loss_running": "loss_running",
+    "time_of_day_bias": "time_of_day_bias",
+    "position_sizing_inconsistency": "position_sizing_inconsistency",
 }
 
 

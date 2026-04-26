@@ -6,7 +6,7 @@ import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
-JWT_SECRET = os.getenv("JWT_SECRET", "nevup-dev-secret")
+JWT_SECRET = os.getenv("JWT_SECRET", "nevup-hackathon-secret")
 JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 JWT_EXPIRES_MINUTES = int(os.getenv("JWT_EXPIRES_MINUTES", "60"))
 
