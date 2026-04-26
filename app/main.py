@@ -17,11 +17,7 @@ def read_root():
 
 @app.get("/health")
 def health():
-    try:
-        client.admin.command('ping')
-        return {"status": "ok", "db": "connected"}
-    except Exception as e:
-        raise HTTPException(status_code=503, detail=f"Database connection failed: {str(e)}")
+    return {"status": "ok"}
 
 app.include_router(traders.router, prefix="/api")
 app.include_router(profiling.router, prefix="/api/profiling")
