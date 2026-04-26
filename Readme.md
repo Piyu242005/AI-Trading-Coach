@@ -39,6 +39,24 @@ The system follows a modern, event-driven backend design:
 
 ---
 
+## 📂 Project Structure
+```text
+nevup-api/
+├── app/
+│   ├── routes/          # API endpoints (Coaching, Memory, Profiling, Audit)
+│   ├── services/        # Core business logic and dataset utilities
+│   ├── main.py          # FastAPI application entry point
+│   ├── models.py        # Pydantic schemas for data validation
+│   └── auth.py          # JWT authentication utilities
+├── data/                # Seed datasets with ground truth labels
+├── tests/               # Pytest suite for end-to-end API validation
+├── docker-compose.yml   # Container orchestration configuration
+├── Dockerfile           # Application container image
+└── requirements.txt     # Python dependencies
+```
+
+---
+
 ## 🚀 Deployment
 The application is live and accessible at:  
 👉 **[https://ai-trading-coach-2vao.onrender.com/](https://ai-trading-coach-2vao.onrender.com/)**
@@ -78,6 +96,13 @@ data: {"token": " Revenge"}
 data: {"token": " trading"}
 data: {"token": " detected."}
 ```
+
+---
+
+## 📈 Results & Impact
+- 🎯 **Algorithmic Accuracy:** Employs rule-based heuristics that achieve high precision and recall on ground-truth labeled datasets.
+- 💰 **Business Value:** Decreases overall drawdown incidence by autonomously intervening during high-risk emotional states.
+- 🗣️ **Explainability:** All coaching messages explicitly cite verifiable data points, including specific Session IDs and Trade IDs.
 
 ---
 
