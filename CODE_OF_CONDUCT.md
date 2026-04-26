@@ -1,199 +1,47 @@
-Here is a **clear, short roadmap** to complete **Track 2: System of AI Engine (AI/ML)** efficiently:
+# AI Trading Coach: Engineering Implementation Roadmap
+
+This document outlines the structured execution plan and core architectural principles for developing the AI Trading Coach (Track 2: System of AI Engine).
 
 ---
 
-# 🧠 Track 2 Roadmap (Step-by-Step)
-
-## 🎯 Goal
-
-Build an **AI trading coach** that:
-
-* Understands trader behavior
-* Stores memory (no hallucination)
-* Gives real-time coaching
-* Produces evaluation metrics
+## 1. Project Objective
+Develop a real-time AI trading coach that accurately detects behavioral pathologies, provides context-aware feedback with zero hallucination, and evaluates its own predictive accuracy against ground-truth datasets.
 
 ---
 
-## 🏗️ Phase 1: Setup (2–3 hours)
+## 2. Implementation Phases
 
-* Tech:
+### Phase 1: Foundation & Data Ingestion
+- **Objective:** Establish the API framework and load seed data.
+- **Execution:** Initialize the FastAPI application, configure the MongoDB connection via motor/pymongo, and implement the JSON dataset loader for `nevup_seed_dataset.json`.
 
-  * Python (FastAPI)
-  * JSON dataset load
-* Load `nevup_seed_dataset.json`
-* Create basic project structure
+### Phase 2: Behavioral Profiling Logic
+- **Objective:** Detect behavioral anomalies (e.g., Overtrading, Revenge Trading, FOMO).
+- **Execution:** Implement deterministic, rule-based heuristics to analyze sequential user trading sessions. Ensure every detected pathology is strictly tied to verifiable evidence (e.g., specific `sessionId` and `tradeId`).
 
-👉 Output: API running + data loaded
+### Phase 3: Persistent Memory Subsystem
+- **Objective:** Retain long-term user context across API lifecycles.
+- **Execution:** Build robust REST endpoints to store session summaries and retrieve historical context. Enforce strict database validation to prevent memory hallucinations or data corruption.
 
----
+### Phase 4: Coaching Engine & Streaming
+- **Objective:** Deliver low-latency, actionable trading insights.
+- **Execution:** Connect the deterministic profiling engine to a Server-Sent Events (SSE) stream. Output coaching tokens sequentially to mimic conversational AI dynamics, ensuring all responses explicitly cite the user's historical data.
 
-## 📊 Phase 2: Behavioral Profiling (Core)
+### Phase 5: Audit & Evaluation Harness
+- **Objective:** Validate system accuracy and enforce data integrity.
+- **Execution:** 
+  - Develop an `/audit` API endpoint to strictly verify that all referenced session/trade IDs actually exist in the database.
+  - Implement an automated evaluation script (`evaluate.py`) to calculate Precision, Recall, and F1 Scores across the 10-trader ground-truth dataset.
 
-* Analyze each trader:
-
-  * Detect patterns (FOMO, overtrading, etc.)
-* Use **rule-based logic first**
-
-Example:
-
-* Many trades in short time → Overtrading
-* Loss + immediate trade → Revenge
-
-👉 Output: Structured profile with **evidence (tradeId, sessionId)**
-
----
-
-## 🧠 Phase 3: Memory System (Very Important)
-
-Build 3 APIs:
-
-1. `PUT /memory/{userId}/sessions/{sessionId}`
-
-   * Store summary + metrics
-
-2. `GET /memory/{userId}/context`
-
-   * Retrieve relevant past sessions
-
-3. `GET /memory/{userId}/sessions/{sessionId}`
-
-   * Return exact stored data
-
-👉 Use:
-
-* PostgreSQL / MongoDB (persistent storage)
-
-👉 Key:
-
-* **No fake memory (must match real data)**
+### Phase 6: Security & Deployment
+- **Objective:** Secure the API endpoints and ensure a reproducible deployment environment.
+- **Execution:** Implement PyJWT-based authentication to bind access tokens to specific `userId`s. Containerize the application components (FastAPI + MongoDB) using Docker and Docker Compose for a seamless one-command startup.
 
 ---
 
-## ⚡ Phase 4: Coaching Engine
+## 3. Core Architectural Principles
 
-* Input: stream of trades
-
-* Detect signals:
-
-  * Overtrading
-  * Tilt
-  * Revenge trading
-
-* Generate message:
-
-Example:
-
-```
-"You placed 3 trades after a loss. This indicates revenge trading. Pause and reassess."
-```
-
-👉 Keep logic:
-
-* Simple + explainable
-
----
-
-## 🔄 Phase 5: Streaming Response
-
-* Use:
-
-  * SSE (Server-Sent Events)
-
-* Send message **token-by-token**
-
-👉 Improves UX + meets requirement
-
----
-
-## 🔍 Phase 6: Anti-Hallucination Audit
-
-* API: `POST /audit`
-* Check:
-
-  * All sessionIds in response exist
-
-Output:
-
-```
-sessionId → found / not found
-```
-
-👉 Critical for scoring
-
----
-
-## 📈 Phase 7: Evaluation Harness
-
-* Use 10 traders dataset
-* Predict pathology
-
-Calculate:
-
-* Precision
-* Recall
-* F1 Score
-
-👉 Output: JSON/HTML report
-
----
-
-## 🔐 Phase 8: Authentication
-
-* JWT-based
-* Ensure:
-
-  * userId == token.sub
-* Else → 403
-
----
-
-## 🐳 Phase 9: Docker Setup
-
-* Create `docker-compose.yml`
-* One command run:
-
-```
-docker-compose up
-```
-
----
-
-## 🧪 Phase 10: Testing
-
-* Test all APIs
-* Check:
-
-  * Memory persistence
-  * No hallucination
-  * Response < 3 sec
-
----
-
-# 🧾 Final Architecture
-
-```
-Dataset → Profiling → Memory DB
-                ↓
-        Coaching Engine → Streaming API
-                ↓
-         Evaluation + Audit
-```
-
----
-
-## 🎯 Winning Tips
-
-* Focus on **accuracy + explainability**
-* Avoid complex ML → start with **rules**
-* Always **cite sessionId + tradeId**
-* Make system **deterministic (same input → same output)**
-
----
-
-## ⏱️ Suggested Timeline (72 hrs)
-
-* Day 1 → Setup + Profiling
-* Day 2 → Memory + Coaching
-* Day 3 → Evaluation + Docker + Testing
-
+- **Accuracy over Complexity:** Prioritize deterministic rule-based logic over black-box machine learning to guarantee 100% explainability.
+- **Strict Anti-Hallucination:** The system must never fabricate data. All coaching advice must cite real, verifiable database records.
+- **Stateless API / Stateful Storage:** Maintain web server statelessness to allow for horizontal scaling by delegating all memory persistence to MongoDB.
+- **Reproducibility:** The system's output must remain entirely deterministic—identical inputs must consistently produce identical coaching outputs and evaluation metrics.
