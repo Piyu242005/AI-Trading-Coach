@@ -4,7 +4,6 @@
 
 </div>
 
-
 <div align="center">
   <p><b>A smart, memory-based AI system that delivers proven, explainable trading advice.</b></p>
   
@@ -20,7 +19,9 @@
 ---
 
 ## 🎯 Overview
-The **AI Trading Coach** is a robust backend system designed to monitor streaming trading activity, profile participants, and deliver actionable coaching feedback. Built with persistent memory, it tracks and mitigates emotional and behavioral trading mistakes (Overtrading, Revenge Trading, FOMO) in real time.
+The **AI Trading Coach** is a robust backend system designed to monitor streaming trading activity, profile participants, and deliver actionable coaching feedback. Built with persistent memory, it tracks and mitigates emotional and behavioral trading mistakes in real time. 
+
+It now comprehensively detects **all 9 core behavioral pathologies**: Overtrading, Revenge Trading, Session Tilt, FOMO Entries, Plan Non-Adherence, Premature Exit, Loss Running, Time of Day Bias, and Position Sizing Inconsistency.
 
 ---
 
@@ -28,21 +29,21 @@ The **AI Trading Coach** is a robust backend system designed to monitor streamin
 
 | Feature | Description |
 | :--- | :--- |
-| 🚀 **Real-Time Signal Detection** | Autonomously identifies overtrading, revenge trading, and session tilt. |
+| 🚀 **Comprehensive Detection** | Identifies all 9 behavioral pathologies using rigorous, deterministic heuristics. |
 | 📡 **Streaming Coaching Engine** | Delivers token-by-token coaching feedback using Server-Sent Events (SSE). |
-| 🧠 **Persistent Memory System** | Safely retains trade summaries and performance metrics across system restarts. |
-| 🔍 **Anti-Hallucination Audit** | Actively cross-verifies all referenced sessions and trades against the core dataset. |
-| 📊 **Automated Evaluation** | Validates detection accuracy (Precision, Recall, F1) against ground-truth labels. |
-| 🔒 **Secure Authentication** | Implements JWT-based access controls to safeguard user-specific data. |
+| 🧠 **Persistent Memory System** | Safely retains trade summaries and performance metrics across system restarts via MongoDB. |
+| 🔍 **Anti-Hallucination Audit** | Actively cross-verifies all referenced sessions and trades against the core database. |
+| 📊 **Automated Evaluation** | Validates detection accuracy (Precision, Recall, F1) using a unified, reproducible engine. |
+| 🔒 **Strict JWT Authentication** | Enforces HS256 JWT validation matching user identity to `token.sub` for secure multi-tenancy. |
 
 ---
 
-## 🏗️ System Architecture
-The system follows a modern, event-driven backend design:
-1. **Ingestion Layer:** Accepts streaming trade data via FastAPI endpoints.
-2. **Deterministic Engine:** Analyzes trade sequences and emotional flags to trigger behavioral pathologies using explicit heuristics.
-3. **Memory Store:** Persists user statistics and session data in MongoDB, giving the AI "context" across time.
-4. **Coaching Engine:** Dispatches personalized advice via Server-Sent Events (SSE) based on verified memory constraints.
+## 🏗️ System Flow & Architecture
+The system follows a modern, event-driven backend flow:
+1. **Profiling & Ingestion:** Streaming trade data is ingested via FastAPI and evaluated against deterministic heuristic rules.
+2. **Memory Persistence:** User statistics, context, and detected signals are persisted securely in MongoDB.
+3. **Coaching Delivery:** Personalized advice is streamed via Server-Sent Events (SSE). All advice explicitly cites verified `sessionId` and `tradeId` evidence to guarantee zero hallucination.
+4. **Evaluation & Audit:** The system continually self-evaluates, exposing endpoints to verify data integrity and classification accuracy.
 
 ---
 
@@ -50,7 +51,7 @@ The system follows a modern, event-driven backend design:
 - **Backend:** Python, FastAPI (Async web framework)
 - **Database:** MongoDB (Document-oriented memory persistence)
 - **Real-Time Data:** Server-Sent Events (SSE)
-- **Authentication:** PyJWT
+- **Authentication:** PyJWT (Strict HS256 Signature Validation)
 - **Containerization:** Docker & Docker Compose
 
 ---
@@ -59,16 +60,16 @@ The system follows a modern, event-driven backend design:
 ```text
 nevup-api/
 ├── app/
-│   ├── routes/          # API endpoints (Coaching, Memory, Profiling, Audit)
+│   ├── routes/          # API endpoints (Coaching, Memory, Profiling, Audit, Evaluation)
 │   ├── services/        # Core business logic and dataset utilities
-│   ├── main.py          # FastAPI application entry point
+│   ├── main.py          # FastAPI application entry point + DB Healthcheck
 │   ├── models.py        # Pydantic schemas for data validation
 │   └── auth.py          # JWT authentication utilities
 ├── data/                # Seed datasets with ground truth labels
 ├── tests/               # Pytest suite for end-to-end API validation
+├── evaluate.py          # Unified CLI script for generating the classification report
 ├── docker-compose.yml   # Container orchestration configuration
-├── Dockerfile           # Application container image
-└── requirements.txt     # Python dependencies
+└── Dockerfile           # Application container image
 ```
 
 ---
@@ -77,7 +78,8 @@ nevup-api/
 The application is live and accessible at:  
 👉 **[https://ai-trading-coach-2vao.onrender.com/](https://ai-trading-coach-2vao.onrender.com/)**
 
-> Note: Access `/docs` at the deployment URL to test the interactive Swagger UI.
+- Interactive Swagger UI: `https://ai-trading-coach-2vao.onrender.com/docs`
+- Live Evaluation Report: `https://ai-trading-coach-2vao.onrender.com/evaluation/report?format=html`
 
 ---
 
@@ -87,65 +89,40 @@ The application is live and accessible at:
 | :--- | :---: | :--- |
 | `/api/auth/token` | `POST` | Generates a JWT for secure access. |
 | `/api/ingest` | `POST` | Receives raw trade data and updates the user profile. |
-| `/api/coach/stream` | `GET` | Streams tokenized coaching feedback via SSE. |
+| `/api/coach/stream` | `POST` | Streams tokenized, evidence-based coaching feedback via SSE. |
 | `/api/memory/{userId}` | `GET` | Retrieves the historical context for a specific user. |
-| `/api/audit` | `GET` | Verifies coaching outputs against database records to prevent hallucination. |
-
-### 📝 Example Request / Response
-
-**Ingest Trade (POST `/api/ingest`)**
-```json
-// Request payload
-{
-  "userId": "f412f236-4edc-47a2-8f54-8763a6ed2ce8",
-  "sessionId": "4f39c2ea-8687-41f7-85a0-1fafd3e976df",
-  "outcome": "loss",
-  "revengeFlag": true,
-  "emotionalState": "anxious"
-}
-```
-
-**Coaching Stream (GET `/api/coach/stream`)**
-```text
-data: {"token": "Warning:"}
-data: {"token": " Revenge"}
-data: {"token": " trading"}
-data: {"token": " detected."}
-```
+| `/audit` | `POST` | Verifies coaching outputs against database records to prevent hallucination. |
+| `/evaluation/report` | `GET` | Returns the dynamic Precision/Recall/F1 classification report (JSON/HTML). |
+| `/health` | `GET` | Performs a live database connectivity ping. |
 
 ---
 
 ## 📈 Results & Impact
-- 🎯 **Algorithmic Accuracy:** Employs rule-based heuristics that achieve high precision and recall on ground-truth labeled datasets.
+- 🎯 **Algorithmic Accuracy:** Employs rule-based heuristics that achieve realistic precision and recall across all 9 ground-truth pathologies.
 - 💰 **Business Value:** Decreases overall drawdown incidence by autonomously intervening during high-risk emotional states.
-- 🗣️ **Explainability:** All coaching messages explicitly cite verifiable data points, including specific Session IDs and Trade IDs.
+- 🗣️ **Zero Hallucination:** All coaching messages explicitly cite verifiable data points, guaranteeing explainability.
 
 ---
 
-## 📊 Evaluation Report
-To prove the system's ability to accurately classify pathologies, we developed an evaluation pipeline measuring **Precision**, **Recall**, and **F1 Score**.
+## 📊 Unified Evaluation Report
+To prove the system's ability to accurately classify pathologies, we developed a unified evaluation pipeline measuring **Precision**, **Recall**, and **F1 Score** across all 9 target labels. 
 
-- **Precision:** How many flagged pathologies were actually correct.
-- **Recall:** How many actual pathologies the system successfully caught.
-- **F1 Score:** The harmonic mean of Precision and Recall.
-
-*Our heuristic-based approach achieved a highly accurate score, particularly at identifying overtrading and revenge trading by isolating specific session volume thresholds and loss-recovery patterns.*
+The evaluation logic is shared identically between the API endpoint and the CLI script to ensure absolute consistency and reproducibility.
 
 ### 🛠️ How to Reproduce Results
-We have included a reproducible evaluation script inside the repository:
 1. Ensure dependencies are installed (`pip install -r requirements.txt`).
-2. Run the script:
+2. Run the unified evaluation script:
    ```bash
    python evaluate.py
    ```
-3. The metrics will be outputted to the console and saved to `reports/classification_report.json`.
+3. The metrics will be outputted to the console and saved locally to `reports/classification_report.json`.
 
 ---
 
 ## 💻 Running Locally
 
 ### 🐳 Method 1: Using Docker (Recommended)
-1. Clone the repository:
+1. Clone the repository and navigate to `nevup-api`:
    ```bash
    git clone https://github.com/Piyu242005/AI-Trading-Coach.git
    cd AI-Trading-Coach/nevup-api
@@ -157,21 +134,14 @@ We have included a reproducible evaluation script inside the repository:
 3. Access the API at `http://localhost:8000/docs`
 
 ### 🐍 Method 2: Manual Setup
-1. Clone the repository and navigate to `nevup-api`.
-2. Install dependencies:
+1. Clone the repository and install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-3. Run the server:
+2. Run the server:
    ```bash
    uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
    ```
-
----
-
-## 📸 Screenshots / Demo
-
-![Live Deployment URL](assets/Live%20Deployment%20URL.png)
 
 ---
 
