@@ -14,6 +14,10 @@ def read_root():
         "status": "API running + data loaded successfully.",
     }
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
 app.include_router(traders.router, prefix="/api")
 app.include_router(profiling.router, prefix="/api/profiling")
 app.include_router(memory.router, prefix="/api/memory")
