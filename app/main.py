@@ -7,12 +7,34 @@ app = FastAPI(title="NevUp API")
 @app.get("/")
 def read_root():
     return {
-        "message": (
-            "Welcome to the NevUp API! Access trades at /api/trades, profiling at "
-            "/api/profiling/{userId}, memory at /api/memory/{userId}, coaching at "
-            "/api/coaching/{userId}, audit at /audit, and evaluation at /evaluation/report"
-        ),
-        "status": "API running + data loaded successfully.",
+        "project": "NevUp AI Trading Coach",
+        "author": "Piyush Ramteke",
+        "status": "🟢 API Online • Data Loaded Successfully",
+        "description": "Explainable Behavioral AI System for Reliable Financial Decision Support",
+        "core_features": [
+            "Behavioral Pathology Detection",
+            "Retrieval-Augmented Coaching",
+            "Persistent Memory Engine",
+            "Anti-Hallucination Audit",
+            "Real-Time Streaming Feedback"
+        ],
+        "available_endpoints": {
+            "trades": "/api/trades",
+            "profiling": "/api/profiling/{userId}",
+            "memory": "/api/memory/{userId}",
+            "coaching": "/api/coaching/{userId}",
+            "audit": "/audit",
+            "evaluation": "/evaluation/report"
+        },
+        "tech_stack": [
+            "FastAPI",
+            "MongoDB",
+            "Python",
+            "LangChain",
+            "Docker"
+        ],
+        "live_demo": "https://ai-trading-coach-2vao.onrender.com",
+        "github": "https://github.com/Piyu242005/AI-Trading-Coach"
     }
 
 @app.get("/health")
