@@ -2,12 +2,12 @@ from fastapi import FastAPI, HTTPException
 from app.routes import auth, coaching, evaluation, memory, profiling, traders, audit
 from app.mongodb import client
 
-app = FastAPI(title="NevUp API")
+app = FastAPI(title="Piyu API")
 
 @app.get("/")
 def read_root():
     return {
-        "project": "NevUp AI Trading Coach",
+        "project": "AI Trading Coach",
         "author": "Piyush Ramteke",
         "status": "🟢 API Online • Data Loaded Successfully",
         "description": "Explainable Behavioral AI System for Reliable Financial Decision Support",

@@ -168,6 +168,9 @@ python evaluate.py
 ### 🚀 System Pipeline
 <img src="./Research_Submission/📊%20Figures%20%26%20Diagrams/3.%20system%20pipeline.png" width="100%" />
 
+### 🖥️ API Response Preview
+<img src="./assets/api_preview.png" width="100%" />
+
 ### 📈 Evaluation Charts
 <img src="./Research_Submission/📊%20Figures%20%26%20Diagrams/4.%20evaluation%20charts.png" width="100%" />
 
