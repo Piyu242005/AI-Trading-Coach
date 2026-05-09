@@ -54,7 +54,7 @@ Unlike "black-box" AI advisors, this project prioritizes **Explainable AI (XAI)*
 The AI Trading Coach utilizes a modular, event-driven pipeline optimized for low latency and high explainability.
 
 <div align="center">
-  <img src="./📊%20Figures%20%26%20Diagrams/1.%20system%20architecture.png" alt="System Architecture" width="100%" />
+  <img src="./Research_Submission/📊%20Figures%20%26%20Diagrams/1.%20system%20architecture.png" alt="System Architecture" width="100%" />
   <p><i>Figure 1: End-to-end data flow from trade ingestion to streaming coaching delivery.</i></p>
 </div>
 
@@ -163,13 +163,13 @@ python evaluate.py
 <summary><b>Click to expand screenshots</b></summary>
 
 ### 🏗️ Workflow Diagram
-<img src="./📊%20Figures%20%26%20Diagrams/2.%20workflow%20diagram.png" width="100%" />
+<img src="./Research_Submission/📊%20Figures%20%26%20Diagrams/2.%20workflow%20diagram.png" width="100%" />
 
 ### 🚀 System Pipeline
-<img src="./📊%20Figures%20%26%20Diagrams/3.%20system%20pipeline.png" width="100%" />
+<img src="./Research_Submission/📊%20Figures%20%26%20Diagrams/3.%20system%20pipeline.png" width="100%" />
 
 ### 📈 Evaluation Charts
-<img src="./📊%20Figures%20%26%20Diagrams/4.%20evaluation%20charts.png" width="100%" />
+<img src="./Research_Submission/📊%20Figures%20%26%20Diagrams/4.%20evaluation%20charts.png" width="100%" />
 
 </details>
 
