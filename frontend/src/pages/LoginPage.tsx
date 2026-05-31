@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogIn } from 'lucide-react';
+import { LogIn, Eye, EyeOff } from 'lucide-react';
 import { api } from '../services/api';
 import { useAuthStore } from '../store/authStore';
 
 export default function LoginPage() {
   const [userId, setUserId] = useState('Piyu24');
   const [password, setPassword] = useState('Piyu24005');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const login = useAuthStore(state => state.login);
   const navigate = useNavigate();
@@ -18,8 +19,13 @@ export default function LoginPage() {
       const { data } = await api.post('/api/auth/token', { userId });
       login(data.access_token, userId);
       navigate('/dashboard');
-    } catch (err) {
-      setError('Invalid User ID or Password.');
+    } catch (err: any) {
+      console.error("Login Error:", err);
+      if (err.message === 'Network Error' || err.code === 'ERR_NETWORK') {
+         setError('Network error: Cannot reach the backend API. Please set VITE_API_BASE_URL on Vercel.');
+      } else {
+         setError('Invalid User ID or Password.');
+      }
     }
   };
 
@@ -52,14 +58,27 @@ export default function LoginPage() {
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Password
             </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter Password"
-              required
-            />
+            <div className="relative mt-1">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="block w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 pr-12"
+                placeholder="Enter Password"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-500 focus:outline-none"
+              >
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5" aria-hidden="true" />
+                ) : (
+                  <Eye className="h-5 w-5" aria-hidden="true" />
+                )}
+              </button>
+            </div>
           </div>
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
           <button
