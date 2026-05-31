@@ -2,8 +2,17 @@ from fastapi import FastAPI, HTTPException
 from app.routes import auth, coaching, evaluation, memory, profiling, traders, audit
 from app.mongodb import client
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI(title="Piyu API")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 @app.get("/")
 def read_root():
     return {
