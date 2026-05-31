@@ -1,0 +1,4 @@
+pytest
+mongomock
+httpx
+ruff

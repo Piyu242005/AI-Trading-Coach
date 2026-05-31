@@ -5,6 +5,3 @@ sqlalchemy
 databases
 pymongo
 PyJWT
-pytest
-mongomock
-httpx
