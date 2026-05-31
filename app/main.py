@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from app.routes import auth, coaching, evaluation, memory, profiling, traders, audit
+from app.routes import auth, coaching, evaluation, memory, profiling, traders, audit, discipline
 from app.mongodb import client
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -55,5 +55,6 @@ app.include_router(profiling.router, prefix="/api/profiling")
 app.include_router(memory.router, prefix="/api/memory")
 app.include_router(auth.router, prefix="/api/auth")
 app.include_router(coaching.router, prefix="/api/coaching")
+app.include_router(discipline.router, prefix="/api/discipline-score")
 app.include_router(audit.router)
 app.include_router(evaluation.router)

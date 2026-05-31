@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, MessageSquare, Brain, Activity } from 'lucide-react';
+import { LayoutDashboard, MessageSquare, Brain, Activity, BookOpen } from 'lucide-react';
 import clsx from 'clsx';
 
 export default function Sidebar() {
@@ -7,6 +7,7 @@ export default function Sidebar() {
     { name: 'Dashboard', path: '/', icon: LayoutDashboard },
     { name: 'Behavioral Profile', path: '/profiling', icon: Brain },
     { name: 'Real-time Coaching', path: '/coaching', icon: MessageSquare },
+    { name: 'Trade Journal', path: '/journal', icon: BookOpen },
   ];
 
   return (

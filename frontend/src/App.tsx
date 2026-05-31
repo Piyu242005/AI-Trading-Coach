@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
 import Coaching from './pages/Coaching';
 import Profiling from './pages/Profiling';
+import Journal from './pages/Journal';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 
@@ -54,6 +55,13 @@ export default function App() {
             <ProtectedRoute>
               <Layout>
                 <Profiling />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/journal" element={
+            <ProtectedRoute>
+              <Layout>
+                <Journal />
               </Layout>
             </ProtectedRoute>
           } />

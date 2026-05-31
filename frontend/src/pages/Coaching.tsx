@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { Play, Square } from 'lucide-react';
 import { api } from '../services/api';
+import ReactMarkdown from 'react-markdown';
 
 export default function Coaching() {
   const userId = useAuthStore(state => state.userId);
@@ -120,8 +121,8 @@ export default function Coaching() {
 
       <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 min-h-[400px]">
         {messages ? (
-          <div className="prose dark:prose-invert max-w-none whitespace-pre-wrap font-sans text-gray-800 dark:text-gray-200">
-            {messages}
+          <div className="prose dark:prose-invert max-w-none font-sans text-gray-800 dark:text-gray-200">
+            <ReactMarkdown>{messages}</ReactMarkdown>
           </div>
         ) : (
           <div className="flex items-center justify-center h-64 text-gray-400">
