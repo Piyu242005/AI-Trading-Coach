@@ -41,7 +41,8 @@ export default function Coaching() {
 
       setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
 
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'}/api/coaching/${userId}/stream`, {
+      const API_URL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.PROD ? 'https://ai-trading-coach-2vao.onrender.com' : 'http://localhost:8000');
+      const response = await fetch(`${API_URL}/api/coaching/${userId}/stream`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
