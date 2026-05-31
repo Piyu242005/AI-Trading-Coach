@@ -5,7 +5,8 @@ import { api } from '../services/api';
 import { useAuthStore } from '../store/authStore';
 
 export default function LoginPage() {
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState('Piyu24');
+  const [password, setPassword] = useState('Piyu24005');
   const [error, setError] = useState('');
   const login = useAuthStore(state => state.login);
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export default function LoginPage() {
       login(data.access_token, userId);
       navigate('/');
     } catch (err) {
-      setError('Invalid User ID. Try "f412f236-4edc-47a2-8f54-8763a6ed2ce8"');
+      setError('Invalid User ID or Password.');
     }
   };
 
@@ -47,6 +48,19 @@ export default function LoginPage() {
               required
             />
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Password
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter Password"
+              required
+            />
+          </div>
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
           <button
             type="submit"
@@ -55,6 +69,9 @@ export default function LoginPage() {
             Sign in
           </button>
         </form>
+        <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+          Default User ID is <span className="font-semibold text-gray-700 dark:text-gray-300">Piyu24</span> and password is <span className="font-semibold text-gray-700 dark:text-gray-300">Piyu24005</span>
+        </p>
       </div>
     </div>
   );
