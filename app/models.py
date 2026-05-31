@@ -2,6 +2,7 @@ from typing import Any, Dict, List, Literal, Optional
 
 from pydantic import BaseModel, Field
 
+
 class Trade(BaseModel):
     trader_id: int
     trade_id: int
@@ -10,6 +11,7 @@ class Trade(BaseModel):
     quantity: int
     price: float
     timestamp: str
+
 
 class SessionMemory(BaseModel):
     summary: str

@@ -39,7 +39,9 @@ def audit_session_references(
 
     requested_session_ids = list(payload.sessionIds)
     if payload.responseText:
-        requested_session_ids.extend(_extract_session_ids_from_text(payload.responseText))
+        requested_session_ids.extend(
+            _extract_session_ids_from_text(payload.responseText)
+        )
 
     # Keep deterministic output order while removing duplicates.
     deduped_session_ids = list(dict.fromkeys(requested_session_ids))

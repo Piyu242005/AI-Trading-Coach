@@ -45,7 +45,9 @@ def _trade_id(trade: Dict[str, Any]) -> str:
     return str(trade.get("tradeId", "unknown"))
 
 
-def _collect_user_trades(user_id: str, trades: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+def _collect_user_trades(
+    user_id: str, trades: List[Dict[str, Any]]
+) -> List[Dict[str, Any]]:
     return [t for t in trades if str(t.get("userId")) == str(user_id)]
 
 
@@ -61,7 +63,9 @@ def _group_by_session(trades: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, 
     return grouped
 
 
-def _detect_overtrading(session_id: str, session_trades: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+def _detect_overtrading(
+    session_id: str, session_trades: List[Dict[str, Any]]
+) -> Optional[Dict[str, Any]]:
     if len(session_trades) <= OVERTRADING_THRESHOLD:
         return None
 
@@ -77,8 +81,12 @@ def _detect_overtrading(session_id: str, session_trades: List[Dict[str, Any]]) -
     }
 
 
-def _detect_revenge_trading(session_id: str, session_trades: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
-    revenge_ids = {_trade_id(t) for t in session_trades if _normalize_bool(t.get("revengeFlag"))}
+def _detect_revenge_trading(
+    session_id: str, session_trades: List[Dict[str, Any]]
+) -> Optional[Dict[str, Any]]:
+    revenge_ids = {
+        _trade_id(t) for t in session_trades if _normalize_bool(t.get("revengeFlag"))
+    }
 
     for index in range(1, len(session_trades)):
         previous_trade = session_trades[index - 1]
@@ -123,7 +131,9 @@ def _is_tilt_trade(trade: Dict[str, Any]) -> bool:
     return outcome_is_loss and emotional_tilt and adherence <= 2
 
 
-def _detect_tilt(session_id: str, session_trades: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+def _detect_tilt(
+    session_id: str, session_trades: List[Dict[str, Any]]
+) -> Optional[Dict[str, Any]]:
     current_streak: List[str] = []
     longest_streak: List[str] = []
 
@@ -149,20 +159,34 @@ def _detect_tilt(session_id: str, session_trades: List[Dict[str, Any]]) -> Optio
     }
 
 
-def _detect_fomo(session_id: str, session_trades: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
-    fomo_ids = [_trade_id(t) for t in session_trades if "catch the rest" in str(t.get("entryRationale", "")).lower() or str(t.get("emotionalState", "")).lower() == "greedy"]
+def _detect_fomo(
+    session_id: str, session_trades: List[Dict[str, Any]]
+) -> Optional[Dict[str, Any]]:
+    fomo_ids = [
+        _trade_id(t)
+        for t in session_trades
+        if "catch the rest" in str(t.get("entryRationale", "")).lower()
+        or str(t.get("emotionalState", "")).lower() == "greedy"
+    ]
     if not fomo_ids:
         return None
     return {
         "signal": "fomo_entries",
         "sessionId": session_id,
         "tradeIds": fomo_ids,
-        "reason": "Entry rationale indicates late entry driven by fear of missing out."
+        "reason": "Entry rationale indicates late entry driven by fear of missing out.",
     }
 
-def _detect_plan_non_adherence(session_id: str, session_trades: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+
+def _detect_plan_non_adherence(
+    session_id: str, session_trades: List[Dict[str, Any]]
+) -> Optional[Dict[str, Any]]:
     try:
-        non_adherent_ids = [_trade_id(t) for t in session_trades if float(t.get("planAdherence", 5)) <= 2]
+        non_adherent_ids = [
+            _trade_id(t)
+            for t in session_trades
+            if float(t.get("planAdherence", 5)) <= 2
+        ]
     except (TypeError, ValueError):
         non_adherent_ids = []
     if len(non_adherent_ids) < len(session_trades) * 0.5 or not session_trades:
@@ -171,32 +195,50 @@ def _detect_plan_non_adherence(session_id: str, session_trades: List[Dict[str, A
         "signal": "plan_non_adherence",
         "sessionId": session_id,
         "tradeIds": non_adherent_ids,
-        "reason": "Majority of trades in this session severely deviated from the trading plan."
+        "reason": "Majority of trades in this session severely deviated from the trading plan.",
     }
 
-def _detect_premature_exit(session_id: str, session_trades: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
-    premature_ids = [_trade_id(t) for t in session_trades if "fear of reversal" in str(t.get("entryRationale", "")).lower()]
+
+def _detect_premature_exit(
+    session_id: str, session_trades: List[Dict[str, Any]]
+) -> Optional[Dict[str, Any]]:
+    premature_ids = [
+        _trade_id(t)
+        for t in session_trades
+        if "fear of reversal" in str(t.get("entryRationale", "")).lower()
+    ]
     if not premature_ids:
         return None
     return {
         "signal": "premature_exit",
         "sessionId": session_id,
         "tradeIds": premature_ids,
-        "reason": "Trades were exited early out of fear, cutting potential profits short."
+        "reason": "Trades were exited early out of fear, cutting potential profits short.",
     }
 
-def _detect_loss_running(session_id: str, session_trades: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
-    loss_running_ids = [_trade_id(t) for t in session_trades if "hop" in str(t.get("entryRationale", "")).lower() and _normalize_outcome(t) == "loss"]
+
+def _detect_loss_running(
+    session_id: str, session_trades: List[Dict[str, Any]]
+) -> Optional[Dict[str, Any]]:
+    loss_running_ids = [
+        _trade_id(t)
+        for t in session_trades
+        if "hop" in str(t.get("entryRationale", "")).lower()
+        and _normalize_outcome(t) == "loss"
+    ]
     if not loss_running_ids:
         return None
     return {
         "signal": "loss_running",
         "sessionId": session_id,
         "tradeIds": loss_running_ids,
-        "reason": "Losing trades were held open based on hope rather than technical rules."
+        "reason": "Losing trades were held open based on hope rather than technical rules.",
     }
 
-def _detect_time_of_day_bias(session_id: str, session_trades: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+
+def _detect_time_of_day_bias(
+    session_id: str, session_trades: List[Dict[str, Any]]
+) -> Optional[Dict[str, Any]]:
     afternoon_losses = []
     for t in session_trades:
         if _normalize_outcome(t) == "loss" and t.get("entryAt"):
@@ -209,10 +251,13 @@ def _detect_time_of_day_bias(session_id: str, session_trades: List[Dict[str, Any
         "signal": "time_of_day_bias",
         "sessionId": session_id,
         "tradeIds": afternoon_losses,
-        "reason": "Consistent pattern of losses occurring during afternoon trading hours."
+        "reason": "Consistent pattern of losses occurring during afternoon trading hours.",
     }
 
-def _detect_position_sizing(session_id: str, session_trades: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+
+def _detect_position_sizing(
+    session_id: str, session_trades: List[Dict[str, Any]]
+) -> Optional[Dict[str, Any]]:
     inconsistent_ids = []
     prev_qty = None
     prev_outcome = None
@@ -231,11 +276,13 @@ def _detect_position_sizing(session_id: str, session_trades: List[Dict[str, Any]
         "signal": "position_sizing_inconsistency",
         "sessionId": session_id,
         "tradeIds": inconsistent_ids,
-        "reason": "Massive position size increases detected following winning trades."
+        "reason": "Massive position size increases detected following winning trades.",
     }
 
 
-def detect_signals_for_user_trades(user_id: str, trades: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+def detect_signals_for_user_trades(
+    user_id: str, trades: List[Dict[str, Any]]
+) -> List[Dict[str, Any]]:
     user_trades = _collect_user_trades(user_id, trades)
     grouped = _group_by_session(user_trades)
 
@@ -285,7 +332,12 @@ def detect_signals_for_user_trades(user_id: str, trades: List[Dict[str, Any]]) -
         if pos_sizing is not None:
             detected.append(pos_sizing)
 
-    detected.sort(key=lambda signal: (SIGNAL_PRIORITY.get(signal["signal"], 99), signal["sessionId"]))
+    detected.sort(
+        key=lambda signal: (
+            SIGNAL_PRIORITY.get(signal["signal"], 99),
+            signal["sessionId"],
+        )
+    )
     return detected
 
 

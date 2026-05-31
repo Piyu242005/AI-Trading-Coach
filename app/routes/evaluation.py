@@ -169,7 +169,7 @@ def _render_html(report: Dict[str, Any]) -> str:
 </head>
 <body>
   <h1>NevUp Evaluation Report</h1>
-  <p><strong>Overall Precision:</strong> {overall['precision']} | <strong>Recall:</strong> {overall['recall']} | <strong>F1:</strong> {overall['f1']}</p>
+  <p><strong>Overall Precision:</strong> {overall["precision"]} | <strong>Recall:</strong> {overall["recall"]} | <strong>F1:</strong> {overall["f1"]}</p>
 
   <h2>Per-Label Metrics</h2>
   <table>
@@ -177,7 +177,7 @@ def _render_html(report: Dict[str, Any]) -> str:
       <tr><th>Label</th><th>Precision</th><th>Recall</th><th>F1</th></tr>
     </thead>
     <tbody>
-      {''.join(per_label_rows)}
+      {"".join(per_label_rows)}
     </tbody>
   </table>
 
@@ -187,7 +187,7 @@ def _render_html(report: Dict[str, Any]) -> str:
       <tr><th>User ID</th><th>Predicted</th><th>Ground Truth</th></tr>
     </thead>
     <tbody>
-      {''.join(rows)}
+      {"".join(rows)}
     </tbody>
   </table>
 </body>
