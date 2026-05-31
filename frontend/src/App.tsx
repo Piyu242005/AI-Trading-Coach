@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuthStore } from './store/authStore';
 import LoginPage from './pages/LoginPage';
+import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
 import Coaching from './pages/Coaching';
 import Profiling from './pages/Profiling';
@@ -14,6 +15,12 @@ const queryClient = new QueryClient();
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = useAuthStore(state => state.token);
   if (!token) return <Navigate to="/login" replace />;
+  return <>{children}</>;
+}
+
+function PublicRoute({ children }: { children: React.ReactNode }) {
+  const token = useAuthStore(state => state.token);
+  if (token) return <Navigate to="/dashboard" replace />;
   return <>{children}</>;
 }
 
@@ -36,8 +43,9 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <Router>
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/" element={
+          <Route path="/" element={<PublicRoute><Landing /></PublicRoute>} />
+          <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+          <Route path="/dashboard" element={
             <ProtectedRoute>
               <Layout>
                 <Dashboard />

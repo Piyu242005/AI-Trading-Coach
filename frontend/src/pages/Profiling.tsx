@@ -119,6 +119,25 @@ export default function Profiling() {
           </div>
         </div>
       )}
+
+      {/* Additional Signals */}
+      <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+        <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">Additional Signals</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="p-4 bg-green-50 dark:bg-green-900/10 border border-green-200 dark:border-green-800/50 rounded-xl">
+            <h4 className="font-bold text-green-800 dark:text-green-300 flex items-center mb-1">
+              <ShieldCheck className="w-4 h-4 mr-2" /> Good Risk Management
+            </h4>
+            <p className="text-sm text-green-700 dark:text-green-400">Maintained position sizing within daily risk limits across 95% of recent trades.</p>
+          </div>
+          <div className="p-4 bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-800/50 rounded-xl">
+            <h4 className="font-bold text-yellow-800 dark:text-yellow-300 flex items-center mb-1">
+              <AlertTriangle className="w-4 h-4 mr-2" /> Hesitation
+            </h4>
+            <p className="text-sm text-yellow-700 dark:text-yellow-400">Detected delayed entry on momentum continuation setups.</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

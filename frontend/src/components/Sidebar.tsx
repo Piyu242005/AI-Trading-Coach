@@ -4,7 +4,7 @@ import clsx from 'clsx';
 
 export default function Sidebar() {
   const links = [
-    { name: 'Dashboard', path: '/', icon: LayoutDashboard },
+    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { name: 'Behavioral Profile', path: '/profiling', icon: Brain },
     { name: 'Real-time Coaching', path: '/coaching', icon: MessageSquare },
     { name: 'Trade Journal', path: '/journal', icon: BookOpen },

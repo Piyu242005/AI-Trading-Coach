@@ -17,7 +17,7 @@ export default function LoginPage() {
     try {
       const { data } = await api.post('/api/auth/token', { userId });
       login(data.access_token, userId);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       setError('Invalid User ID or Password.');
     }
