@@ -107,16 +107,16 @@ export default function Dashboard() {
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <StatCard title="Total Trades" value={totalTrades} />
         <StatCard title="Win Rate" value={`${winRate}%`} />
-        <StatCard title="Total P&L" value={`$${currentPnl.toFixed(2)}`} valueColor={currentPnl >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'} />
+        <StatCard title="Total P&L" value={`₹${currentPnl.toFixed(2)}`} valueColor={currentPnl >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'} />
         <StatCard title="Profit Factor" value={profitFactor} />
         <div className="flex flex-col justify-between bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="flex justify-between w-full mb-2">
             <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">Avg Win</span>
-            <span className="text-green-600 dark:text-green-400 font-bold">${avgWin}</span>
+            <span className="text-green-600 dark:text-green-400 font-bold">₹{avgWin}</span>
           </div>
           <div className="flex justify-between w-full">
             <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">Avg Loss</span>
-            <span className="text-red-600 dark:text-red-400 font-bold">-${avgLoss}</span>
+            <span className="text-red-600 dark:text-red-400 font-bold">-₹{avgLoss}</span>
           </div>
         </div>
       </div>
@@ -149,8 +149,8 @@ export default function Dashboard() {
                 contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #374151', borderRadius: '8px', color: '#fff' }}
                 itemStyle={{ color: '#E5E7EB' }}
               />
-              <Area type="monotone" dataKey="pnl" name="Equity ($)" stroke="#3B82F6" strokeWidth={3} fillOpacity={1} fill="url(#colorPnl)" />
-              <Area type="monotone" dataKey="drawdown" name="Drawdown ($)" stroke="#EF4444" strokeWidth={1} fillOpacity={1} fill="url(#colorDrawdown)" />
+              <Area type="monotone" dataKey="pnl" name="Equity (₹)" stroke="#3B82F6" strokeWidth={3} fillOpacity={1} fill="url(#colorPnl)" />
+              <Area type="monotone" dataKey="drawdown" name="Drawdown (₹)" stroke="#EF4444" strokeWidth={1} fillOpacity={1} fill="url(#colorDrawdown)" />
             </AreaChart>
           </ResponsiveContainer>
         </div>

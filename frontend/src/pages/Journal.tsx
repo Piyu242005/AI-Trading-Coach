@@ -66,7 +66,7 @@ export default function Journal() {
                     </div>
                   </td>
                   <td className={`px-6 py-4 whitespace-nowrap text-sm font-bold ${trade.pnl >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                    ${trade.pnl.toFixed(2)}
+                    ₹{trade.pnl.toFixed(2)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
