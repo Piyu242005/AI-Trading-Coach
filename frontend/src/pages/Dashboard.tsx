@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { api } from '../services/api';
 import { useAuthStore } from '../store/authStore';
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
-import { Activity, ShieldCheck, Zap, TrendingUp, TrendingDown, Info, Lightbulb } from 'lucide-react';
+import { Activity, Zap, TrendingUp, TrendingDown, Lightbulb } from 'lucide-react';
 
 export default function Dashboard() {
   const userId = useAuthStore(state => state.userId);
@@ -132,7 +132,7 @@ export default function Dashboard() {
                     stroke="none"
                   >
                     <Cell fill={disciplineData.score > 80 ? '#10B981' : disciplineData.score > 60 ? '#F59E0B' : '#EF4444'} />
-                    <Cell fill="#E5E7EB" dark:fill="#374151" />
+                    <Cell fill="#E5E7EB" />
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
@@ -231,7 +231,7 @@ export default function Dashboard() {
                     dataKey="value"
                     stroke="none"
                   >
-                    {riskData.map((entry, index) => (
+                    {riskData.map((_, index) => (
                       <Cell key={`cell-${index}`} fill={RISK_COLORS[index % RISK_COLORS.length]} />
                     ))}
                   </Pie>
