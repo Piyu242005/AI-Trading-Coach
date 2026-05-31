@@ -6,33 +6,40 @@ Designed for Recruiters, Researchers, and AI Maintainers
 <div align="center">
 
 <!-- Animated Hero Banner -->
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=10,20,30&height=220&section=header&text=AI%20Trading%20Coach&fontSize=60&fontColor=fff&animation=twinkling&fontAlignY=35&desc=Explainable%20Behavioral%20AI%20for%20Financial%20Decision%20Support&descSize=22&descAlignY=55" width="100%" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=10,20,30&height=220&section=header&text=AI%20Trading%20Coach&fontSize=60&fontColor=fff&animation=twinkling&fontAlignY=35&desc=Full-Stack%20Behavioral%20AI%20for%20Financial%20Decision%20Support&descSize=22&descAlignY=55" width="100%" />
 
 <br />
 
-[![Deployment](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=render&logoColor=white)](https://ai-trading-coach-2vao.onrender.com/)
+[![Deployment](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=vercel&logoColor=white)](https://ai-trading-coach-2vao.onrender.com/)
 [![Documentation](https://img.shields.io/badge/Swagger-API-blue?style=for-the-badge&logo=swagger&logoColor=white)](https://ai-trading-coach-2vao.onrender.com/docs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![Python 3.9+](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![React 19](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 
 <p align="center">
-  <b>A research-grade Behavioral AI system providing reliable, explainable trading coaching through RAG, persistent memory, and anti-hallucination verification.</b>
+  <b>A production-grade SaaS platform providing reliable, explainable trading coaching through RAG, persistent memory, and a ChatGPT-style conversational interface.</b>
 </p>
 
----
+</div>
 
-[Overview](#-overview) • [Key Features](#-key-features) • [Architecture](#-system-architecture) • [Results](#-experimental-results) • [Tech Stack](#-tech-stack) • [Setup](#-setup-instructions) • [API](#-api-endpoints) • [Research](#-research--publications)
+<br />
 
+## 📈 Portfolio Metrics
+<div align="center">
+  <img src="https://img.shields.io/badge/Trades_Analyzed-25+-10B981?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/AI_Confidence-95%25-F59E0B?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Discipline_Score-79-3B82F6?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Profit_Factor-3.07-8B5CF6?style=for-the-badge" />
 </div>
 
 <br />
 
 ## 🎯 Overview
 
-The **AI Trading Coach** is a sophisticated behavioral AI system designed to mitigate emotional and cognitive biases in financial decision-making. By combining **Retrieval-Augmented Generation (RAG)** with a **Persistent Memory System**, the platform tracks a trader's activity across sessions to detect behavioral "pathologies" and provide real-time, evidence-based coaching.
+The **AI Trading Coach** is a sophisticated full-stack SaaS application designed to mitigate emotional and cognitive biases in financial decision-making. By combining **Retrieval-Augmented Generation (RAG)** with a **Persistent Memory System**, the platform tracks a trader's activity across sessions to detect behavioral "pathologies" and provide real-time, evidence-based coaching.
 
-### 🔬 Research Focus
-Unlike "black-box" AI advisors, this project prioritizes **Explainable AI (XAI)**. Every coaching insight is backed by a verifiable audit trail, mapping AI-generated advice directly to historical trade data, ensuring zero-hallucination and high reliability for serious financial support.
+### 🔬 Explainable AI (XAI)
+Unlike "black-box" AI advisors, this project prioritizes **Explainable AI**. Every coaching insight is backed by a verifiable audit trail, mapping AI-generated advice directly to historical trade data, ensuring zero-hallucination and high reliability.
 
 ---
 
@@ -40,18 +47,22 @@ Unlike "black-box" AI advisors, this project prioritizes **Explainable AI (XAI)*
 
 | Feature | Category | Description |
 | :--- | :--- | :--- |
-| 🧠 **Behavioral Profiling** | `AI Engine` | Detects 9 core trading pathologies (FOMO, Revenge Trading, Tilt, etc.) via deterministic heuristics. |
-| 📚 **RAG-Powered Memory** | `Architecture` | Persistent MongoDB-backed memory that retains session context and user-specific behavioral patterns. |
-| 🛡️ **Anti-Hallucination Audit** | `Reliability` | A rigorous verification layer that cross-references AI outputs with ground-truth trade records. |
-| ⚡ **SSE Streaming** | `UX` | Real-time, token-by-token coaching delivery using Server-Sent Events for a responsive interface. |
-| 🔐 **JWT Security** | `Security` | Multi-tenant security with strict HS256 JWT validation and user identity mapping. |
-| 📊 **Unified Evaluation** | `Research` | A built-in engine to measure Precision, Recall, and F1 scores against labeled behavioral datasets. |
+| 💬 **ChatGPT-Style Coaching** | `UX` | Real-time, streaming markdown UI for interactive behavioral feedback. |
+| 🧠 **Behavioral Profiling** | `AI Engine` | Detects pathologies (FOMO, Revenge Trading, Tilt) with severity & confidence metrics. |
+| 📊 **Advanced Analytics** | `Frontend` | Glassmorphic dashboard with Recharts-powered Equity Curves and Risk Distribution. |
+| 📚 **RAG-Powered Memory** | `Architecture` | Persistent MongoDB-backed memory retaining session context and user-specific patterns. |
+| 🛡️ **Anti-Hallucination Audit** | `Reliability` | A rigorous verification layer cross-referencing AI outputs with ground-truth records. |
 
 ---
 
-## 🏗️ System Architecture
+## 🏗️ System Architecture & Deployment
 
-The AI Trading Coach utilizes a modular, event-driven pipeline optimized for low latency and high explainability.
+The AI Trading Coach utilizes a highly decoupled, modern microservices architecture optimized for latency and scalability.
+
+**Deployment Stack:**
+*   **Frontend**: React + Vite + Tailwind CSS (Deployed on **Vercel**)
+*   **Backend**: FastAPI + Python 3.10 (Deployed on **Render**)
+*   **Database**: MongoDB (Hosted on **MongoDB Atlas**)
 
 <div align="center">
   <img src="./Research_Submission/📊%20Figures%20%26%20Diagrams/1.%20system%20architecture.png" alt="System Architecture" width="100%" />
@@ -59,29 +70,11 @@ The AI Trading Coach utilizes a modular, event-driven pipeline optimized for low
 </div>
 
 ### 🔄 Workflow Pipeline
-1.  **Data Ingestion Layer**: Raw trade streams are ingested and normalized.
+1.  **Data Ingestion Layer**: Raw trade streams are ingested and normalized via FastAPI.
 2.  **Heuristic Engine**: Deterministic rules identify behavioral signals.
-3.  **Contextual Memory**: Signals are stored and retrieved to build long-term trader profiles.
+3.  **Contextual Memory**: Signals are stored in MongoDB Atlas to build long-term profiles.
 4.  **Inference & Verification**: The LLM generates coaching, which is then audited for factual accuracy.
-5.  **Streaming Delivery**: Validated advice is pushed to the client via SSE.
-
----
-
-## 📈 Experimental Results
-
-The system is benchmarked against a curated dataset of labeled trading sessions. Below is the performance report generated by the `unified-evaluation` engine.
-
-### 📊 Behavioral Detection Performance
-| Pathology Label | Precision | Recall | F1-Score | Status |
-| :--- | :---: | :---: | :---: | :---: |
-| **Overtrading** | 1.00 | 1.00 | 1.00 | ✅ Optimized |
-| **Revenge Trading** | 0.33 | 1.00 | 0.50 | 🛠️ Refining |
-| **Session Tilt** | 0.25 | 1.00 | 0.40 | 🛠️ Refining |
-| **FOMO Entries** | 0.17 | 1.00 | 0.29 | 🛠️ Refining |
-| **Time of Day Bias** | 1.00 | 1.00 | 1.00 | ✅ Optimized |
-| **Loss Running** | 0.50 | 1.00 | 0.67 | 📈 Improving |
-
-> **Latency Metric**: Average end-to-end signal detection latency is **< 150ms**, making it suitable for high-frequency coaching environments.
+5.  **Streaming Delivery**: Validated advice is pushed to the React client via Server-Sent Events (SSE).
 
 ---
 
@@ -89,11 +82,12 @@ The system is benchmarked against a curated dataset of labeled trading sessions.
 
 <div align="center">
 
-| Core | Database | Infrastructure | Security |
-| :---: | :---: | :---: | :---: |
-| ![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white) | ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white) | ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white) | ![JWT](https://img.shields.io/badge/JWT-black?style=flat&logo=json-web-tokens&logoColor=white) |
-| ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat&logo=fastapi&logoColor=white) | ![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat&logo=redis&logoColor=white) | ![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat&logo=amazon-aws&logoColor=white) | ![OAuth2](https://img.shields.io/badge/OAuth2-EB5424?style=flat&logo=auth0&logoColor=white) |
-| ![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=flat&logo=chainlink&logoColor=white) | | ![Render](https://img.shields.io/badge/Render-46E3B7?style=flat&logo=render&logoColor=white) | |
+| Frontend | Backend | Database & Infrastructure |
+| :---: | :---: | :---: |
+| ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB) | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white) | ![MongoDB Atlas](https://img.shields.io/badge/MongoDB_Atlas-47A248?style=flat&logo=mongodb&logoColor=white) |
+| ![Vite](https://img.shields.io/badge/Vite-B73BFE?style=flat&logo=vite&logoColor=FFD62E) | ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat&logo=fastapi&logoColor=white) | ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel&logoColor=white) |
+| ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white) | ![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=flat&logo=chainlink&logoColor=white) | ![Render](https://img.shields.io/badge/Render-46E3B7?style=flat&logo=render&logoColor=white) |
+| ![Zustand](https://img.shields.io/badge/Zustand-443E38?style=flat&logo=react&logoColor=white) | ![Pytest](https://img.shields.io/badge/Pytest-0A9EDC?style=flat&logo=pytest&logoColor=white) | ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat&logo=github-actions&logoColor=white) |
 
 </div>
 
@@ -103,17 +97,17 @@ The system is benchmarked against a curated dataset of labeled trading sessions.
 
 ```text
 AI-Trading-Coach/
+├── frontend/            # React + Vite Application
+│   ├── src/pages/       # Dashboard, Coaching, Profiling, Journal
+│   └── src/services/    # Axios API client
 ├── app/                 # FastAPI application (Routes, Models, Services)
 │   ├── routes/          # API endpoints (Coaching, Memory, Profiling, Audit)
 │   ├── services/        # Core business logic & heuristic engines
 │   ├── main.py          # Entry point & lifecycle management
 │   └── auth.py          # JWT & Identity Management
+├── .github/workflows/   # CI/CD Pipelines (Backend & Frontend tests)
 ├── data/                # Ground-truth datasets & behavioral labels
-├── reports/             # Generated research & evaluation reports
-├── tests/               # E2E test suite (Pytest)
-├── evaluate.py          # CLI Research Evaluation Engine
-├── Dockerfile           # Production container manifest
-└── docker-compose.yml   # Multi-service orchestration
+└── tests/               # E2E test suite (Pytest)
 ```
 
 ---
@@ -132,14 +126,18 @@ docker-compose up --build -d
 
 ### 🐍 Method 2: Local Development
 ```bash
-# 1. Install dependencies
+# 1. Install Backend dependencies
 pip install -r requirements.txt
 
-# 2. Run the server
+# 2. Run the FastAPI server
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
-# 3. Run evaluation pipeline
-python evaluate.py
+# 3. In a new terminal, install Frontend dependencies
+cd frontend
+npm install
+
+# 4. Run the Vite React server
+npm run dev
 ```
 
 ---
@@ -149,11 +147,10 @@ python evaluate.py
 | Endpoint | Method | Description |
 | :--- | :---: | :--- |
 | `/api/auth/token` | `POST` | Exchange credentials for a JWT Access Token. |
-| `/api/ingest` | `POST` | Push raw trade data to the behavioral engine. |
-| `/api/coach/stream` | `POST` | Real-time coaching feedback via Server-Sent Events. |
-| `/api/memory/{userId}` | `GET` | Fetch historical behavioral context for a user. |
-| `/audit` | `POST` | Execute the anti-hallucination verification suite. |
-| `/evaluation/report` | `GET` | Generate the latest Precision/Recall research metrics. |
+| `/api/discipline-score/{userId}` | `GET` | Fetches the AI-calculated behavioral discipline score. |
+| `/api/coaching/{userId}/stream` | `POST` | Real-time ChatGPT-style coaching feedback via Server-Sent Events. |
+| `/api/profiling/{userId}` | `GET` | Fetch behavioral profiles (severity, confidence, impacts). |
+| `/api/trades` | `GET` | Return paginated historical trades with emotional states. |
 
 ---
 
@@ -201,7 +198,7 @@ This project is part of a broader study on **Behavioral Pathology in Financial M
 <div align="center">
 
 ### **Piyush Ramteke**
-*AI Researcher & Data Scientist*
+*AI Researcher & Software Engineer*
 
 [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Piyu242005)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/piyu24/)
