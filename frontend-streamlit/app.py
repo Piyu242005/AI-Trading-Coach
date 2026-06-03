@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 import requests
 import streamlit as st
 
-DEFAULT_API_URL = "http://localhost:8000"
+DEFAULT_API_URL = "https://ai-trading-coach-2vao.onrender.com"
 
 st.set_page_config(page_title="AI Trading Coach", page_icon="📈", layout="wide")
 
