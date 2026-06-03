@@ -14,7 +14,9 @@ import os
 
 DEFAULT_API_URL = "https://ai-trading-coach-2vao.onrender.com"
 
-st.set_page_config(page_title="AI Trading Coach", page_icon="assets/logo.jpg", layout="wide")
+LOGO_PATH = os.path.join(os.path.dirname(__file__), "assets", "logo.jpg")
+
+st.set_page_config(page_title="AI Trading Coach", page_icon=LOGO_PATH, layout="wide")
 
 def apply_dark_theme():
     st.markdown("""
@@ -224,7 +226,7 @@ def render_dashboard(df: pd.DataFrame) -> None:
     
     col_logo, col_title = st.columns([1, 10])
     with col_logo:
-        st.image("assets/logo.jpg", width=60)
+        st.image(LOGO_PATH, width=60)
     with col_title:
         st.title("Trading Intelligence Command Center")
         
@@ -297,7 +299,7 @@ def render_ai_coach(df: pd.DataFrame) -> None:
             )
 
         for message in st.session_state.coach_messages:
-            with st.chat_message(message["role"], avatar="assets/logo.jpg" if message["role"] == "assistant" else None):
+            with st.chat_message(message["role"], avatar=LOGO_PATH if message["role"] == "assistant" else None):
                 st.write(message["content"])
 
         prompt = st.chat_input("Ask Trading Coach...")
@@ -306,7 +308,7 @@ def render_ai_coach(df: pd.DataFrame) -> None:
             with st.chat_message("user"):
                 st.write(prompt)
 
-            with st.chat_message("assistant", avatar="assets/logo.jpg"):
+            with st.chat_message("assistant", avatar=LOGO_PATH):
                 with st.spinner("Analyzing..."):
                     if df.empty:
                         reply = "You currently have 0 trades logged. Add some trades to the journal so I can analyze your performance!"
@@ -638,7 +640,7 @@ def render_settings() -> None:
 init_session_state()
 
 if not st.session_state.welcome_screen_passed:
-    st.image("assets/logo.jpg", width=80)
+    st.image(LOGO_PATH, width=80)
     st.title("Welcome to AI Trading Coach")
     st.markdown("Explore the platform instantly with demo data.")
     st.markdown("---")
@@ -666,7 +668,7 @@ if not st.session_state.welcome_screen_passed:
     st.stop()
 
 # Sidebar Authentication
-st.sidebar.image("assets/logo.jpg", width=50)
+st.sidebar.image(LOGO_PATH, width=50)
 st.sidebar.markdown("### AI Trading Coach")
 st.sidebar.markdown("*Enterprise AI Analytics*")
 st.sidebar.markdown("━━━━━━━━━━━━━━━")
