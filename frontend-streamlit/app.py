@@ -15,7 +15,9 @@ st.set_page_config(page_title="AI Trading Coach", page_icon="📈", layout="wide
 def init_session_state() -> None:
     defaults = {
         "token": None,
-        "user_id": None,
+        "user_id": "guest_demo",
+        "is_guest": True,
+        "welcome_screen_passed": False,
         "trades_data": [],
         "journal_entries": [],
         "coach_messages": [],
@@ -45,6 +47,8 @@ def login(user_id: str, password: str) -> None:
         if response.status_code == 200:
             st.session_state.token = response.json().get("access_token")
             st.session_state.user_id = user_id
+            st.session_state.is_guest = False
+            st.session_state.welcome_screen_passed = True
             st.success("Logged in successfully!")
             st.rerun()
         else:
@@ -55,6 +59,16 @@ def login(user_id: str, password: str) -> None:
 
 def load_user_trades(force: bool = False) -> None:
     if st.session_state.trades_data and not force:
+        return
+
+    if st.session_state.user_id == "guest_demo":
+        st.session_state.trades_data = [
+            {"tradeId": "t1", "asset": "AAPL", "assetClass": "Equities", "direction": "Long", "entryPrice": 150, "exitPrice": 155, "pnl": 500, "entryAt": (datetime.datetime.now() - datetime.timedelta(days=2)).isoformat(), "outcome": "win"},
+            {"tradeId": "t2", "asset": "TSLA", "assetClass": "Equities", "direction": "Short", "entryPrice": 200, "exitPrice": 210, "pnl": -1000, "entryAt": (datetime.datetime.now() - datetime.timedelta(days=1)).isoformat(), "outcome": "loss"},
+            {"tradeId": "t3", "asset": "BTC", "assetClass": "Crypto", "direction": "Long", "entryPrice": 60000, "exitPrice": 62000, "pnl": 2000, "entryAt": (datetime.datetime.now() - datetime.timedelta(hours=5)).isoformat(), "outcome": "win"},
+            {"tradeId": "t4", "asset": "ETH", "assetClass": "Crypto", "direction": "Long", "entryPrice": 3000, "exitPrice": 3100, "pnl": 500, "entryAt": (datetime.datetime.now() - datetime.timedelta(hours=2)).isoformat(), "outcome": "win"},
+            {"tradeId": "t5", "asset": "NIFTY", "assetClass": "Indices", "direction": "Long", "entryPrice": 20000, "exitPrice": 20200, "pnl": 1000, "entryAt": (datetime.datetime.now() - datetime.timedelta(hours=1)).isoformat(), "outcome": "win"},
+        ]
         return
 
     try:
@@ -78,6 +92,14 @@ def load_user_trades(force: bool = False) -> None:
 
 
 def fetch_discipline_score() -> Optional[Dict[str, str]]:
+    if st.session_state.user_id == "guest_demo":
+        return {
+            "score": 85,
+            "risk_level": "Moderate",
+            "confidence": 92,
+            "contributors": {"Consistency": "+10", "Win Rate": "+5", "Drawdown": "-2"}
+        }
+
     try:
         response = requests.get(
             f"{get_api_url()}/api/discipline-score/{st.session_state.user_id}",
@@ -300,7 +322,14 @@ def render_ai_coach(df: pd.DataFrame) -> None:
 
         with st.chat_message("assistant"):
             with st.spinner("Reviewing your recent trades..."):
-                payload = {"trades": st.session_state.trades_data[-20:]}
+                if st.session_state.user_id == "guest_demo":
+                    reply = "I see your demo trades! Your long position on BTC is doing great, but TSLA was a loss. You are demonstrating a solid win rate, but keep an eye on risk management."
+                    st.write(reply)
+                    st.session_state.coach_messages.append(
+                        {"role": "assistant", "content": reply}
+                    )
+                else:
+                    payload = {"trades": st.session_state.trades_data[-20:]}
                 try:
                     resp = requests.post(
                         f"{get_api_url()}/api/coaching/{st.session_state.user_id}",
@@ -399,26 +428,29 @@ def render_trading_journal(df: pd.DataFrame) -> None:
         submitted = st.form_submit_button("Add to Journal")
 
         if submitted and asset:
-            computed_pnl = pnl
-            if pnl == 0 and entry_price and exit_price:
-                computed_pnl = exit_price - entry_price
-                if direction == "Short":
-                    computed_pnl = -computed_pnl
+            if st.session_state.is_guest:
+                st.warning("🔒 Login Required: Sign in to save your progress and unlock full platform features.")
+            else:
+                computed_pnl = pnl
+                if pnl == 0 and entry_price and exit_price:
+                    computed_pnl = exit_price - entry_price
+                    if direction == "Short":
+                        computed_pnl = -computed_pnl
 
-            st.session_state.journal_entries.append(
-                {
-                    "date": trade_date.isoformat(),
-                    "asset": asset,
-                    "direction": direction,
-                    "entry": entry_price,
-                    "exit": exit_price,
-                    "strategy": strategy,
-                    "pnl": computed_pnl,
-                    "confidence": confidence,
-                    "notes": notes,
-                }
-            )
-            st.success("Entry added.")
+                st.session_state.journal_entries.append(
+                    {
+                        "date": trade_date.isoformat(),
+                        "asset": asset,
+                        "direction": direction,
+                        "entry": entry_price,
+                        "exit": exit_price,
+                        "strategy": strategy,
+                        "pnl": computed_pnl,
+                        "confidence": confidence,
+                        "notes": notes,
+                    }
+                )
+                st.success("Entry added.")
 
     if st.session_state.journal_entries:
         st.subheader("Journal Entries")
@@ -497,6 +529,11 @@ def render_portfolio_analytics(df: pd.DataFrame) -> None:
 
 def render_settings() -> None:
     st.header("Settings")
+    
+    if st.session_state.is_guest:
+        st.warning("🔒 Login Required: Sign in to access Account Settings, Create Portfolios, and export data.")
+        return
+
     st.text_input("API URL", key="api_url")
 
     col1, col2, col3 = st.columns(3)
@@ -536,56 +573,89 @@ def render_settings() -> None:
 
 init_session_state()
 
+if not st.session_state.welcome_screen_passed:
+    st.title("🚀 Welcome to AI Trading Coach")
+    st.markdown("Explore the platform instantly with demo data.")
+    st.markdown("---")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader("Guest Mode")
+        st.markdown("Instantly access a complete demo environment with sample trades, AI coaching, and portfolio analytics.")
+        if st.button("Continue as Guest", use_container_width=True, type="primary"):
+            st.session_state.welcome_screen_passed = True
+            st.session_state.is_guest = True
+            st.rerun()
+            
+    with col2:
+        st.subheader("Existing Users")
+        with st.expander("Login for Full Access", expanded=False):
+            st.markdown("**Test User ID:** `Piyu24`")
+            with st.form("welcome_login_form"):
+                user_id_input = st.text_input("Username (User ID)")
+                password_input = st.text_input("Password", type="password")
+                submitted = st.form_submit_button("Login")
+                if submitted and user_id_input:
+                    login(user_id_input, password_input)
+                    
+    st.stop()
+
 # Sidebar Authentication
-st.sidebar.title("🔐 Login")
-if not st.session_state.token:
-    with st.sidebar.form("login_form"):
+st.sidebar.markdown("### AI Trading Coach")
+st.sidebar.markdown("━━━━━━━━━━━━━━━")
+
+if st.session_state.is_guest:
+    st.sidebar.markdown("🟢 **Guest Mode**")
+    st.sidebar.markdown("Viewing Demo Portfolio")
+    with st.sidebar.expander("Login for Full Access"):
         st.markdown("**Test User ID:** `Piyu24`")
-        user_id_input = st.text_input("Username (User ID)")
-        password_input = st.text_input("Password", type="password")
-        submitted = st.form_submit_button("Login")
-        if submitted and user_id_input:
-            login(user_id_input, password_input)
+        with st.form("sidebar_login_form"):
+            user_id_input = st.text_input("Username (User ID)")
+            password_input = st.text_input("Password", type="password")
+            submitted = st.form_submit_button("Login")
+            if submitted and user_id_input:
+                login(user_id_input, password_input)
 else:
     display_id = str(st.session_state.user_id)
-    st.sidebar.success(f"Logged in as: {display_id[:8]}...")
+    st.sidebar.markdown(f"👤 **{display_id}**")
+    st.sidebar.markdown("Portfolio Owner")
     if st.sidebar.button("Logout"):
         st.session_state.token = None
-        st.session_state.user_id = None
+        st.session_state.user_id = "guest_demo"
+        st.session_state.is_guest = True
         st.session_state.trades_data = []
+        st.session_state.journal_entries = []
+        st.session_state.coach_messages = []
         st.session_state.discipline_score = None
         st.rerun()
 
+st.sidebar.markdown("━━━━━━━━━━━━━━━")
+
 # Main Application
-if st.session_state.token:
-    load_user_trades()
-    df_trades = build_trade_frame(st.session_state.trades_data)
+load_user_trades()
+df_trades = build_trade_frame(st.session_state.trades_data)
 
-    st.sidebar.markdown("---")
-    page = st.sidebar.radio(
-        "Navigate",
-        [
-            "Dashboard",
-            "AI Coach",
-            "Market Analysis",
-            "Trading Journal",
-            "Portfolio Analytics",
-            "Settings",
-        ],
-    )
+page = st.sidebar.radio(
+    "Navigate",
+    [
+        "Dashboard",
+        "AI Coach",
+        "Market Analysis",
+        "Trading Journal",
+        "Portfolio Analytics",
+        "Settings",
+    ],
+)
 
-    if page == "Dashboard":
-        render_dashboard(df_trades)
-    elif page == "AI Coach":
-        render_ai_coach(df_trades)
-    elif page == "Market Analysis":
-        render_market_analysis(df_trades)
-    elif page == "Trading Journal":
-        render_trading_journal(df_trades)
-    elif page == "Portfolio Analytics":
-        render_portfolio_analytics(df_trades)
-    elif page == "Settings":
-        render_settings()
-else:
-    st.title("AI Trading Coach")
-    st.info("Please login using the sidebar to view your Trading Dashboard.")
+if page == "Dashboard":
+    render_dashboard(df_trades)
+elif page == "AI Coach":
+    render_ai_coach(df_trades)
+elif page == "Market Analysis":
+    render_market_analysis(df_trades)
+elif page == "Trading Journal":
+    render_trading_journal(df_trades)
+elif page == "Portfolio Analytics":
+    render_portfolio_analytics(df_trades)
+elif page == "Settings":
+    render_settings()
