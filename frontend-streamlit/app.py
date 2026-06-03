@@ -32,6 +32,10 @@ def init_session_state() -> None:
     for key, value in defaults.items():
         if key not in st.session_state:
             st.session_state[key] = value
+            
+    # Force fix if stuck on old localhost from previous session
+    if st.session_state.get("api_url") == "http://localhost:8000":
+        st.session_state["api_url"] = DEFAULT_API_URL
 
 
 def get_api_url() -> str:
