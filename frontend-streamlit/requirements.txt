@@ -2,3 +2,8 @@ streamlit
 requests
 pandas
 plotly
+xgboost
+shap
+scikit-learn
+matplotlib
+joblib
