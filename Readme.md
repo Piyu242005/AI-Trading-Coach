@@ -1,3 +1,25 @@
+
+<div align="center">
+
+<!-- Animated Hero Banner -->
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=10,20,30&height=220&section=header&text=AI%20Trading%20Coach&fontSize=60&fontColor=fff&animation=twinkling&fontAlignY=35&desc=Full-Stack%20Behavioral%20AI%20for%20Financial%20Decision%20Support&descSize=22&descAlignY=55" width="100%" />
+
+<br />
+
+[![Deployment](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=vercel&logoColor=white)](https://ai-trading-coach-2vao.onrender.com/)
+[![Documentation](https://img.shields.io/badge/Swagger-API-blue?style=for-the-badge&logo=swagger&logoColor=white)](https://ai-trading-coach-2vao.onrender.com/docs)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![React 19](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+
+<p align="center">
+  <b>A production-grade SaaS platform providing reliable, explainable trading coaching through RAG, persistent memory, and a ChatGPT-style conversational interface.</b>
+</p>
+
+</div>
+
+<br />
+
 # AI Trading Coach
 AI-Powered Trading Intelligence, Portfolio Analytics & Financial Decision Support System
 
@@ -53,27 +75,42 @@ flowchart TD
     analytics --> db[(Database)]
 ```
 
-## Tech Stack
-Frontend:
-- Streamlit
-- Plotly
+## 🏗️ System Architecture & Deployment
 
-Backend:
-- FastAPI
-- Python
+The AI Trading Coach utilizes a highly decoupled, modern microservices architecture optimized for latency and scalability.
 
-AI and ML:
-- OpenAI or Ollama (pluggable)
-- Scikit-Learn
-- Pandas
-- NumPy
+**Deployment Stack:**
+*   **Frontend**: React + Vite + Tailwind CSS (Deployed on **Vercel**)
+*   **Backend**: FastAPI + Python 3.10 (Deployed on **Render**)
+*   **Database**: MongoDB (Hosted on **MongoDB Atlas**)
 
-Database:
-- PostgreSQL or SQLite (configurable)
+<div align="center">
+  <img src="./Research_Submission/📊%20Figures%20%26%20Diagrams/1.%20system%20architecture.png" alt="System Architecture" width="100%" />
+  <p><i>Figure 1: End-to-end data flow from trade ingestion to streaming coaching delivery.</i></p>
+</div>
 
-DevOps:
-- Docker
-- GitHub Actions
+### 🔄 Workflow Pipeline
+1.  **Data Ingestion Layer**: Raw trade streams are ingested and normalized via FastAPI.
+2.  **Heuristic Engine**: Deterministic rules identify behavioral signals.
+3.  **Contextual Memory**: Signals are stored in MongoDB Atlas to build long-term profiles.
+4.  **Inference & Verification**: The LLM generates coaching, which is then audited for factual accuracy.
+5.  **Streaming Delivery**: Validated advice is pushed to the React client via Server-Sent Events (SSE).
+
+---
+
+## 🛠️ Tech Stack
+
+<div align="center">
+
+| Frontend | Backend | Database & Infrastructure |
+| :---: | :---: | :---: |
+| ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB) | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white) | ![MongoDB Atlas](https://img.shields.io/badge/MongoDB_Atlas-47A248?style=flat&logo=mongodb&logoColor=white) |
+| ![Vite](https://img.shields.io/badge/Vite-B73BFE?style=flat&logo=vite&logoColor=FFD62E) | ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat&logo=fastapi&logoColor=white) | ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel&logoColor=white) |
+| ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white) | ![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=flat&logo=chainlink&logoColor=white) | ![Render](https://img.shields.io/badge/Render-46E3B7?style=flat&logo=render&logoColor=white) |
+| ![Zustand](https://img.shields.io/badge/Zustand-443E38?style=flat&logo=react&logoColor=white) | ![Pytest](https://img.shields.io/badge/Pytest-0A9EDC?style=flat&logo=pytest&logoColor=white) | ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat&logo=github-actions&logoColor=white) |
+
+</div>
+
 
 ## Screenshots
 Placeholders for portfolio visuals. Replace with real screenshots once available.
@@ -163,3 +200,64 @@ This repository demonstrates end-to-end capability across:
 - Financial analytics and portfolio intelligence
 - Full-stack delivery with FastAPI and Streamlit
 - Data science workflows and production-ready DevOps
+
+
+## 📸 Visual Showcase
+
+<details>
+<summary><b>Click to expand screenshots</b></summary>
+
+### 🏗️ Workflow Diagram
+<img src="./Research_Submission/📊%20Figures%20%26%20Diagrams/2.%20workflow%20diagram.png" width="100%" />
+
+### 🚀 System Pipeline
+<img src="./Research_Submission/📊%20Figures%20%26%20Diagrams/3.%20system%20pipeline.png" width="100%" />
+
+### 🖥️ API Response Preview
+<img src="./assets/api_preview.png" width="100%" />
+
+### 📈 Evaluation Charts
+<img src="./Research_Submission/📊%20Figures%20%26%20Diagrams/4.%20evaluation%20charts.png" width="100%" />
+
+</details>
+
+---
+
+## 📜 Research & Publications
+
+This project is part of a broader study on **Behavioral Pathology in Financial Markets**.
+
+*   **Preprint**: *Explainable Behavioral AI Systems for Trading Decision Support* (In Review)
+*   **Key Findings**: Demonstrated a **100% detection rate** for time-based and volume-based overtrading patterns.
+*   **Methodology**: Hybrid heuristic-LLM approach for high-precision coaching.
+
+---
+
+## 🔮 Future Roadmap
+- [ ] **Multimodal AI Integration**: Analyzing trader sentiment via voice and facial cues.
+- [ ] **Reinforcement Learning**: Tuning coaching feedback based on trader performance improvement.
+- [ ] **Advanced Retrieval**: Implementing vector-based RAG for more nuanced memory recall.
+- [ ] **Personalization**: Hyper-personalized risk-management thresholds based on individual equity curves.
+
+---
+
+## 👨‍💻 Author
+
+<div align="center">
+
+### **Piyush Ramteke**
+*AI Researcher & Software Engineer*
+
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Piyu242005)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/piyu24/)
+[![Portfolio](https://img.shields.io/badge/Portfolio-FF5722?style=for-the-badge&logo=google-chrome&logoColor=white)](https://piyu242005.github.io/Piyush-Ramteke/)
+[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:piyushramteke24@gmail.com)
+
+</div>
+
+---
+
+<div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=100&section=footer&text=Innovating%20Behavioral%20Finance&fontSize=20" width="100%" />
+  <p>Built with ❤️ for the Open Source AI Community</p>
+</div>
