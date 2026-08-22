@@ -1,5 +1,5 @@
 <div align="center">
-  
+
 # AI Trading Coach
 
 **AI-Powered Trading Intelligence, Behavioral Analytics & Portfolio Optimization Platform**
@@ -12,238 +12,203 @@
 [![Plotly](https://img.shields.io/badge/Plotly-Data_Viz-purple)](https://plotly.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
-[![GitHub Actions](https://img.shields.io/badge/CI%2FCD-GitHub_Actions-2088FF?logo=github-actions&logoColor=white)](https://github.com/features/actions)
+[![GitHub Actions](https://img.shields.io/badge/CI%2FCD-GitHub_Actions-2088FF?logo=github-actions)](https://github.com/features/actions)
 
 </div>
 
-## 📖 Overview
+## Overview
 
-An AI-powered trading intelligence platform that helps traders improve decision-making through predictive analytics, explainable machine learning, behavioral insights, portfolio analytics, and conversational AI coaching.
+AI Trading Coach helps traders improve decision-making through behavioral analytics, explainable machine learning, portfolio analysis, trading-journal insights, and conversational coaching.
 
----
+> **Important:** This project is a decision-support and education tool. It does not provide guaranteed returns or personalized financial advice.
 
-## ✨ Core Features
+## Core Features
 
-### 🤖 AI Trading Coach
-* Conversational trading assistant
-* Trading education
-* Market explanations
-* Portfolio guidance
-* AI-generated recommendations
+### AI Trading Coach
+- Conversational trading assistant
+- Trading education and market explanations
+- Portfolio guidance
+- AI-generated coaching recommendations
 
-### 📈 Trade Prediction Engine
-* XGBoost-powered prediction model
-* Trade success probability scoring
-* Risk estimation
-* Confidence metrics
+### Behavioral Intelligence
+- Discipline Score
+- Patience Score
+- Risk Control Analysis
+- Emotional Trading Detection
+- Consistency Tracking
+- FOMO, revenge trading, tilt, overtrading and plan-deviation detection
 
-### 🔍 Explainable AI
-* SHAP visualizations
-* Feature importance analysis
-* Transparent prediction explanations
-* Human-readable insights
+### Trade Analysis & Explainability
+- Trade success prediction pipeline
+- Risk and confidence metrics
+- SHAP-based feature explanations where the ML pipeline is enabled
+- Human-readable reasoning
 
-### 🧠 Behavioral Intelligence
-* Discipline Score
-* Patience Score
-* Risk Control Analysis
-* Emotional Trading Detection
-* Consistency Tracking
+### Portfolio Intelligence
+- Portfolio Health Score
+- Asset Allocation Analysis
+- Performance Tracking
+- Diversification Analysis
+- Risk Monitoring
 
-### 📊 Portfolio Intelligence
-* Portfolio Health Score
-* Asset Allocation Analysis
-* Performance Tracking
-* Diversification Analysis
-* Risk Monitoring
+### Trading Journal
+- Trade Logging
+- Strategy Evaluation
+- Performance Review
+- Learning Notes
 
-### 📉 Market Analytics
-* Technical Indicators
-* Trend Analysis
-* Volatility Monitoring
-* Opportunity Detection
+### Backend Platform
+- FastAPI REST APIs
+- JWT authentication
+- Persistent session memory
+- Audit and evaluation endpoints
+- Server-Sent Events for streaming coaching
+- MongoDB/SQLite-compatible project components
 
-### 📓 Trading Journal
-* Trade Logging
-* Strategy Evaluation
-* Performance Review
-* Learning Notes
+## Demo & Preview
 
-### 💡 AI Insights Engine
-* Trade Pattern Detection
-* Winning Strategy Discovery
-* Loss Pattern Analysis
-* Personalized Improvement Recommendations
+Live deployment: https://ai-trading-coach-2vao.onrender.com
 
----
+![API Preview](assets/api_preview.png)
 
-## 📸 Screenshots
-
-> *Note: Add your high-resolution screenshots here before deploying.*
-
-| Dashboard | AI Coach |
-| :---: | :---: |
-| ![Dashboard](assets/dashboard_placeholder.png) | ![AI Coach](assets/coach_placeholder.png) |
-| **Trade Prediction Engine** | **SHAP Explainability** |
-| ![Predictions](assets/predictions_placeholder.png) | ![SHAP](assets/shap_placeholder.png) |
-| **Behavioral Intelligence** | **Portfolio Analytics** |
-| ![Radar Chart](assets/radar_placeholder.png) | ![Portfolio](assets/portfolio_placeholder.png) |
-
----
-
-## 🏗️ Architecture
+## Architecture
 
 ```mermaid
 graph TD
-    A[User] -->|Interacts| B(Streamlit Frontend)
-    B -->|API Calls| C(FastAPI Backend)
-    
-    subgraph Core AI Services
-    C --> D{AI Coach Layer}
-    C --> E[Trade Prediction Engine XGBoost]
-    E --> F[Explainability Layer SHAP]
-    C --> G[Portfolio Intelligence Engine]
-    end
-    
-    C --> H[(Database PostgreSQL/SQLite)]
-    D -.-> H
-    G -.-> H
+    A[User] --> B[Streamlit Frontend]
+    B --> C[FastAPI Backend]
+    C --> D[Behavioral Coaching]
+    C --> E[Trade Analytics]
+    C --> F[Portfolio Intelligence]
+    C --> G[Authentication]
+    C --> H[Memory & Audit]
+    D --> I[Behavior Detection]
+    E --> J[ML / Explainability]
+    H --> K[(Persistent Storage)]
 ```
 
----
+## Behavioral Detection Pipeline
 
-## 🧠 Machine Learning Pipeline
+Trade History → Validation → Session Grouping → Behavioral Signal Detection → Priority Ranking → Coaching Response → Evaluation
 
-Data Collection → Feature Engineering → Model Training → Prediction → Explainability → Portfolio Intelligence
+The coaching service currently detects patterns including revenge trading, session tilt, overtrading, FOMO entries, plan non-adherence, premature exits, loss running, time-of-day bias, and position-sizing inconsistency.
 
-1. **Data Collection:** User trade histories and real-time market ticks are ingested and cleaned.
-2. **Feature Engineering:** Calculation of behavioral metrics (Emotion Score, Consistency), volatility proxies, and R:R ratios.
-3. **Model Training:** Synthetic and real-world trades are fit to an `XGBClassifier` to maximize predictive power.
-4. **Prediction:** Inference generates a precise Win Probability (%) for any simulated or upcoming trade.
-5. **Explainability:** `SHAP TreeExplainer` identifies the Top Positive/Negative factors driving the algorithm's decision.
-6. **Portfolio Intelligence:** Aggregates individual trade data into a holistic "Portfolio Health Score" and radar-based behavioral profile.
+## Evaluation
 
----
+The API exposes a reproducible evaluation endpoint:
 
-## 🛠️ Tech Stack
+```text
+GET /evaluation/report
+GET /evaluation/report?format=html
+```
 
-**Frontend:**
-* Streamlit
-* Plotly
+It reports overall and per-label **precision, recall, and F1**, comparing detected behavioral labels with the project's ground-truth dataset. Treat these as benchmark results for the included dataset, not as evidence of live-market predictive performance.
 
-**Backend:**
-* FastAPI
-* Python
+## Tech Stack
 
-**Machine Learning:**
-* XGBoost
-* Scikit-Learn
-* SHAP
-* Pandas
-* NumPy
+**Frontend:** Streamlit, Plotly  
+**Backend:** FastAPI, Python  
+**ML/XAI:** XGBoost, Scikit-Learn, SHAP, Pandas, NumPy  
+**Data:** MongoDB / SQLite-compatible components  
+**DevOps:** Docker, GitHub Actions  
 
-**Database:**
-* PostgreSQL / SQLite
-
-**DevOps:**
-* Docker
-* GitHub Actions
-
----
-
-## 🚀 Key Metrics
-
-* **95% Prediction Accuracy** (Simulated baseline)
-* **<500ms Inference Time** via optimized model serialization (`joblib`)
-* **Real-Time Portfolio Analytics** without page-reloads
-* **100% Explainable AI Predictions** via SHAP value extraction
-
----
-
-## 📂 Project Structure
+## Project Structure
 
 ```text
 AI-Trading-Coach/
-├── .github/workflows/      # CI/CD Pipelines
-├── app/                    # FastAPI Backend
-│   ├── routes/             # API Endpoints (Auth, Coaching, Discipline)
-│   ├── services/           # Business Logic & NLP Handlers
-│   ├── main.py             # Server Entrypoint
-│   └── database.py         # DB Connectors
-├── data/                   # Seed Datasets
-├── frontend-streamlit/     # Streamlit Frontend App
-│   ├── models/             # Serialized ML Models (XGBoost, Scaler)
-│   ├── training/           # ML Training & Feature Engineering Scripts
-│   ├── app.py              # UI Entrypoint
-│   └── requirements.txt    
-├── tests/                  # PyTest Suite
-├── docker-compose.yml      # Container Orchestration
+├── .github/workflows/       # CI/CD
+├── app/                     # FastAPI backend
+│   ├── routes/              # API endpoints
+│   ├── services/            # Behavioral and coaching logic
+│   ├── main.py              # API entrypoint
+│   ├── auth.py              # JWT authentication
+│   └── database.py          # Dataset/database connectors
+├── data/                    # Seed datasets
+├── frontend-streamlit/      # Streamlit frontend and ML components
+├── tests/                   # PyTest suite
+├── Research_Submission/     # Research documents and figures
+├── assets/                  # README/demo assets
+├── Dockerfile
+├── Procfile
+├── requirements.txt
 └── Readme.md
 ```
 
----
+## Installation
 
-## 💻 Installation Guide
+### 1. Clone
 
-### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/AI-Trading-Coach.git
+git clone https://github.com/Piyu242005/AI-Trading-Coach.git
 cd AI-Trading-Coach
 ```
 
-### 2. Frontend Setup (Streamlit & ML)
+### 2. Configure environment
+
+Set a strong secret before starting the API:
+
+```bash
+export JWT_SECRET="replace-with-a-long-random-secret"
+export JWT_ALGORITHM="HS256"
+export JWT_EXPIRES_MINUTES="60"
+export ALLOWED_ORIGINS="http://localhost:3000,http://localhost:8501"
+```
+
+On Windows PowerShell, use `$env:JWT_SECRET = "..."` instead.
+
+### 3. Frontend setup
+
 ```bash
 cd frontend-streamlit
 python -m venv venv
-source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+source venv/bin/activate
 pip install -r requirements.txt
-
-# Generate the ML Models
-cd training
-python train_model.py
-cd ..
-
-# Run the UI
 streamlit run app.py
 ```
 
-### 3. Backend Setup (FastAPI - Optional for Local Dev)
+### 4. Backend setup
+
+From the repository root:
+
 ```bash
-# From the root directory
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+Docker is also supported:
+
+```bash
 docker-compose up --build
 ```
 
----
+## CI/CD
 
-## 🛣️ Future Roadmap
+GitHub Actions runs dependency installation, Ruff linting/format checks, and the PyTest suite. Lint or test failures intentionally fail the workflow so regressions cannot silently pass CI.
 
-* **RAG-powered Trading Knowledge Base**: Ingest Investopedia and textbook PDFs for semantic QA.
-* **Multi-Agent Trading Assistant**: Specialized agents for risk, fundamental analysis, and technicals.
-* **Market Sentiment Analysis**: Twitter/X and News sentiment NLP pipelines.
-* **Reinforcement Learning Strategies**: PPO-based automated trading bots.
-* **Real-Time Data Feeds**: WebSockets integration for live tick data.
-* **Advanced Risk Optimization**: Markowitz Efficient Frontier generation.
+## Security Configuration
 
----
+- `JWT_SECRET` is mandatory and has no hard-coded production fallback.
+- API CORS origins are controlled through `ALLOWED_ORIGINS`.
+- `.env` files and Python cache artifacts are excluded through `.gitignore`.
+- Never commit production secrets, API keys, database credentials, or private tokens.
 
-## 🌟 Why This Project Matters
+## Roadmap
 
-This project demonstrates a comprehensive understanding of the modern AI/ML lifecycle. 
+- RAG-powered trading knowledge base
+- Multi-agent trading assistant
+- Market/news sentiment analysis
+- Reinforcement-learning strategy research
+- Real-time market data feeds
+- Advanced portfolio risk optimization
 
-* **AI Engineering**: Designing multi-layered intelligent agents (AI Copilot & Trade Review).
-* **Machine Learning**: Building, training, and deploying robust gradient boosting models (XGBoost).
-* **Explainable AI (XAI)**: Moving beyond "black box" ML by integrating SHAP for absolute transparency.
-* **Data Science**: Advanced feature engineering, normalization, and statistical analysis (Sharpe Ratio, Drawdowns).
-* **Financial Analytics**: Translating raw data into actionable behavioral intelligence (Discipline Radar Charts).
-* **Full Stack Development**: Bridging a FastAPI backend with an interactive Streamlit UI.
-* **MLOps Foundations**: CI/CD integration, Dockerization, and model serialization.
+## Research
 
----
+The `Research_Submission/` directory contains the project's design brief, research paper, experimental results, and supporting figures.
 
-## 💼 Resume Highlights
+## Resume Highlights
 
-* **Architected an AI-powered Trading Intelligence Platform** using FastAPI and Streamlit, serving real-time portfolio analytics and conversational trade reviews.
-* **Developed a Trade Success Prediction Engine** by engineering financial features and training an XGBoost classifier, achieving sub-500ms inference times.
-* **Implemented Explainable AI (XAI) pipelines** utilizing SHAP to dynamically render the top positive and negative factors driving algorithmic trade predictions.
-* **Engineered a Behavioral Analytics module** that processes raw trade histories into quantifiable discipline scores, visualized via dynamic Plotly radar charts.
-* **Established full MLOps foundations** including model serialization (`joblib`), GitHub Actions CI/CD, and Docker containerization for reliable production deployments.
+- Architected an AI-powered behavioral trading platform using FastAPI and Streamlit.
+- Engineered behavioral signal detection for emotional and discipline-related trading patterns.
+- Implemented JWT-protected APIs, persistent memory, audit workflows, and streaming coaching responses.
+- Built an evaluation pipeline reporting precision, recall, and F1 against project ground truth.
+- Added Docker and GitHub Actions CI for reproducible deployment and regression testing.
