@@ -8,34 +8,35 @@ on:
     branches:
       - master
 
+env:
+  JWT_SECRET: ci-test-secret-change-in-production
+
 jobs:
   test-python:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
-      
+
       - name: Install backend dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
-          
+
       - name: Install frontend dependencies
         run: |
           pip install -r frontend-streamlit/requirements.txt
-          
+
       - name: Lint with Ruff
         run: |
-          # Continue even if there are formatting warnings
-          ruff check . || true
-          ruff format --check . || true
-          
+          ruff check .
+          ruff format --check .
+
       - name: Run Tests
-        run: |
-          pytest || true
+        run: pytest -q
