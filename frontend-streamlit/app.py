@@ -106,6 +106,7 @@ def style_figure(fig, height: int | None = None):
         paper_bgcolor="#FFFEFA",
         plot_bgcolor="#FFFEFA",
         font={"family": "Inter, Arial, sans-serif", "color": "#202820", "size": 12},
+        colorway=["#174C3C", "#E8A15A", "#6B8F80", "#B54742", "#A5A096"],
         margin={"l": 18, "r": 18, "t": 32, "b": 18},
         hoverlabel={"bgcolor": "#202820", "font_color": "#FFFEFA"},
         legend={"bgcolor": "rgba(255,254,250,0)", "font": {"color": "#202820"}},
@@ -264,12 +265,12 @@ def render_dashboard(df: pd.DataFrame) -> None:
     factor_label = "∞" if factor == float("inf") else "—" if factor is None else f'{factor:.2f}x'
     total_pnl = metrics["total_pnl"]
     prefix = "+" if total_pnl > 0 else ""
-    cards = st.columns(5)
-    cards[0].metric("Trades", f'{metrics["total_trades"]:,}')
+    cards = st.columns(4)
+    cards[0].metric("Net P&L", f'{prefix}₹{total_pnl:,.2f}')
     cards[1].metric("Win rate", f'{metrics["win_rate"]:.1f}%')
-    cards[2].metric("Net P&L", f'{prefix}₹{total_pnl:,.2f}')
-    cards[3].metric("Profit factor", factor_label)
-    cards[4].metric("Max drawdown", f'₹{metrics["max_drawdown"]:,.2f}')
+    cards[2].metric("Profit factor", factor_label)
+    cards[3].metric("Max drawdown", f'₹{metrics["max_drawdown"]:,.2f}')
+    st.caption(f'Based on {metrics["total_trades"]:,} recorded trades. Values are historical and do not predict future results.')
 
     st.divider()
     left, right = st.columns([1.7, 1], gap="large")
