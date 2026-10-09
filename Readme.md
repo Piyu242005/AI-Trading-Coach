@@ -214,24 +214,20 @@ docker-compose up --build
 
 ---
 
-## 🌟 Why This Project Matters
+## 🌟 Project Strengths & Current Boundaries
 
-This project demonstrates a comprehensive understanding of the modern AI/ML lifecycle. 
+This repository demonstrates a Streamlit + FastAPI architecture, data visualization, an XGBoost training workflow, model serialization, and test automation.
 
-* **AI Engineering**: Designing multi-layered intelligent agents (AI Copilot & Trade Review).
-* **Machine Learning**: Building, training, and deploying robust gradient boosting models (XGBoost).
-* **Explainable AI (XAI)**: Moving beyond "black box" ML by integrating SHAP for absolute transparency.
-* **Data Science**: Advanced feature engineering, normalization, and statistical analysis (Sharpe Ratio, Drawdowns).
-* **Financial Analytics**: Translating raw data into actionable behavioral intelligence (Discipline Radar Charts).
-* **Full Stack Development**: Bridging a FastAPI backend with an interactive Streamlit UI.
-* **MLOps Foundations**: CI/CD integration, Dockerization, and model serialization.
-
----
+**Important boundaries:** the bundled model is trained on synthetic data; the Streamlit coach uses deterministic record-based rules rather than an external LLM; the current API token endpoint does not verify a password; and journal entries are not persisted. These limitations must be addressed before describing the app as production-ready.
 
 ## 💼 Resume Highlights
 
-* **Architected an AI-powered Trading Intelligence Platform** using FastAPI and Streamlit, serving real-time portfolio analytics and conversational trade reviews.
-* **Developed a Trade Success Prediction Engine** by engineering financial features and training an XGBoost classifier, achieving sub-500ms inference times.
-* **Implemented Explainable AI (XAI) pipelines** utilizing SHAP to dynamically render the top positive and negative factors driving algorithmic trade predictions.
-* **Engineered a Behavioral Analytics module** that processes raw trade histories into quantifiable discipline scores, visualized via dynamic Plotly radar charts.
-* **Established full MLOps foundations** including model serialization (`joblib`), GitHub Actions CI/CD, and Docker containerization for reliable production deployments.
+Use wording that accurately reflects the current prototype:
+
+- Built a Streamlit trading analytics dashboard with Plotly visualizations for historical win rate, net P&L, profit factor, and drawdown.
+- Implemented a reproducible XGBoost demonstration pipeline with a train/holdout split and preprocessing fitted only on training data.
+- Added SHAP-based feature contribution visualizations with graceful fallback handling.
+- Integrated a Streamlit frontend with a FastAPI backend and added automated tests for trade analytics.
+
+Avoid claiming real-world prediction accuracy, sub-500ms inference, persistent journal storage, secure production authentication, or live market-data ingestion until those capabilities are implemented and verified.
+
