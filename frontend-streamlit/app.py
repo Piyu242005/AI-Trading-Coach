@@ -162,6 +162,11 @@ def login(user_id: str, password: str) -> None:
                 return
             st.session_state.token = token
             st.session_state.user_id = user_id
+            st.session_state.trades_data = []
+            st.session_state.pop("trades_loaded_for_user", None)
+            st.session_state.journal_entries = []
+            st.session_state.pop("journal_loaded_for_user", None)
+            st.session_state.coach_messages = []
             st.session_state.is_guest = False
             st.session_state.welcome_screen_passed = True
             st.success("Logged in successfully!")
@@ -173,7 +178,8 @@ def login(user_id: str, password: str) -> None:
 
 
 def load_user_trades(force: bool = False) -> bool:
-    if st.session_state.trades_data and not force:
+    current_user = str(st.session_state.user_id)
+    if not force and st.session_state.get("trades_loaded_for_user") == current_user:
         return True
 
     if st.session_state.user_id == "guest_demo":
@@ -184,6 +190,7 @@ def load_user_trades(force: bool = False) -> bool:
             {"tradeId": "t4", "asset": "ETH", "assetClass": "Crypto", "direction": "Long", "entryPrice": 3000, "exitPrice": 3100, "pnl": 500, "entryAt": (datetime.datetime.now() - datetime.timedelta(hours=2)).isoformat(), "outcome": "win"},
             {"tradeId": "t5", "asset": "NIFTY", "assetClass": "Indices", "direction": "Long", "entryPrice": 20000, "exitPrice": 20200, "pnl": 1000, "entryAt": (datetime.datetime.now() - datetime.timedelta(hours=1)).isoformat(), "outcome": "win"},
         ]
+        st.session_state.trades_loaded_for_user = current_user
         return True
 
     try:
@@ -204,6 +211,7 @@ def load_user_trades(force: bool = False) -> bool:
                     all_trades.extend(session.get("trades", []))
 
         st.session_state.trades_data = all_trades
+        st.session_state.trades_loaded_for_user = current_user
         return True
     except (requests.RequestException, ValueError, TypeError):
         st.error("Could not load or parse trades. Check the API service status and response format.")
@@ -765,6 +773,7 @@ else:
         st.session_state.user_id = "guest_demo"
         st.session_state.is_guest = True
         st.session_state.trades_data = []
+        st.session_state.pop("trades_loaded_for_user", None)
         st.session_state.journal_entries = []
         st.session_state.pop("journal_loaded_for_user", None)
         st.session_state.coach_messages = []
