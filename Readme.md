@@ -171,6 +171,29 @@ AI-Trading-Coach/
 
 ---
 
+## 🔐 Secure Backend Configuration
+
+The API intentionally has **no default credentials**. Configure a strong JWT signing secret and a password-hash map before enabling login.
+
+1. Generate a password hash locally (password input is hidden):
+
+   ```bash
+   python scripts/hash_password.py
+   ```
+
+2. Generate a strong JWT secret:
+
+   ```bash
+   python -c "import secrets; print(secrets.token_urlsafe(48))"
+   ```
+
+3. Configure these environment variables in your API host (or export them before Docker Compose):
+
+   - `JWT_SECRET`: the generated secret (at least 32 characters).
+   - `AI_TRADING_COACH_USERS_JSON`: JSON mapping user IDs to the hash output, e.g. `{"Piyu24":"<salt_hex>:<pbkdf2_hash_hex>"}`.
+
+   Do not commit actual secrets, password hashes, or `.env` files. Without valid configuration, login fails closed and Guest demo remains available.
+
 ## 💻 Installation Guide
 
 ### 1. Clone the repository
@@ -196,8 +219,10 @@ streamlit run app.py
 ```
 
 ### 3. Backend Setup (FastAPI - Optional for Local Dev)
+
+Configure the secure backend environment variables above, then run:
+
 ```bash
-# From the root directory
 docker-compose up --build
 ```
 
