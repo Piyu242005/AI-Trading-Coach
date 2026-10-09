@@ -1,5 +1,5 @@
 import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 import pandas as pd
 import plotly.express as px
@@ -8,7 +8,6 @@ import requests
 import streamlit as st
 import joblib
 import shap
-import matplotlib.pyplot as plt
 import numpy as np
 import os
 from pathlib import Path
@@ -126,25 +125,8 @@ def load_user_trades(force: bool = False) -> None:
         st.error("Could not load trades. Check the API service status and try again.")
 
 
-def fetch_discipline_score() -> Optional[Dict[str, str]]:
-    if st.session_state.user_id == "guest_demo":
-        return {
-            "score": 85,
-            "risk_level": "Moderate",
-            "confidence": 92,
-            "contributors": {"Consistency": "+10", "Win Rate": "+5", "Drawdown": "-2"}
-        }
 
-    try:
-        response = requests.get(
-            f"{get_api_url()}/api/discipline-score/{st.session_state.user_id}",
-            headers=api_headers(), timeout=10,
-        )
-        if response.status_code == 200:
-            return response.json()
-    except Exception:
-        return None
-    return None
+
 
 
 def build_trade_frame(trades: List[Dict[str, object]]) -> pd.DataFrame:
@@ -354,6 +336,7 @@ def render_market_analysis(df: pd.DataFrame) -> None:
 def render_trading_journal(df: pd.DataFrame) -> None:
     st.header("Trading Journal")
     st.markdown("Log trades, strategies, and notes for review.")
+    st.caption("Journal entries are stored in the current Streamlit session only; persistent journal storage is not connected yet.")
 
     with st.form("journal_entry"):
         col1, col2, col3 = st.columns(3)
@@ -515,7 +498,7 @@ def render_settings() -> None:
     st.header("Settings")
     
     if st.session_state.is_guest:
-        st.warning("🔒 Login Required: Sign in to access Account Settings, Create Portfolios, and export data.")
+        st.warning("Backend account management and export are not implemented in this prototype. Use guest mode for the safe demo experience.")
         return
 
     st.text_input("API URL", key="api_url")
