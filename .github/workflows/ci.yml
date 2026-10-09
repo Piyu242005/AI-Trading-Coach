@@ -29,5 +29,8 @@ jobs:
         run: |
           ruff check frontend-streamlit/analytics.py frontend-streamlit/training/train_model.py tests/test_streamlit_analytics.py
 
+      - name: Compile Python modules
+        run: python -m compileall -q app frontend-streamlit tests
+
       - name: Run tests
         run: pytest
