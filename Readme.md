@@ -77,17 +77,14 @@ An AI-powered trading intelligence platform that helps traders improve decision-
 
 ---
 
-## 📸 Screenshots
+## 🖥️ Interface & Demo Notes
 
-> *Note: Add your high-resolution screenshots here before deploying.*
+The Streamlit interface includes a dashboard, trade-history charts, a record-based insights coach, a prediction sandbox, a trading journal, and portfolio analytics.
 
-| Dashboard | AI Coach |
-| :---: | :---: |
-| ![Dashboard](assets/dashboard_placeholder.png) | ![AI Coach](assets/coach_placeholder.png) |
-| **Trade Prediction Engine** | **SHAP Explainability** |
-| ![Predictions](assets/predictions_placeholder.png) | ![SHAP](assets/shap_placeholder.png) |
-| **Behavioral Intelligence** | **Portfolio Analytics** |
-| ![Radar Chart](assets/radar_placeholder.png) | ![Portfolio](assets/portfolio_placeholder.png) |
+- Guest mode uses illustrative sample trades; it does not connect to live market prices.
+- Market charts only use recorded trade prices. Missing data is shown as unavailable rather than generated.
+- Prediction artifacts are trained on synthetic data for demonstration and must not be interpreted as real-market probabilities.
+- The current backend token endpoint accepts a user ID without password verification. Do not use sensitive account or portfolio data until proper authentication and authorization are implemented.
 
 ---
 
@@ -151,12 +148,11 @@ Data Collection → Feature Engineering → Model Training → Prediction → Ex
 
 ---
 
-## 🚀 Key Metrics
+## 📐 Metrics & Evaluation
 
-* **95% Prediction Accuracy** (Simulated baseline)
-* **<500ms Inference Time** via optimized model serialization (`joblib`)
-* **Real-Time Portfolio Analytics** without page-reloads
-* **100% Explainable AI Predictions** via SHAP value extraction
+Dashboard metrics are calculated from the trade records currently loaded into the app: trade count, historical win rate, net P&L, profit factor, and peak-to-trough drawdown from cumulative trade P&L.
+
+The demo model training script reports holdout accuracy, precision, recall, F1, and ROC AUC on a synthetic dataset. These are **synthetic-data diagnostics**, not evidence of trading performance. No real-world accuracy or latency claim is made.
 
 ---
 
@@ -187,13 +183,13 @@ AI-Trading-Coach/
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/AI-Trading-Coach.git
+git clone https://github.com/Piyu242005/AI-Trading-Coach.git
 cd AI-Trading-Coach
 ```
 
 ### 2. Frontend Setup (Streamlit & ML)
 ```bash
-cd frontend-streamlit
+cd AI-Trading-Coach/frontend-streamlit
 python -m venv venv
 source venv/bin/activate  # On Windows: .\venv\Scripts\activate
 pip install -r requirements.txt
