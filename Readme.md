@@ -2,7 +2,7 @@
   
 # AI Trading Coach
 
-**AI-Powered Trading Intelligence, Behavioral Analytics & Portfolio Optimization Platform**
+**Trade-history analytics, a synthetic ML demo, and a Streamlit + FastAPI portfolio prototype**
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/)
@@ -10,7 +10,7 @@
 [![XGBoost](https://img.shields.io/badge/XGBoost-Machine_Learning-orange)](https://xgboost.readthedocs.io/)
 [![SHAP](https://img.shields.io/badge/SHAP-Explainable_AI-brightgreen)](https://shap.readthedocs.io/)
 [![Plotly](https://img.shields.io/badge/Plotly-Data_Viz-purple)](https://plotly.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
 [![GitHub Actions](https://img.shields.io/badge/CI%2FCD-GitHub_Actions-2088FF?logo=github-actions&logoColor=white)](https://github.com/features/actions)
 
@@ -18,7 +18,7 @@
 
 ## 📖 Overview
 
-An AI-powered trading intelligence platform that helps traders improve decision-making through predictive analytics, explainable machine learning, behavioral insights, portfolio analytics, and conversational AI coaching.
+A portfolio prototype for exploring trade-history analytics, a synthetic-data XGBoost workflow, SHAP visualizations, and a Streamlit frontend connected to a FastAPI backend.
 
 ---
 
@@ -29,11 +29,11 @@ An AI-powered trading intelligence platform that helps traders improve decision-
 * Natural-language keyword routing to deterministic analytics
 * Clear disclosure that this version does not call an external LLM
 
-### 📈 Trade Prediction Engine
-* XGBoost-powered prediction model
-* Trade success probability scoring
-* Risk estimation
-* Confidence metrics
+### 📈 Synthetic-Data Prediction Sandbox
+* XGBoost demonstration classifier
+* Class-1 probability output for sample feature inputs
+* Holdout diagnostics on generated data only
+* Explicit warning that scores are not real-market probabilities
 
 ### 🔍 Model Explainability Sandbox
 * SHAP feature-contribution visualization when supported by the installed model/runtime
@@ -61,11 +61,10 @@ An AI-powered trading intelligence platform that helps traders improve decision-
 * Performance Review
 * Learning Notes
 
-### 💡 AI Insights Engine
-* Trade Pattern Detection
-* Winning Strategy Discovery
-* Loss Pattern Analysis
-* Personalized Improvement Recommendations
+### ⚠️ Current Prototype Limitations
+* Trade journal entries are session-only and are not persisted
+* No live market-data provider is connected to the Streamlit UI
+* Secure backend login requires environment-configured user hashes and a strong JWT secret
 
 ---
 
@@ -131,8 +130,10 @@ Data Collection → Feature Engineering → Model Training → Prediction → Ex
 * Pandas
 * NumPy
 
-**Database:**
-* PostgreSQL / SQLite
+**Data / Persistence:**
+* MongoDB for backend session memory
+* Bundled sample trade dataset
+* Streamlit journal state is session-only
 
 **DevOps:**
 * Docker
