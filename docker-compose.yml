@@ -9,6 +9,7 @@ services:
       - JWT_SECRET=${JWT_SECRET:?Set a strong JWT_SECRET before starting the API}
       - AI_TRADING_COACH_USERS_JSON=${AI_TRADING_COACH_USERS_JSON:?Configure at least one password hash before starting the API}
       - JWT_ALGORITHM=HS256
+      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:8501}
     depends_on:
       - mongo
   mongo:

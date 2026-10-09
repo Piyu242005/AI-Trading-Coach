@@ -8,15 +8,18 @@ from app.routes import (
     traders,
     audit,
     discipline,
+    journal,
 )
+
+import os
 
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(title="Piyu API")
+app = FastAPI(title="AI Trading Coach API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[origin.strip() for origin in os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:8501").split(",") if origin.strip()],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -29,7 +32,7 @@ def read_root():
         "project": "AI Trading Coach",
         "author": "Piyush Ramteke",
         "status": "🟢 API Online • Data Loaded Successfully",
-        "description": "Explainable Behavioral AI System for Reliable Financial Decision Support",
+        "description": "Portfolio prototype for historical trade analytics, authenticated journal persistence, and synthetic-model experimentation",
         "core_features": [
             "Behavioral Pathology Detection",
             "Retrieval-Augmented Coaching",
@@ -39,6 +42,7 @@ def read_root():
         ],
         "available_endpoints": {
             "trades": "/api/trades",
+            "journal": "/api/journal",
             "profiling": "/api/profiling/{userId}",
             "memory": "/api/memory/{userId}",
             "coaching": "/api/coaching/{userId}",
@@ -62,5 +66,6 @@ app.include_router(memory.router, prefix="/api/memory")
 app.include_router(auth.router, prefix="/api/auth")
 app.include_router(coaching.router, prefix="/api/coaching")
 app.include_router(discipline.router, prefix="/api/discipline-score")
+app.include_router(journal.router, prefix="/api")
 app.include_router(audit.router)
 app.include_router(evaluation.router)

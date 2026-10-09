@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Any, Dict, List, Literal, Optional
 
 from pydantic import BaseModel, Field, SecretStr
@@ -81,3 +82,15 @@ class TokenRequest(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
+
+
+class JournalEntryCreate(BaseModel):
+    date: date
+    asset: str = Field(min_length=1, max_length=32)
+    direction: Literal["Long", "Short"]
+    entry: float = Field(ge=0)
+    exit: float = Field(ge=0)
+    strategy: str = Field(default="", max_length=160)
+    pnl: float
+    confidence: int = Field(ge=1, le=10)
+    notes: str = Field(default="", max_length=2000)

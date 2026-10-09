@@ -25,9 +25,9 @@ jobs:
           pip install -r requirements-dev.txt
           pip install -r frontend-streamlit/requirements.txt
 
-      - name: Lint changed Streamlit analytics modules
+      - name: Lint Python correctness rules
         run: |
-          ruff check frontend-streamlit/analytics.py frontend-streamlit/training/train_model.py tests/test_streamlit_analytics.py
+          ruff check --select E4,E7,E9,F app/main.py app/models.py app/routes/journal.py frontend-streamlit/analytics.py frontend-streamlit/training/train_model.py tests/test_journal_api.py tests/test_streamlit_analytics.py
 
       - name: Compile Python modules
         run: python -m compileall -q app frontend-streamlit tests
