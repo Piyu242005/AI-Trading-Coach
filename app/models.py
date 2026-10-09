@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Literal, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, SecretStr
 
 
 class Trade(BaseModel):
@@ -74,7 +74,8 @@ class AuditResponse(BaseModel):
 
 
 class TokenRequest(BaseModel):
-    userId: str
+    userId: str = Field(min_length=1, max_length=128)
+    password: SecretStr
 
 
 class TokenResponse(BaseModel):

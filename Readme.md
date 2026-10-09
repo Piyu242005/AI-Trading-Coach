@@ -2,7 +2,7 @@
   
 # AI Trading Coach
 
-**AI-Powered Trading Intelligence, Behavioral Analytics & Portfolio Optimization Platform**
+**Trade-history analytics, a synthetic ML demo, and a Streamlit + FastAPI portfolio prototype**
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/)
@@ -10,7 +10,7 @@
 [![XGBoost](https://img.shields.io/badge/XGBoost-Machine_Learning-orange)](https://xgboost.readthedocs.io/)
 [![SHAP](https://img.shields.io/badge/SHAP-Explainable_AI-brightgreen)](https://shap.readthedocs.io/)
 [![Plotly](https://img.shields.io/badge/Plotly-Data_Viz-purple)](https://plotly.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
 [![GitHub Actions](https://img.shields.io/badge/CI%2FCD-GitHub_Actions-2088FF?logo=github-actions&logoColor=white)](https://github.com/features/actions)
 
@@ -18,50 +18,42 @@
 
 ## 📖 Overview
 
-An AI-powered trading intelligence platform that helps traders improve decision-making through predictive analytics, explainable machine learning, behavioral insights, portfolio analytics, and conversational AI coaching.
+A portfolio prototype for exploring trade-history analytics, a synthetic-data XGBoost workflow, SHAP visualizations, and a Streamlit frontend connected to a FastAPI backend.
 
 ---
 
 ## ✨ Core Features
 
-### 🤖 AI Trading Coach
-* Conversational trading assistant
-* Trading education
-* Market explanations
-* Portfolio guidance
-* AI-generated recommendations
+### 📊 Trading Insights Coach
+* Record-based summaries and historical metrics
+* Natural-language keyword routing to deterministic analytics
+* Clear disclosure that this version does not call an external LLM
 
-### 📈 Trade Prediction Engine
-* XGBoost-powered prediction model
-* Trade success probability scoring
-* Risk estimation
-* Confidence metrics
+### 📈 Synthetic-Data Prediction Sandbox
+* XGBoost demonstration classifier
+* Class-1 probability output for sample feature inputs
+* Holdout diagnostics on generated data only
+* Explicit warning that scores are not real-market probabilities
 
-### 🔍 Explainable AI
-* SHAP visualizations
-* Feature importance analysis
-* Transparent prediction explanations
-* Human-readable insights
+### 🔍 Model Explainability Sandbox
+* SHAP feature-contribution visualization when supported by the installed model/runtime
+* Explicit warning that model artifacts use synthetic training data
+* Graceful fallback when SHAP output is unavailable
 
-### 🧠 Behavioral Intelligence
-* Discipline Score
-* Patience Score
-* Risk Control Analysis
-* Emotional Trading Detection
-* Consistency Tracking
+### 🧠 Behavioral Analytics Readiness
+* Trade history normalization and outcome counts
+* Recorded strategy/confidence fields surfaced when present
+* Behavioral scores are not generated when supporting data is missing
 
-### 📊 Portfolio Intelligence
-* Portfolio Health Score
-* Asset Allocation Analysis
-* Performance Tracking
-* Diversification Analysis
-* Risk Monitoring
+### 📊 Trade Performance Analytics
+* Net P&L, historical win rate, profit factor, and drawdown
+* Trade count and P&L by asset
+* Clear distinction between trade-level statistics and a complete portfolio valuation
 
-### 📉 Market Analytics
-* Technical Indicators
-* Trend Analysis
-* Volatility Monitoring
-* Opportunity Detection
+### 📉 Trade-Price Analysis
+* Recorded entry-price charts and rolling averages
+* Descriptive price variation where enough records exist
+* No fabricated price history or claims of live market data
 
 ### 📓 Trading Journal
 * Trade Logging
@@ -69,25 +61,21 @@ An AI-powered trading intelligence platform that helps traders improve decision-
 * Performance Review
 * Learning Notes
 
-### 💡 AI Insights Engine
-* Trade Pattern Detection
-* Winning Strategy Discovery
-* Loss Pattern Analysis
-* Personalized Improvement Recommendations
+### ⚠️ Current Prototype Limitations
+* Trade journal entries are session-only and are not persisted
+* No live market-data provider is connected to the Streamlit UI
+* Secure backend login requires environment-configured user hashes and a strong JWT secret
 
 ---
 
-## 📸 Screenshots
+## 🖥️ Interface & Demo Notes
 
-> *Note: Add your high-resolution screenshots here before deploying.*
+The Streamlit interface includes a dashboard, trade-history charts, a record-based insights coach, a prediction sandbox, a trading journal, and portfolio analytics.
 
-| Dashboard | AI Coach |
-| :---: | :---: |
-| ![Dashboard](assets/dashboard_placeholder.png) | ![AI Coach](assets/coach_placeholder.png) |
-| **Trade Prediction Engine** | **SHAP Explainability** |
-| ![Predictions](assets/predictions_placeholder.png) | ![SHAP](assets/shap_placeholder.png) |
-| **Behavioral Intelligence** | **Portfolio Analytics** |
-| ![Radar Chart](assets/radar_placeholder.png) | ![Portfolio](assets/portfolio_placeholder.png) |
+- Guest mode uses illustrative sample trades; it does not connect to live market prices.
+- Market charts only use recorded trade prices. Missing data is shown as unavailable rather than generated.
+- Prediction artifacts are trained on synthetic data for demonstration and must not be interpreted as real-market probabilities.
+- Backend login requires a configured PBKDF2 password-hash map and a strong JWT secret; no default credentials are shipped. Journal entries remain session-only.
 
 ---
 
@@ -116,12 +104,12 @@ graph TD
 
 Data Collection → Feature Engineering → Model Training → Prediction → Explainability → Portfolio Intelligence
 
-1. **Data Collection:** User trade histories and real-time market ticks are ingested and cleaned.
-2. **Feature Engineering:** Calculation of behavioral metrics (Emotion Score, Consistency), volatility proxies, and R:R ratios.
-3. **Model Training:** Synthetic and real-world trades are fit to an `XGBClassifier` to maximize predictive power.
-4. **Prediction:** Inference generates a precise Win Probability (%) for any simulated or upcoming trade.
-5. **Explainability:** `SHAP TreeExplainer` identifies the Top Positive/Negative factors driving the algorithm's decision.
-6. **Portfolio Intelligence:** Aggregates individual trade data into a holistic "Portfolio Health Score" and radar-based behavioral profile.
+1. **Data collection:** The current demo accepts sample trade records and API-provided records.
+2. **Feature engineering:** A deterministic synthetic dataset is generated for the model demonstration.
+3. **Model training:** An `XGBClassifier` is trained with a holdout split; preprocessing is fitted on training data only.
+4. **Prediction:** The app displays a model score for user-supplied synthetic-scale features.
+5. **Explainability:** SHAP contributions are rendered when compatible with the model and runtime.
+6. **Evaluation boundary:** Synthetic-data metrics are diagnostic only and are not evidence of real-world trading performance.
 
 ---
 
@@ -142,8 +130,10 @@ Data Collection → Feature Engineering → Model Training → Prediction → Ex
 * Pandas
 * NumPy
 
-**Database:**
-* PostgreSQL / SQLite
+**Data / Persistence:**
+* MongoDB for backend session memory
+* Bundled sample trade dataset
+* Streamlit journal state is session-only
 
 **DevOps:**
 * Docker
@@ -151,12 +141,11 @@ Data Collection → Feature Engineering → Model Training → Prediction → Ex
 
 ---
 
-## 🚀 Key Metrics
+## 📐 Metrics & Evaluation
 
-* **95% Prediction Accuracy** (Simulated baseline)
-* **<500ms Inference Time** via optimized model serialization (`joblib`)
-* **Real-Time Portfolio Analytics** without page-reloads
-* **100% Explainable AI Predictions** via SHAP value extraction
+Dashboard metrics are calculated from the trade records currently loaded into the app: trade count, historical win rate, net P&L, profit factor, and peak-to-trough drawdown from cumulative trade P&L.
+
+The demo model training script reports holdout accuracy, precision, recall, F1, and ROC AUC on a synthetic dataset. These are **synthetic-data diagnostics**, not evidence of trading performance. No real-world accuracy or latency claim is made.
 
 ---
 
@@ -183,11 +172,34 @@ AI-Trading-Coach/
 
 ---
 
+## 🔐 Secure Backend Configuration
+
+The API intentionally has **no default credentials**. Configure a strong JWT signing secret and a password-hash map before enabling login.
+
+1. Generate a password hash locally (password input is hidden):
+
+   ```bash
+   python scripts/hash_password.py
+   ```
+
+2. Generate a strong JWT secret:
+
+   ```bash
+   python -c "import secrets; print(secrets.token_urlsafe(48))"
+   ```
+
+3. Configure these environment variables in your API host (or export them before Docker Compose):
+
+   - `JWT_SECRET`: the generated secret (at least 32 characters).
+   - `AI_TRADING_COACH_USERS_JSON`: JSON mapping user IDs to the hash output, e.g. `{"Piyu24":"<salt_hex>:<pbkdf2_hash_hex>"}`.
+
+   Do not commit actual secrets, password hashes, or `.env` files. Without valid configuration, login fails closed and Guest demo remains available.
+
 ## 💻 Installation Guide
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/AI-Trading-Coach.git
+git clone https://github.com/Piyu242005/AI-Trading-Coach.git
 cd AI-Trading-Coach
 ```
 
@@ -208,8 +220,10 @@ streamlit run app.py
 ```
 
 ### 3. Backend Setup (FastAPI - Optional for Local Dev)
+
+Configure the secure backend environment variables above, then run:
+
 ```bash
-# From the root directory
 docker-compose up --build
 ```
 
@@ -226,24 +240,20 @@ docker-compose up --build
 
 ---
 
-## 🌟 Why This Project Matters
+## 🌟 Project Strengths & Current Boundaries
 
-This project demonstrates a comprehensive understanding of the modern AI/ML lifecycle. 
+This repository demonstrates a Streamlit + FastAPI architecture, data visualization, an XGBoost training workflow, model serialization, and test automation.
 
-* **AI Engineering**: Designing multi-layered intelligent agents (AI Copilot & Trade Review).
-* **Machine Learning**: Building, training, and deploying robust gradient boosting models (XGBoost).
-* **Explainable AI (XAI)**: Moving beyond "black box" ML by integrating SHAP for absolute transparency.
-* **Data Science**: Advanced feature engineering, normalization, and statistical analysis (Sharpe Ratio, Drawdowns).
-* **Financial Analytics**: Translating raw data into actionable behavioral intelligence (Discipline Radar Charts).
-* **Full Stack Development**: Bridging a FastAPI backend with an interactive Streamlit UI.
-* **MLOps Foundations**: CI/CD integration, Dockerization, and model serialization.
-
----
+**Important boundaries:** the bundled model is trained on synthetic data; the Streamlit coach uses deterministic record-based rules rather than an external LLM; API login requires configured password hashes and a strong JWT secret; and journal entries are not persisted. These limitations must be addressed before describing the app as production-ready.
 
 ## 💼 Resume Highlights
 
-* **Architected an AI-powered Trading Intelligence Platform** using FastAPI and Streamlit, serving real-time portfolio analytics and conversational trade reviews.
-* **Developed a Trade Success Prediction Engine** by engineering financial features and training an XGBoost classifier, achieving sub-500ms inference times.
-* **Implemented Explainable AI (XAI) pipelines** utilizing SHAP to dynamically render the top positive and negative factors driving algorithmic trade predictions.
-* **Engineered a Behavioral Analytics module** that processes raw trade histories into quantifiable discipline scores, visualized via dynamic Plotly radar charts.
-* **Established full MLOps foundations** including model serialization (`joblib`), GitHub Actions CI/CD, and Docker containerization for reliable production deployments.
+Use wording that accurately reflects the current prototype:
+
+- Built a Streamlit trading analytics dashboard with Plotly visualizations for historical win rate, net P&L, profit factor, and drawdown.
+- Implemented a reproducible XGBoost demonstration pipeline with a train/holdout split and preprocessing fitted only on training data.
+- Added SHAP-based feature contribution visualizations with graceful fallback handling.
+- Integrated a Streamlit frontend with a FastAPI backend and added automated tests for trade analytics.
+
+Avoid claiming real-world prediction accuracy, sub-500ms inference, persistent journal storage, secure production authentication, or live market-data ingestion until those capabilities are implemented and verified.
+
