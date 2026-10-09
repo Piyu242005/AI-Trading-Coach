@@ -144,7 +144,7 @@ def build_trade_frame(trades: List[Dict[str, object]]) -> pd.DataFrame:
     if "pnl" not in df.columns:
         df["pnl"] = 0
     if "outcome" not in df.columns:
-        df["outcome"] = df["pnl"].apply(lambda value: "win" if value >= 0 else "loss")
+        df["outcome"] = df["pnl"].apply(lambda value: "win" if value > 0 else "loss" if value < 0 else "breakeven")
     return df
 
 
