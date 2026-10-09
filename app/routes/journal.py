@@ -29,6 +29,7 @@ def create_journal_entry(
 ):
     user_id = str(claims["sub"])
     record = payload.dict()
+    record["date"] = payload.date.isoformat()
     record.update({
         "id": str(uuid4()),
         "user_id": user_id,
