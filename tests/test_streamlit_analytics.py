@@ -1,10 +1,10 @@
-from pathlib import Path
 import sys
+from pathlib import Path
 
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "frontend-streamlit"))
-from analytics import calculate_trade_metrics, normalize_trades  # noqa: E402
+from analytics import calculate_trade_metrics, normalize_trades
 
 
 def test_empty_trades_have_safe_zero_metrics():
