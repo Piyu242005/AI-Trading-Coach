@@ -156,7 +156,11 @@ def login(user_id: str, password: str) -> None:
             f"{get_api_url()}/api/auth/token", json={"userId": user_id, "password": password}, timeout=10
         )
         if response.status_code == 200:
-            st.session_state.token = response.json().get("access_token")
+            token = response.json().get("access_token")
+            if not token:
+                st.error("The API response did not include an access token. Login was not completed.")
+                return
+            st.session_state.token = token
             st.session_state.user_id = user_id
             st.session_state.is_guest = False
             st.session_state.welcome_screen_passed = True
@@ -164,8 +168,8 @@ def login(user_id: str, password: str) -> None:
             st.rerun()
         else:
             st.error(f"Login failed (HTTP {response.status_code}). Check the credentials and backend authentication configuration.")
-    except requests.RequestException:
-        st.error("Could not reach the API. Check the service status and try again.")
+    except (requests.RequestException, ValueError):
+        st.error("Could not reach the API or read its response. Check the service status and try again.")
 
 
 def load_user_trades(force: bool = False) -> bool:
@@ -189,6 +193,8 @@ def load_user_trades(force: bool = False) -> bool:
             return False
 
         data = response.json()
+        if not isinstance(data, dict):
+            raise ValueError("Expected an object containing trade records")
         traders = data.get("traders", [])
 
         all_trades = []
@@ -199,8 +205,8 @@ def load_user_trades(force: bool = False) -> bool:
 
         st.session_state.trades_data = all_trades
         return True
-    except requests.RequestException:
-        st.error("Could not load trades. Check the API service status and try again.")
+    except (requests.RequestException, ValueError, TypeError):
+        st.error("Could not load or parse trades. Check the API service status and response format.")
         return False
 
 
@@ -430,8 +436,8 @@ def load_journal_entries(force: bool = False) -> None:
             st.session_state.journal_loaded_for_user = user_id
         else:
             st.error(f"Could not load journal entries (HTTP {response.status_code}).")
-    except requests.RequestException:
-        st.error("Journal service is unavailable. Your saved entries have not been changed.")
+    except (requests.RequestException, ValueError):
+        st.error("Journal service is unavailable or returned an invalid response. Your saved entries have not been changed.")
 
 
 def clear_journal_entries() -> bool:
@@ -515,8 +521,8 @@ def render_trading_journal(df: pd.DataFrame) -> None:
                     st.success("Journal entry saved to your account.")
                 else:
                     st.error(f"Journal entry was not saved (HTTP {response.status_code}). Check your session and API configuration.")
-            except requests.RequestException:
-                st.error("Journal service is unavailable. The entry was not saved.")
+            except (requests.RequestException, ValueError):
+                st.error("Journal service is unavailable or returned an invalid response. The entry was not saved.")
 
     st.divider()
     st.subheader("Saved entries")
