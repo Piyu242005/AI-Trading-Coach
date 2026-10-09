@@ -1,259 +1,175 @@
 <div align="center">
-  
+
 # AI Trading Coach
 
-**Trade-history analytics, a synthetic ML demo, and a Streamlit + FastAPI portfolio prototype**
+### Clarity over noise.
 
-[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=flat&logo=streamlit&logoColor=white)](https://streamlit.io/)
-[![XGBoost](https://img.shields.io/badge/XGBoost-Machine_Learning-orange)](https://xgboost.readthedocs.io/)
-[![SHAP](https://img.shields.io/badge/SHAP-Explainable_AI-brightgreen)](https://shap.readthedocs.io/)
-[![Plotly](https://img.shields.io/badge/Plotly-Data_Viz-purple)](https://plotly.com/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
-[![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
-[![GitHub Actions](https://img.shields.io/badge/CI%2FCD-GitHub_Actions-2088FF?logo=github-actions&logoColor=white)](https://github.com/features/actions)
+A thoughtful trading analytics prototype built with **Streamlit, FastAPI, XGBoost and Plotly** — designed to explore recorded trade performance, risk metrics and explainable ML experiments.
+
+[![Python](https://img.shields.io/badge/Python-3.10%2B-233d32?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/UI-Streamlit-c65c3d?style=flat-square&logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![FastAPI](https://img.shields.io/badge/API-FastAPI-718875?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![CI](https://img.shields.io/badge/Checks-GitHub_Actions-d9ad60?style=flat-square&logo=githubactions&logoColor=202a25)](https://github.com/Piyu242005/AI-Trading-Coach/actions)
+
+[Explore the repository](https://github.com/Piyu242005/AI-Trading-Coach) · [Open the portfolio site](https://piyu242005.github.io/AI-Trading-Coach/)
 
 </div>
 
-## 📖 Overview
+![AI Trading Coach editorial dashboard cover](docs/assets/ai-trading-coach-cover.svg)
 
-A portfolio prototype for exploring trade-history analytics, a synthetic-data XGBoost workflow, SHAP visualizations, and a Streamlit frontend connected to a FastAPI backend.
-
----
-
-## ✨ Core Features
-
-### 📊 Trading Insights Coach
-* Record-based summaries and historical metrics
-* Natural-language keyword routing to deterministic analytics
-* Clear disclosure that this version does not call an external LLM
-
-### 📈 Synthetic-Data Prediction Sandbox
-* XGBoost demonstration classifier
-* Class-1 probability output for sample feature inputs
-* Holdout diagnostics on generated data only
-* Explicit warning that scores are not real-market probabilities
-
-### 🔍 Model Explainability Sandbox
-* SHAP feature-contribution visualization when supported by the installed model/runtime
-* Explicit warning that model artifacts use synthetic training data
-* Graceful fallback when SHAP output is unavailable
-
-### 🧠 Behavioral Analytics Readiness
-* Trade history normalization and outcome counts
-* Recorded strategy/confidence fields surfaced when present
-* Behavioral scores are not generated when supporting data is missing
-
-### 📊 Trade Performance Analytics
-* Net P&L, historical win rate, profit factor, and drawdown
-* Trade count and P&L by asset
-* Clear distinction between trade-level statistics and a complete portfolio valuation
-
-### 📉 Trade-Price Analysis
-* Recorded entry-price charts and rolling averages
-* Descriptive price variation where enough records exist
-* No fabricated price history or claims of live market data
-
-### 📓 Trading Journal
-* Trade Logging
-* Strategy Evaluation
-* Performance Review
-* Learning Notes
-
-### ⚠️ Current Prototype Limitations
-* Trade journal entries are session-only and are not persisted
-* No live market-data provider is connected to the Streamlit UI
-* Secure backend login requires environment-configured user hashes and a strong JWT secret
+> **Project status:** portfolio prototype. The dashboard analyzes available trade records; the bundled classifier uses synthetic data. It is not a live trading terminal, a validated forecasting system, or financial advice.
 
 ---
 
-## 🖥️ Interface & Demo Notes
+## The idea
 
-The Streamlit interface includes a dashboard, trade-history charts, a record-based insights coach, a prediction sandbox, a trading journal, and portfolio analytics.
+Trading results are easier to learn from when the numbers are presented with context. AI Trading Coach brings trade-history metrics, interactive charts and a small ML experimentation workflow into one workspace.
 
-- Guest mode uses illustrative sample trades; it does not connect to live market prices.
-- Market charts only use recorded trade prices. Missing data is shown as unavailable rather than generated.
-- Prediction artifacts are trained on synthetic data for demonstration and must not be interpreted as real-market probabilities.
-- Backend login requires a configured PBKDF2 password-hash map and a strong JWT secret; no default credentials are shipped. Journal entries remain session-only.
+The product direction is deliberately calm: a warm paper palette, editorial typography, clear metric hierarchy and visible explanations of what the data can—and cannot—tell you.
 
----
+## What you can explore
 
-## 🏗️ Architecture
+| Workspace | What it does |
+| --- | --- |
+| **Performance dashboard** | Summarizes recorded trade count, historical win rate, net P&L, profit factor and drawdown. |
+| **Trade ledger** | Presents the trade fields available from the current session or backend. |
+| **Market & trade history** | Charts recorded entry prices and rolling averages when dates and prices exist. It does not invent missing prices. |
+| **Trading insights** | Answers a small set of questions using deterministic calculations over recorded trades; this version does not call an external LLM. |
+| **Prediction sandbox** | Demonstrates an XGBoost classifier trained on synthetic examples, with optional SHAP contributions. |
+| **Portfolio analytics** | Breaks down trade count and P&L by asset where those fields are present. |
+| **Trading journal** | Lets you record notes during a session. Entries are currently session-only, not durable storage. |
+
+## Product principles
+
+- **Evidence before polish.** Metrics are calculated from available records; missing fields are not replaced with made-up data.
+- **Demo labels stay visible.** Sample trades and synthetic-model outputs are clearly identified.
+- **Graceful empty states.** Missing prices, dates or model artifacts should be explained rather than disguised.
+- **Security is explicit.** Backend sign-in requires configured password hashes and a strong JWT secret. No default credentials are shipped.
+- **Prototype, not advice.** Model scores and historical results are not a recommendation to buy or sell.
+
+## How it fits together
 
 ```mermaid
-graph TD
-    A[User] -->|Interacts| B(Streamlit Frontend)
-    B -->|API Calls| C(FastAPI Backend)
-    
-    subgraph Core AI Services
-    C --> D{AI Coach Layer}
-    C --> E[Trade Prediction Engine XGBoost]
-    E --> F[Explainability Layer SHAP]
-    C --> G[Portfolio Intelligence Engine]
-    end
-    
-    C --> H[(Database PostgreSQL/SQLite)]
-    D -.-> H
-    G -.-> H
+flowchart LR
+    U[User] --> UI[Streamlit interface]
+    UI --> A[Trade analytics]
+    UI --> M[Prediction sandbox]
+    UI --> API[FastAPI backend]
+    A --> P[Plotly visualizations]
+    M --> X[XGBoost demo model]
+    X --> S[SHAP explanations]
+    API --> D[(Configured data store)]
+    classDef interface fill:#233d32,color:#fffdf8,stroke:#233d32
+    classDef analytics fill:#fffdf8,color:#202a25,stroke:#e5dfd2
+    classDef model fill:#f3e4cf,color:#202a25,stroke:#d9ad60
+    class UI,API interface
+    class A,P,D analytics
+    class M,X,S model
 ```
 
----
+## Technology
 
-## 🧠 Machine Learning Pipeline
+| Layer | Tools |
+| --- | --- |
+| Interface & charts | Streamlit, Plotly |
+| API | FastAPI, Python |
+| Data analysis | Pandas, NumPy |
+| ML demonstration | XGBoost, scikit-learn, joblib |
+| Explainability | SHAP, where compatible with the installed model/runtime |
+| Delivery | Docker, GitHub Actions, pytest |
 
-Data Collection → Feature Engineering → Model Training → Prediction → Explainability → Portfolio Intelligence
+## Run it locally
 
-1. **Data collection:** The current demo accepts sample trade records and API-provided records.
-2. **Feature engineering:** A deterministic synthetic dataset is generated for the model demonstration.
-3. **Model training:** An `XGBClassifier` is trained with a holdout split; preprocessing is fitted on training data only.
-4. **Prediction:** The app displays a model score for user-supplied synthetic-scale features.
-5. **Explainability:** SHAP contributions are rendered when compatible with the model and runtime.
-6. **Evaluation boundary:** Synthetic-data metrics are diagnostic only and are not evidence of real-world trading performance.
+### 1. Get the code
 
----
-
-## 🛠️ Tech Stack
-
-**Frontend:**
-* Streamlit
-* Plotly
-
-**Backend:**
-* FastAPI
-* Python
-
-**Machine Learning:**
-* XGBoost
-* Scikit-Learn
-* SHAP
-* Pandas
-* NumPy
-
-**Data / Persistence:**
-* MongoDB for backend session memory
-* Bundled sample trade dataset
-* Streamlit journal state is session-only
-
-**DevOps:**
-* Docker
-* GitHub Actions
-
----
-
-## 📐 Metrics & Evaluation
-
-Dashboard metrics are calculated from the trade records currently loaded into the app: trade count, historical win rate, net P&L, profit factor, and peak-to-trough drawdown from cumulative trade P&L.
-
-The demo model training script reports holdout accuracy, precision, recall, F1, and ROC AUC on a synthetic dataset. These are **synthetic-data diagnostics**, not evidence of trading performance. No real-world accuracy or latency claim is made.
-
----
-
-## 📂 Project Structure
-
-```text
-AI-Trading-Coach/
-├── .github/workflows/      # CI/CD Pipelines
-├── app/                    # FastAPI Backend
-│   ├── routes/             # API Endpoints (Auth, Coaching, Discipline)
-│   ├── services/           # Business Logic & NLP Handlers
-│   ├── main.py             # Server Entrypoint
-│   └── database.py         # DB Connectors
-├── data/                   # Seed Datasets
-├── frontend-streamlit/     # Streamlit Frontend App
-│   ├── models/             # Serialized ML Models (XGBoost, Scaler)
-│   ├── training/           # ML Training & Feature Engineering Scripts
-│   ├── app.py              # UI Entrypoint
-│   └── requirements.txt    
-├── tests/                  # PyTest Suite
-├── docker-compose.yml      # Container Orchestration
-└── Readme.md
-```
-
----
-
-## 🔐 Secure Backend Configuration
-
-The API intentionally has **no default credentials**. Configure a strong JWT signing secret and a password-hash map before enabling login.
-
-1. Generate a password hash locally (password input is hidden):
-
-   ```bash
-   python scripts/hash_password.py
-   ```
-
-2. Generate a strong JWT secret:
-
-   ```bash
-   python -c "import secrets; print(secrets.token_urlsafe(48))"
-   ```
-
-3. Configure these environment variables in your API host (or export them before Docker Compose):
-
-   - `JWT_SECRET`: the generated secret (at least 32 characters).
-   - `AI_TRADING_COACH_USERS_JSON`: JSON mapping user IDs to the hash output, e.g. `{"Piyu24":"<salt_hex>:<pbkdf2_hash_hex>"}`.
-
-   Do not commit actual secrets, password hashes, or `.env` files. Without valid configuration, login fails closed and Guest demo remains available.
-
-## 💻 Installation Guide
-
-### 1. Clone the repository
 ```bash
 git clone https://github.com/Piyu242005/AI-Trading-Coach.git
 cd AI-Trading-Coach
 ```
 
-### 2. Frontend Setup (Streamlit & ML)
+### 2. Install and start the Streamlit app
+
 ```bash
 cd frontend-streamlit
-python -m venv venv
-source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+python -m venv .venv
+
+# macOS / Linux
+source .venv/bin/activate
+
+# Windows PowerShell
+# .venv\Scripts\Activate.ps1
+
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 
-# Generate the ML Models
-cd training
-python train_model.py
-cd ..
+# Generate local demo model artifacts
+python training/train_model.py
 
-# Run the UI
+# Launch the UI
 streamlit run app.py
 ```
 
-### 3. Backend Setup (FastAPI - Optional for Local Dev)
-
-Configure the secure backend environment variables above, then run:
+The frontend uses `AI_TRADING_COACH_API_URL` when set; otherwise it uses the configured default API URL. To point it at a local backend, set the variable before starting Streamlit.
 
 ```bash
-docker-compose up --build
+# macOS / Linux example
+export AI_TRADING_COACH_API_URL="http://localhost:8000"
+streamlit run app.py
 ```
 
+### 3. Configure the backend (optional)
+
+The API login has no built-in default credentials. Before using account features, configure:
+
+- `JWT_SECRET`: a randomly generated secret of at least 32 characters.
+- `AI_TRADING_COACH_USERS_JSON`: JSON mapping user IDs to PBKDF2 password-hash values.
+
+Generate a secret locally:
+
+```bash
+python -c "import secrets; print(secrets.token_urlsafe(48))"
+```
+
+Generate a password hash using the repository helper:
+
+```bash
+python scripts/hash_password.py
+```
+
+Do not commit `.env` files, password hashes or production secrets. If authentication is not configured, use the guest demo.
+
+## Model evaluation: read the fine print
+
+The training script generates synthetic records, fits preprocessing on the training split, and reports holdout diagnostics such as accuracy, precision, recall, F1 and ROC AUC. These metrics describe the synthetic exercise only. They do **not** establish real-world predictive power or a trading edge.
+
+Likewise, dashboard win rate and P&L are descriptive of the records loaded into the app. Drawdown is calculated from cumulative trade P&L and is not a full account-equity drawdown unless complete account data is supplied.
+
+## Known limitations
+
+- No live market-data provider is connected to the Streamlit interface.
+- The prediction model is trained on synthetic data and is not validated for live trading.
+- The insights coach uses deterministic, record-based rules rather than an external LLM.
+- Journal entries live in Streamlit session state and are not persisted.
+- A production release still needs a full authentication/authorization review, durable user-scoped storage, integration testing and real-data model evaluation.
+
+## Development checks
+
+The repository includes a GitHub Actions workflow for dependency installation, linting, Python compilation and tests. Check the [Actions tab](https://github.com/Piyu242005/AI-Trading-Coach/actions) for the latest run status.
+
+## Roadmap
+
+- Persist journal entries with authenticated, user-scoped storage.
+- Add integration tests for API authentication, trade loading and empty/error states.
+- Connect a licensed market-data provider and show source timestamps.
+- Evaluate model quality only on suitable, documented real-world datasets with leakage checks and time-aware validation.
+- Expand coaching only when recommendations can be grounded in observed trade context and clearly communicated uncertainty.
+
 ---
 
-## 🛣️ Future Roadmap
+<div align="center">
 
-* **RAG-powered Trading Knowledge Base**: Ingest Investopedia and textbook PDFs for semantic QA.
-* **Multi-Agent Trading Assistant**: Specialized agents for risk, fundamental analysis, and technicals.
-* **Market Sentiment Analysis**: Twitter/X and News sentiment NLP pipelines.
-* **Reinforcement Learning Strategies**: PPO-based automated trading bots.
-* **Real-Time Data Feeds**: WebSockets integration for live tick data.
-* **Advanced Risk Optimization**: Markowitz Efficient Frontier generation.
+**Built as a learning project in data science, ML and full-stack development.**
 
----
+[Repository](https://github.com/Piyu242005/AI-Trading-Coach) · [Portfolio](https://piyu242005.github.io/AI-Trading-Coach/)
 
-## 🌟 Project Strengths & Current Boundaries
-
-This repository demonstrates a Streamlit + FastAPI architecture, data visualization, an XGBoost training workflow, model serialization, and test automation.
-
-**Important boundaries:** the bundled model is trained on synthetic data; the Streamlit coach uses deterministic record-based rules rather than an external LLM; API login requires configured password hashes and a strong JWT secret; and journal entries are not persisted. These limitations must be addressed before describing the app as production-ready.
-
-## 💼 Resume Highlights
-
-Use wording that accurately reflects the current prototype:
-
-- Built a Streamlit trading analytics dashboard with Plotly visualizations for historical win rate, net P&L, profit factor, and drawdown.
-- Implemented a reproducible XGBoost demonstration pipeline with a train/holdout split and preprocessing fitted only on training data.
-- Added SHAP-based feature contribution visualizations with graceful fallback handling.
-- Integrated a Streamlit frontend with a FastAPI backend and added automated tests for trade analytics.
-
-Avoid claiming real-world prediction accuracy, sub-500ms inference, persistent journal storage, secure production authentication, or live market-data ingestion until those capabilities are implemented and verified.
-
+</div>
