@@ -86,7 +86,7 @@ def login(user_id: str, password: str) -> None:
             st.success("Logged in successfully!")
             st.rerun()
         else:
-            st.error("Authentication failed. Check your User ID.")
+            st.error(f"Login failed (HTTP {response.status_code}). Check the credentials and backend authentication configuration.")
     except requests.RequestException:
         st.error("Could not reach the API. Check the service status and try again.")
 
