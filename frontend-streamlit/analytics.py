@@ -72,7 +72,7 @@ def calculate_trade_metrics(trades: pd.DataFrame) -> dict[str, Any]:
     max_drawdown = float(abs(drawdown.min())) if not drawdown.empty else 0.0
 
     return {
-        "total_trades": int(len(df)),
+        "total_trades": len(df),
         "wins": wins,
         "losses": losses,
         "breakeven": breakeven,
