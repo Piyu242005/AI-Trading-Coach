@@ -78,6 +78,15 @@ flowchart LR
 
 Deploy the Streamlit interface from `frontend-streamlit/app.py` in Streamlit Community Cloud. Configure `AI_TRADING_COACH_API_URL` and the required backend secrets in the Streamlit app settings. The backend API and MongoDB still need their own reachable hosting and secure configuration; Streamlit Cloud hosts the UI, not the API/database automatically.
 
+## Demo login
+
+For demo/testing only (public repository; these credentials are visible to anyone):
+
+- **Username:** `piyu`
+- **Password:** `Piyu@Coach2026#`
+
+These credentials are documentation only and will work only after the matching user is configured in `AI_TRADING_COACH_USERS_JSON` using the password-hash helper described below. Do not reuse this password for any other service or use it for production.
+
 ## Run locally
 
 ### 1. Clone and create an environment
