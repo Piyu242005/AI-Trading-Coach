@@ -122,6 +122,7 @@ Set these environment variables **outside source control**:
 - `AI_TRADING_COACH_USERS_JSON` — JSON mapping each user ID to the helper's `salt_hex:pbkdf2_hash_hex` output.
 - `MONGO_URL` — MongoDB connection string.
 - `CORS_ALLOWED_ORIGINS` — comma-separated trusted browser origins (defaults to `http://localhost:8501`).
+- `AI_TRADING_COACH_API_URL` — API base URL used by Streamlit; set this to the reachable API URL in hosted environments.
 
 Then start the API and MongoDB:
 
