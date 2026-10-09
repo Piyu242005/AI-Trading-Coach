@@ -267,7 +267,7 @@ def render_dashboard(df: pd.DataFrame) -> None:
     cards = st.columns(5)
     cards[0].metric("Trades", f'{metrics["total_trades"]:,}')
     cards[1].metric("Win rate", f'{metrics["win_rate"]:.1f}%')
-    cards[2].metric("Net P&L", f'{prefix}${total_pnl:,.2f}')
+    cards[2].metric("Net P&L", f'{prefix}₹{total_pnl:,.2f}')
     cards[3].metric("Profit factor", factor_label)
     cards[4].metric("Max drawdown", f'₹{metrics["max_drawdown"]:,.2f}')
 
@@ -328,11 +328,11 @@ def render_ai_coach(df: pd.DataFrame) -> None:
                 if "win rate" in q or "winning" in q:
                     reply = f'Your recorded win rate is {m["win_rate"]:.1f}% ({m["wins"]} wins out of {m["total_trades"]} trades). This is historical performance, not a forecast.'
                 elif "loss" in q or "drawdown" in q or "risk" in q:
-                    reply = f'Your recorded net P&L is ${m["total_pnl"]:,.2f}; maximum peak-to-trough drawdown from ordered trade P&L is ${m["max_drawdown"]:,.2f}. Review position sizing and stop rules before making trading decisions.'
+                    reply = f'Your recorded net P&L is ₹{m["total_pnl"]:,.2f}; maximum peak-to-trough drawdown from ordered trade P&L is ₹{m["max_drawdown"]:,.2f}. Review position sizing and stop rules before making trading decisions.'
                 elif "best" in q or "asset" in q or "symbol" in q:
                     if "asset" in normalized.columns:
                         by_asset = normalized.groupby("asset", dropna=True)["pnl"].sum().sort_values(ascending=False)
-                        reply = "Net P&L by asset in the recorded data:\n" + "\n".join(f"• {asset}: ${value:,.2f}" for asset, value in by_asset.items()) if not by_asset.empty else "The records do not contain asset names to compare."
+                        reply = "Net P&L by asset in the recorded data:\n" + "\n".join(f"• {asset}: ₹{value:,.2f}" for asset, value in by_asset.items()) if not by_asset.empty else "The records do not contain asset names to compare."
                     else:
                         reply = "The records do not contain an asset column to compare."
                 elif "profit factor" in q:
@@ -340,7 +340,7 @@ def render_ai_coach(df: pd.DataFrame) -> None:
                     text_factor = "undefined" if f is None else "infinite (no gross losses)" if f == float("inf") else f"{f:.2f}"
                     reply = f"Your historical profit factor is {text_factor}. It does not establish future profitability."
                 else:
-                    reply = f'From {m["total_trades"]} recorded trades, net P&L is ${m["total_pnl"]:,.2f}, average P&L per trade is ${m["average_pnl"]:,.2f}, and win rate is {m["win_rate"]:.1f}%. Ask about win rate, losses/drawdown, assets, or profit factor.'
+                    reply = f'From {m["total_trades"]} recorded trades, net P&L is ₹{m["total_pnl"]:,.2f}, average P&L per trade is ₹{m["average_pnl"]:,.2f}, and win rate is {m["win_rate"]:.1f}%. Ask about win rate, losses/drawdown, assets, or profit factor.'
             st.session_state.coach_messages.append({"role": "assistant", "content": reply})
             with st.chat_message("assistant", avatar=str(LOGO_PATH) if LOGO_PATH.exists() else None):
                 st.write(reply)
@@ -635,7 +635,7 @@ def render_trade_predictions() -> None:
                 chart_df = pd.DataFrame({"Feature": [item[0].replace("_", " ").title() for item in ranking], "Contribution": [float(item[1]) for item in ranking]})
                 fig = px.bar(chart_df, x="Contribution", y="Feature", orientation="h", color="Contribution", color_continuous_midpoint=0, template="plotly_white")
                 fig.update_layout(height=320, margin=dict(l=8, r=8, t=16, b=8), coloraxis_showscale=False)
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(style_figure(fig), use_container_width=True)
             except Exception:
                 st.caption("SHAP is unavailable for this model/runtime combination. No explanation has been fabricated.")
         except Exception:
