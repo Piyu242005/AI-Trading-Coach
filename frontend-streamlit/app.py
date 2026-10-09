@@ -567,7 +567,7 @@ def render_portfolio_analytics(df: pd.DataFrame) -> None:
         if "asset" in normalized.columns:
             by_asset = normalized.groupby("asset", dropna=False)["pnl"].sum().sort_values().rename_axis("Asset").reset_index(name="Net P&L")
             fig = px.bar(by_asset, x="Net P&L", y="Asset", orientation="h", template="plotly_white")
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(style_figure(fig), use_container_width=True)
         else:
             st.info("Asset names are not available in these records.")
     st.subheader("Behavioral data quality")
@@ -702,31 +702,29 @@ if not st.session_state.welcome_screen_passed:
 
     left, right = st.columns([1.35, 1], gap="large")
     with left:
-        st.markdown('<div class="editorial-panel">', unsafe_allow_html=True)
-        st.subheader("A clearer view of your trading.")
-        st.write("Track historical trade outcomes, review price records, and capture the context behind your decisions.")
-        st.markdown("- Historical performance metrics")
-        st.markdown("- Explainable synthetic-model sandbox")
-        st.markdown("- Private journal for authenticated users")
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(border=True):
+            st.subheader("A clearer view of your trading.")
+            st.write("Track historical trade outcomes, review price records, and capture the context behind your decisions.")
+            st.markdown("- Historical performance metrics")
+            st.markdown("- Explainable synthetic-model sandbox")
+            st.markdown("- Private journal for authenticated users")
         if st.button("Explore the demo", use_container_width=True, type="primary"):
             st.session_state.welcome_screen_passed = True
             st.session_state.is_guest = True
             st.rerun()
     with right:
-        st.markdown('<div class="editorial-panel">', unsafe_allow_html=True)
-        st.subheader("Sign in to your workspace")
-        st.caption("Authentication requires a configured API user and strong JWT secret.")
-        with st.form("welcome_login_form"):
-            user_id_input = st.text_input("User ID", placeholder="Your configured user ID")
-            password_input = st.text_input("Password", type="password")
-            submitted = st.form_submit_button("Sign in", type="primary", use_container_width=True)
-            if submitted:
-                if user_id_input.strip():
-                    login(user_id_input.strip(), password_input)
-                else:
-                    st.error("Enter your user ID to continue.")
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(border=True):
+            st.subheader("Sign in to your workspace")
+            st.caption("Authentication requires a configured API user and strong JWT secret.")
+            with st.form("welcome_login_form"):
+                user_id_input = st.text_input("User ID", placeholder="Your configured user ID")
+                password_input = st.text_input("Password", type="password")
+                submitted = st.form_submit_button("Sign in", type="primary", use_container_width=True)
+                if submitted:
+                    if user_id_input.strip():
+                        login(user_id_input.strip(), password_input)
+                    else:
+                        st.error("Enter your user ID to continue.")
 
 
     st.stop()
