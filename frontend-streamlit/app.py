@@ -22,23 +22,102 @@ DEFAULT_API_URL = os.getenv("AI_TRADING_COACH_API_URL", "https://ai-trading-coac
 st.set_page_config(page_title="AI Trading Coach", page_icon="📈", layout="wide")
 
 def apply_dark_theme() -> None:
-    """Apply a consistent, responsive theme using stable Streamlit selectors."""
-    st.markdown("""
-    <style>
-    :root { color-scheme: dark; }
-    .stApp { background: #0b0d12; color: #eef2f7; }
-    [data-testid="stHeader"] { background: rgba(11, 13, 18, .92); }
-    [data-testid="stSidebar"] { background: #10141c; border-right: 1px solid #242b38; }
-    [data-testid="stMetric"] { background: #121824; border: 1px solid #273244; padding: 14px; border-radius: 12px; }
-    [data-testid="stMetricLabel"] { color: #aeb9c9; }
-    [data-testid="stMetricValue"] { color: #f4f7fb; }
-    div[data-testid="stMarkdownContainer"] h1, div[data-testid="stMarkdownContainer"] h2,
-    div[data-testid="stMarkdownContainer"] h3 { letter-spacing: -0.025em; }
-    .stButton > button, .stFormSubmitButton > button { border-radius: 10px; min-height: 2.65rem; font-weight: 600; }
-    [data-testid="stPlotlyChart"], [data-testid="stDataFrame"] { border: 1px solid #242b38; border-radius: 12px; overflow: hidden; }
-    @media (max-width: 768px) { .block-container { padding-top: 1.2rem; padding-left: 1rem; padding-right: 1rem; } }
-    </style>
-    """, unsafe_allow_html=True)
+    """Apply the warm, editorial design system across the Streamlit application."""
+    st.markdown(
+        """
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+
+        :root {
+          color-scheme: light;
+          --paper: #f7f4ed;
+          --surface: #fffdf8;
+          --ink: #202a25;
+          --muted: #6d766e;
+          --line: #e5dfd2;
+          --forest: #233d32;
+          --sage: #718875;
+          --rust: #c65c3d;
+          --gold: #d9ad60;
+        }
+        html, body, [class*="css"] { font-family: 'DM Sans', sans-serif; }
+        .stApp { background: var(--paper); color: var(--ink); }
+        [data-testid="stHeader"] { background: rgba(247,244,237,.94); }
+        [data-testid="stMainBlockContainer"] { max-width: 1440px; padding-top: 2.2rem; padding-bottom: 4rem; }
+        h1, h2, h3, [data-testid="stMarkdownContainer"] h1,
+        [data-testid="stMarkdownContainer"] h2, [data-testid="stMarkdownContainer"] h3 {
+          color: var(--ink); font-family: 'Playfair Display', Georgia, serif;
+          letter-spacing: -.035em; line-height: 1.12;
+        }
+        h1 { font-size: clamp(2.2rem, 4vw, 3.5rem) !important; }
+        h2 { font-size: clamp(1.6rem, 2.7vw, 2.2rem) !important; }
+        h3 { font-size: 1.35rem !important; }
+        p, label, [data-testid="stCaptionContainer"] { color: var(--muted); }
+        [data-testid="stSidebar"] {
+          background: var(--forest); border-right: 0; box-shadow: 8px 0 30px rgba(32,42,37,.05);
+        }
+        [data-testid="stSidebar"] * { color: #f8f5ed; }
+        [data-testid="stSidebar"] hr { border-color: rgba(255,255,255,.16); }
+        [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] h3 {
+          color: #fffaf0; font-family: 'DM Sans', sans-serif; letter-spacing: -.02em;
+        }
+        [data-testid="stSidebar"] [data-testid="stRadio"] label { color: #e7e9df; }
+        [data-testid="stSidebar"] [data-testid="stRadio"] label:hover { color: #f0c58a; }
+        [data-testid="stMetric"] {
+          background: var(--surface); border: 1px solid var(--line); border-radius: 5px;
+          padding: 1.15rem 1.25rem; box-shadow: 0 5px 18px rgba(46,47,35,.025);
+        }
+        [data-testid="stMetricLabel"] { color: var(--muted); font-size: .82rem; font-weight: 600; }
+        [data-testid="stMetricValue"] { color: var(--ink); font-family: 'Playfair Display', Georgia, serif; font-size: clamp(1.5rem,2vw,2rem); }
+        [data-testid="stMetricDelta"] { font-size: .8rem; }
+        .stButton > button, .stFormSubmitButton > button {
+          border-radius: 4px; border: 1px solid var(--forest); min-height: 2.8rem;
+          font-weight: 700; letter-spacing: .01em; transition: transform .16s ease, box-shadow .16s ease;
+        }
+        .stButton > button[kind="primary"], .stFormSubmitButton > button[kind="primary"] {
+          background: var(--rust); border-color: var(--rust); color: #fffdf8;
+        }
+        .stButton > button:hover, .stFormSubmitButton > button:hover {
+          transform: translateY(-1px); box-shadow: 0 7px 18px rgba(32,42,37,.10); border-color: var(--rust);
+        }
+        [data-testid="stTextInput"] input, [data-testid="stNumberInput"] input,
+        [data-testid="stTextArea"] textarea, [data-testid="stSelectbox"] div[data-baseweb="select"] {
+          background: var(--surface); border-color: var(--line); border-radius: 4px;
+        }
+        [data-testid="stPlotlyChart"], [data-testid="stDataFrame"], [data-testid="stTable"] {
+          background: var(--surface); border: 1px solid var(--line); border-radius: 5px; overflow: hidden;
+        }
+        [data-testid="stAlert"] { border-radius: 4px; }
+        hr { border-color: var(--line); }
+        .editorial-kicker {
+          color: var(--rust); font-size: .72rem; font-weight: 700; letter-spacing: .18em;
+          text-transform: uppercase; margin: 0 0 .65rem 0;
+        }
+        .editorial-hero {
+          background: var(--forest); color: #f8f5ed; padding: clamp(1.5rem,4vw,3.3rem);
+          border-radius: 5px; margin: 0 0 1.5rem 0; position: relative; overflow: hidden;
+        }
+        .editorial-hero:after {
+          content: ''; position: absolute; width: 240px; height: 240px; border: 1px solid rgba(240,197,138,.25);
+          border-radius: 50%; right: -85px; top: -100px; box-shadow: 0 0 0 28px rgba(240,197,138,.035), 0 0 0 58px rgba(240,197,138,.025);
+        }
+        .editorial-hero .editorial-kicker { color: #efbd80; }
+        .editorial-hero h1 { color: #fffaf0; max-width: 760px; margin: 0; font-size: clamp(2.3rem,5vw,4.4rem) !important; }
+        .editorial-hero p { color: #d4ddd3; max-width: 680px; font-size: 1.02rem; line-height: 1.75; margin: 1rem 0 0; }
+        .editorial-rule { border-top: 1px solid var(--line); margin: 1.4rem 0; }
+        .editorial-note { color: var(--muted); font-size: .86rem; line-height: 1.65; }
+        @media (max-width: 768px) {
+          [data-testid="stMainBlockContainer"] { padding: 1.1rem 1rem 2.5rem; }
+          [data-testid="stMetric"] { padding: .8rem; }
+          .editorial-hero { padding: 1.5rem; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 
@@ -170,17 +249,20 @@ def build_price_series(df: pd.DataFrame, asset: str) -> pd.DataFrame:
 
 
 def render_dashboard(df: pd.DataFrame) -> None:
-    col_logo, col_title = st.columns([1, 10])
-    with col_logo:
-        if LOGO_PATH.exists():
-            st.image(str(LOGO_PATH), width=58)
-    with col_title:
-        st.title("Trading Intelligence Dashboard")
-        st.caption("Historical trade analytics • Transparent calculations • Demo data clearly labeled")
+    st.markdown(
+        """
+        <section class="editorial-hero">
+          <div class="editorial-kicker">The trading journal · Issue 01</div>
+          <h1>Clarity over noise.</h1>
+          <p>A considered view of your trade history: performance, risk and patterns in one calm workspace. Numbers below describe recorded trades—not future outcomes.</p>
+        </section>
+        """,
+        unsafe_allow_html=True,
+    )
     if st.session_state.is_guest:
-        st.info("Demo mode: sample trades are illustrative, not live market data or personal trading history.")
+        st.caption("DEMO EDITION  /  The sample portfolio is illustrative. It is not live market data or your personal trading history.")
     if df.empty:
-        st.warning("No trade records are available yet. Add or import trades to calculate portfolio statistics.")
+        st.warning("No trade records are available yet. Add or import trades to begin your performance review.")
         return
 
     metrics = calculate_trade_metrics(df)
@@ -189,16 +271,22 @@ def render_dashboard(df: pd.DataFrame) -> None:
     total_pnl = metrics["total_pnl"]
     prefix = "+" if total_pnl > 0 else ""
     cards = st.columns(5)
-    cards[0].metric("Trades", f'{metrics["total_trades"]:,}')
-    cards[1].metric("Win rate", f'{metrics["win_rate"]:.1f}%')
-    cards[2].metric("Net P&L", f'{prefix}${total_pnl:,.2f}')
-    cards[3].metric("Profit factor", factor_label)
-    cards[4].metric("Max drawdown", f'${metrics["max_drawdown"]:,.2f}')
+    cards[0].metric("RECORDED TRADES", f'{metrics["total_trades"]:,}')
+    cards[1].metric("HISTORICAL WIN RATE", f'{metrics["win_rate"]:.1f}%')
+    cards[2].metric("NET P&L", f'{prefix}${total_pnl:,.2f}')
+    cards[3].metric("PROFIT FACTOR", factor_label)
+    cards[4].metric("MAX DRAWDOWN", f'${metrics["max_drawdown"]:,.2f}')
 
-    st.divider()
-    left, right = st.columns([1.7, 1], gap="large")
+    st.markdown('<div class="editorial-rule"></div>', unsafe_allow_html=True)
+    col_heading, col_context = st.columns([1.4, 1])
+    with col_heading:
+        st.markdown('<div class="editorial-kicker">01 / Performance</div>', unsafe_allow_html=True)
+        st.subheader("The shape of your results")
+    with col_context:
+        st.markdown('<p class="editorial-note">Cumulative profit and loss helps show the sequence behind the final result. A positive total alone does not describe risk.</p>', unsafe_allow_html=True)
+    left, right = st.columns([1.65, 1], gap="large")
     with left:
-        st.subheader("Cumulative P&L")
+        st.markdown("**Cumulative P&L**")
         ordered = df.copy()
         if "entryAt" in ordered.columns:
             ordered["entryAt"] = pd.to_datetime(ordered["entryAt"], errors="coerce")
@@ -208,19 +296,36 @@ def render_dashboard(df: pd.DataFrame) -> None:
         ordered["pnl"] = pd.to_numeric(ordered["pnl"], errors="coerce").fillna(0)
         ordered["Cumulative P&L"] = ordered["pnl"].cumsum()
         if "entryAt" in ordered.columns and ordered["entryAt"].notna().any():
-            fig = px.line(ordered, x="entryAt", y="Cumulative P&L", template="plotly_dark")
-            fig.update_layout(margin=dict(l=12, r=12, t=24, b=12), height=330, xaxis_title="Trade date", yaxis_title="P&L")
-            st.plotly_chart(fig, use_container_width=True)
+            fig = px.line(ordered, x="entryAt", y="Cumulative P&L", template="plotly_white")
+            fig.update_traces(line=dict(color="#c65c3d", width=3), fill="tozeroy", fillcolor="rgba(198,92,61,0.08)")
+            fig.update_layout(
+                margin=dict(l=16, r=16, t=18, b=12), height=330,
+                xaxis_title="", yaxis_title="P&L", paper_bgcolor="#fffdf8", plot_bgcolor="#fffdf8",
+                font=dict(family="DM Sans, sans-serif", color="#202a25"),
+                xaxis=dict(showgrid=False, linecolor="#e5dfd2"),
+                yaxis=dict(gridcolor="#eee8dd", zerolinecolor="#c9c0b1"),
+            )
+            st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False, "responsive": True})
         else:
-            st.caption("Add valid trade dates to display the cumulative P&L timeline.")
+            st.caption("Add valid trade dates to reveal the cumulative P&L timeline.")
     with right:
-        st.subheader("Trade outcomes")
+        st.markdown("**Trade outcomes**")
         counts = normalize_trades(df)["outcome"].value_counts().rename_axis("Outcome").reset_index(name="Trades")
-        fig = px.pie(counts, names="Outcome", values="Trades", hole=0.62, template="plotly_dark")
-        fig.update_layout(margin=dict(l=8, r=8, t=24, b=8), height=330, legend_title_text="")
-        st.plotly_chart(fig, use_container_width=True)
-        st.caption(f'{metrics["wins"]} wins · {metrics["losses"]} losses · {metrics["breakeven"]} breakeven')
-    st.subheader("Trade history")
+        fig = px.pie(counts, names="Outcome", values="Trades", hole=0.68, template="plotly_white",
+                     color="Outcome", color_discrete_map={"win": "#718875", "loss": "#c65c3d", "breakeven": "#d9ad60", "unknown": "#a8aaa1"})
+        fig.update_traces(textposition="inside", textinfo="percent", marker=dict(line=dict(color="#fffdf8", width=3)))
+        fig.update_layout(
+            margin=dict(l=8, r=8, t=18, b=8), height=330, legend_title_text="",
+            paper_bgcolor="#fffdf8", plot_bgcolor="#fffdf8",
+            font=dict(family="DM Sans, sans-serif", color="#202a25"),
+        )
+        st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False, "responsive": True})
+        st.caption(f'{metrics["wins"]} wins  ·  {metrics["losses"]} losses  ·  {metrics["breakeven"]} breakeven')
+
+    st.markdown('<div class="editorial-rule"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="editorial-kicker">02 / Ledger</div>', unsafe_allow_html=True)
+    st.subheader("Trade-by-trade")
+    st.markdown('<p class="editorial-note">A clean ledger of the records currently available to this session.</p>', unsafe_allow_html=True)
     columns = [c for c in ["entryAt", "asset", "direction", "entryPrice", "exitPrice", "pnl", "outcome"] if c in df.columns]
     st.dataframe(df[columns] if columns else df, use_container_width=True, hide_index=True)
 
@@ -542,44 +647,51 @@ init_session_state()
 apply_dark_theme()
 
 if not st.session_state.welcome_screen_passed:
-    st.image(str(LOGO_PATH), width=80)
-    st.title("Welcome to AI Trading Coach")
-    st.markdown("Explore the platform instantly with demo data.")
-    st.markdown("---")
-    
-    col1, col2 = st.columns(2)
+    st.markdown(
+        """
+        <section class="editorial-hero">
+          <div class="editorial-kicker">A more thoughtful trading workspace</div>
+          <h1>Read the market.<br>Understand yourself.</h1>
+          <p>Trade-history analytics, explainable model experiments and a quieter way to review performance—designed to put context before impulse.</p>
+        </section>
+        <div class="editorial-kicker">Start here / Choose your edition</div>
+        """,
+        unsafe_allow_html=True,
+    )
+    col1, col2 = st.columns([1, 1], gap="large")
     with col1:
-        st.subheader("Guest demo")
-        st.markdown("Instantly access a complete demo environment with sample trades, AI coaching, and portfolio analytics.")
-        if st.button("Continue as Guest", use_container_width=True, type="primary"):
+        st.markdown("### Explore the demo")
+        st.markdown("An instant, read-only-feeling tour using clearly labeled illustrative trades. Explore performance metrics, outcome charts and portfolio summaries without configuring an account.")
+        if st.button("Explore guest edition  →", use_container_width=True, type="primary"):
             st.session_state.welcome_screen_passed = True
             st.session_state.is_guest = True
             st.rerun()
-            
     with col2:
-        st.subheader("Backend test access")
-        with st.expander("Login for Full Access", expanded=False):
-            st.caption("Password verification is enabled only when AI_TRADING_COACH_USERS_JSON and a strong JWT_SECRET are configured on the backend. If login is not configured, use Guest demo.")
+        st.markdown("### Sign in to your workspace")
+        st.markdown("Connect to your configured backend to inspect your account's recorded trades. Authentication must be configured on the API host before sign-in can succeed.")
+        with st.expander("Open sign-in"):
             with st.form("welcome_login_form"):
-                user_id_input = st.text_input("Username (User ID)")
+                user_id_input = st.text_input("User ID")
                 password_input = st.text_input("Password", type="password")
-                submitted = st.form_submit_button("Login")
-                if submitted and user_id_input:
+                submitted = st.form_submit_button("Sign in", use_container_width=True)
+                if submitted and user_id_input and password_input:
                     login(user_id_input, password_input)
-                    
+    st.markdown('<div class="editorial-rule"></div><p class="editorial-note">FIELD NOTE 01 — This is an educational portfolio prototype. Model scores are trained on synthetic data; this is not financial advice.</p>', unsafe_allow_html=True)
+
+
     st.stop()
 
 # Sidebar Authentication
 st.sidebar.image(str(LOGO_PATH), width=50)
 st.sidebar.markdown("### AI Trading Coach")
-st.sidebar.markdown("*Enterprise AI Analytics*")
-st.sidebar.markdown("━━━━━━━━━━━━━━━")
+st.sidebar.markdown("*Trade intelligence · Field notes*")
+st.sidebar.markdown("---")
 
 if st.session_state.is_guest:
-    st.sidebar.markdown("🟢 **Guest Mode**")
-    st.sidebar.markdown("Viewing Demo Portfolio")
+    st.sidebar.markdown("**GUEST EDITION**")
+    st.sidebar.markdown("Illustrative sample portfolio")
     with st.sidebar.expander("Login for Full Access"):
-        st.caption("Prototype access only: the backend currently issues tokens from a user ID and does not verify a password. Do not use sensitive or real account data.")
+        st.caption("Password verification requires AI_TRADING_COACH_USERS_JSON and a strong JWT_SECRET on the backend. Use Guest demo if credentials are not configured.")
         with st.form("sidebar_login_form"):
             user_id_input = st.text_input("Username (User ID)")
             password_input = st.text_input("Password", type="password")
