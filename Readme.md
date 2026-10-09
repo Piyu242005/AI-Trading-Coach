@@ -72,6 +72,12 @@ flowchart LR
 - **Analysis:** pandas, NumPy
 - **Quality:** pytest, mongomock, Ruff, GitHub Actions, Docker Compose
 
+## Deployment target
+
+**Streamlit Community Cloud is the only intended app-hosting target.** This repository has no Vercel deployment configuration and no GitHub Pages deployment workflow. GitHub Actions is used for CI checks only; it does not publish the application.
+
+Deploy the Streamlit interface from `frontend-streamlit/app.py` in Streamlit Community Cloud. Configure `AI_TRADING_COACH_API_URL` and the required backend secrets in the Streamlit app settings. The backend API and MongoDB still need their own reachable hosting and secure configuration; Streamlit Cloud hosts the UI, not the API/database automatically.
+
 ## Run locally
 
 ### 1. Clone and create an environment
