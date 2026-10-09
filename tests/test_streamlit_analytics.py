@@ -4,7 +4,7 @@ import sys
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "frontend-streamlit"))
-from analytics import calculate_trade_metrics, normalize_trades
+from analytics import calculate_trade_metrics, normalize_trades  # noqa: E402
 
 
 def test_empty_trades_have_safe_zero_metrics():
