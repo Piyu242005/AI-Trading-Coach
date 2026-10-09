@@ -36,7 +36,8 @@ def create_journal_entry(
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
     journal_collection.insert_one(record)
-    return record
+    # PyMongo mutates the input mapping by adding an ObjectId; never expose it in JSON.
+    return {key: value for key, value in record.items() if key != "_id"}
 
 
 @router.delete("")
