@@ -1,4 +1,9 @@
+import hashlib
+import json
+import os
 import time
+
+os.environ.setdefault("JWT_SECRET", "unit-test-jwt-secret-key-with-at-least-32-bytes")
 
 import mongomock
 from fastapi.testclient import TestClient
@@ -11,7 +16,11 @@ client = TestClient(app)
 
 
 def _auth_headers(user_id: str):
-    token_response = client.post("/api/auth/token", json={"userId": user_id})
+    password = "test-only-password"
+    salt = b"unit-test-salt-16"
+    password_hash = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt, 310_000).hex()
+    os.environ["AI_TRADING_COACH_USERS_JSON"] = json.dumps({user_id: f"{salt.hex()}:{password_hash}"})
+    token_response = client.post("/api/auth/token", json={"userId": user_id, "password": password})
     assert token_response.status_code == 200
     token = token_response.json()["access_token"]
     return {"Authorization": f"Bearer {token}"}
@@ -136,3 +145,29 @@ def test_evaluation_report_json_and_html():
     assert html_response.status_code == 200
     assert "text/html" in html_response.headers.get("content-type", "")
     assert "NevUp Evaluation Report" in html_response.text
+
+
+
+def test_token_endpoint_rejects_wrong_password():
+    user_id = _sample_user(0)
+    _auth_headers(user_id)
+    response = client.post(
+        "/api/auth/token",
+        json={"userId": user_id, "password": "incorrect-password"},
+    )
+    assert response.status_code == 401
+
+
+def test_trades_endpoint_requires_auth_and_filters_by_user():
+    from fastapi.testclient import TestClient
+
+    unauthorized = client.get("/api/trades")
+    assert unauthorized.status_code == 401
+
+    user_id = _sample_user(0)
+    headers = _auth_headers(user_id)
+    response = client.get("/api/trades", headers=headers)
+    assert response.status_code == 200
+    body = response.json()
+    assert all(str(item.get("userId")) == user_id for item in body["traders"])
+    assert all(str(item.get("userId")) == user_id for item in body.get("groundTruthLabels", []))
