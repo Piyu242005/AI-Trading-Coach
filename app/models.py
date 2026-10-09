@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Any, Dict, List, Literal, Optional
 
 from pydantic import BaseModel, Field, SecretStr
@@ -84,7 +85,7 @@ class TokenResponse(BaseModel):
 
 
 class JournalEntryCreate(BaseModel):
-    date: str = Field(min_length=10, max_length=10)
+    date: date
     asset: str = Field(min_length=1, max_length=32)
     direction: Literal["Long", "Short"]
     entry: float = Field(ge=0)
