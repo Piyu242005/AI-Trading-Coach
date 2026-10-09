@@ -73,10 +73,10 @@ def api_headers() -> Dict[str, str]:
     return {}
 
 
-def login(user_id: str) -> None:
+def login(user_id: str, password: str) -> None:
     try:
         response = requests.post(
-            f"{get_api_url()}/api/auth/token", json={"userId": user_id}, timeout=10
+            f"{get_api_url()}/api/auth/token", json={"userId": user_id, "password": password}, timeout=10
         )
         if response.status_code == 200:
             st.session_state.token = response.json().get("access_token")
@@ -559,12 +559,13 @@ if not st.session_state.welcome_screen_passed:
     with col2:
         st.subheader("Backend test access")
         with st.expander("Login for Full Access", expanded=False):
-            st.caption("Prototype access only: the backend currently issues tokens from a user ID and does not verify a password. Do not use sensitive or real account data.")
+            st.caption("Password verification is enabled only when AI_TRADING_COACH_USERS_JSON and a strong JWT_SECRET are configured on the backend. If login is not configured, use Guest demo.")
             with st.form("welcome_login_form"):
                 user_id_input = st.text_input("Username (User ID)")
+                password_input = st.text_input("Password", type="password")
                 submitted = st.form_submit_button("Login")
                 if submitted and user_id_input:
-                    login(user_id_input)
+                    login(user_id_input, password_input)
                     
     st.stop()
 
@@ -581,6 +582,7 @@ if st.session_state.is_guest:
         st.caption("Prototype access only: the backend currently issues tokens from a user ID and does not verify a password. Do not use sensitive or real account data.")
         with st.form("sidebar_login_form"):
             user_id_input = st.text_input("Username (User ID)")
+            password_input = st.text_input("Password", type="password")
             submitted = st.form_submit_button("Login")
             if submitted and user_id_input:
                 login(user_id_input)
