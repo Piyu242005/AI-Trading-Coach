@@ -122,8 +122,8 @@ def load_user_trades(force: bool = False) -> None:
                     all_trades.extend(session.get("trades", []))
 
         st.session_state.trades_data = all_trades
-    except Exception as exc:
-        st.error(f"Error loading trades: {exc}")
+    except requests.RequestException:
+        st.error("Could not load trades. Check the API service status and try again.")
 
 
 def fetch_discipline_score() -> Optional[Dict[str, str]]:
@@ -173,29 +173,18 @@ def compute_summary_metrics(df: pd.DataFrame) -> Dict[str, object]:
 
 
 def build_price_series(df: pd.DataFrame, asset: str) -> pd.DataFrame:
-    asset_df = df.copy()
-    if "asset" in asset_df.columns:
-        asset_df = asset_df[asset_df["asset"] == asset]
-    asset_df = asset_df.sort_values("entryAt") if "entryAt" in asset_df.columns else asset_df
+    """Build a price series only from recorded trade prices; never fabricate market data."""
+    if df.empty or "entryAt" not in df.columns:
+        return pd.DataFrame(columns=["date", "price"])
+    selected = df[df["asset"].astype(str) == str(asset)].copy() if "asset" in df.columns else df.copy()
+    selected["date"] = pd.to_datetime(selected["entryAt"], errors="coerce")
+    selected = selected.dropna(subset=["date"])
+    price_column = next((name for name in ["entryPrice", "exitPrice"] if name in selected.columns and pd.to_numeric(selected[name], errors="coerce").notna().any()), None)
+    if price_column is None:
+        return pd.DataFrame(columns=["date", "price"])
+    selected["price"] = pd.to_numeric(selected[price_column], errors="coerce")
+    return selected.dropna(subset=["price"])[["date", "price"]].sort_values("date")
 
-    if not asset_df.empty and "entryAt" in asset_df.columns:
-        asset_df = asset_df.dropna(subset=["entryAt"]) if "entryAt" in asset_df.columns else asset_df
-        price_source = None
-        if "entryPrice" in asset_df.columns and asset_df["entryPrice"].sum() != 0:
-            price_source = "entryPrice"
-        elif "exitPrice" in asset_df.columns and asset_df["exitPrice"].sum() != 0:
-            price_source = "exitPrice"
-
-        if price_source:
-            series = asset_df[["entryAt", price_source]].rename(
-                columns={"entryAt": "date", price_source: "price"}
-            )
-            return series
-
-    end_date = datetime.date.today()
-    dates = [end_date - datetime.timedelta(days=idx) for idx in range(59, -1, -1)]
-    price = [100 + idx * 0.35 + ((idx % 10) - 5) * 0.4 for idx in range(60)]
-    return pd.DataFrame(columns=["date", "price"])
 
 
 def render_dashboard(df: pd.DataFrame) -> None:
@@ -232,7 +221,9 @@ def render_dashboard(df: pd.DataFrame) -> None:
         if "entryAt" in ordered.columns:
             ordered["entryAt"] = pd.to_datetime(ordered["entryAt"], errors="coerce")
             ordered = ordered.sort_values("entryAt", na_position="last")
-        ordered["pnl"] = pd.to_numeric(ordered.get("pnl", 0), errors="coerce").fillna(0)
+        if "pnl" not in ordered.columns:
+            ordered["pnl"] = 0.0
+        ordered["pnl"] = pd.to_numeric(ordered["pnl"], errors="coerce").fillna(0)
         ordered["Cumulative P&L"] = ordered["pnl"].cumsum()
         if "entryAt" in ordered.columns and ordered["entryAt"].notna().any():
             fig = px.line(ordered, x="entryAt", y="Cumulative P&L", template="plotly_dark")
@@ -560,8 +551,8 @@ def render_settings() -> None:
                     st.write(profile.get("summary", "No summary provided."))
                 else:
                     st.error("Failed to fetch profiling data.")
-            except Exception as exc:
-                st.error(f"Profiling error: {exc}")
+            except requests.RequestException:
+                st.error("Profiling request failed. Check the API service and try again.")
 
 
 init_session_state()
@@ -588,7 +579,7 @@ if not st.session_state.welcome_screen_passed:
             st.caption("Prototype access only: the backend currently issues tokens from a user ID and does not verify a password. Do not use sensitive or real account data.")
             with st.form("welcome_login_form"):
                 user_id_input = st.text_input("Username (User ID)")
-                    submitted = st.form_submit_button("Login")
+                submitted = st.form_submit_button("Login")
                 if submitted and user_id_input:
                     login(user_id_input)
                     
@@ -604,13 +595,12 @@ if st.session_state.is_guest:
     st.sidebar.markdown("🟢 **Guest Mode**")
     st.sidebar.markdown("Viewing Demo Portfolio")
     with st.sidebar.expander("Login for Full Access"):
-        st.markdown("**Test User ID:** `Piyu24`")
+        st.caption("Prototype access only: the backend currently issues tokens from a user ID and does not verify a password. Do not use sensitive or real account data.")
         with st.form("sidebar_login_form"):
             user_id_input = st.text_input("Username (User ID)")
-            password_input = st.text_input("Password", type="password")
             submitted = st.form_submit_button("Login")
             if submitted and user_id_input:
-                login(user_id_input, password_input)
+                login(user_id_input)
 else:
     display_id = str(st.session_state.user_id)
     st.sidebar.markdown(f"👤 **{display_id}**")
