@@ -422,13 +422,13 @@ def render_market_analysis(df: pd.DataFrame) -> None:
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=series["date"], y=series["price"], name="Recorded price", mode="lines+markers"))
     fig.add_trace(go.Scatter(x=series["date"], y=series["moving_average"], name="Rolling average", mode="lines"))
-    fig.update_layout(template="plotly_dark", height=380, margin=dict(l=12, r=12, t=24, b=12), xaxis_title="Recorded date", yaxis_title="Price")
+    fig.update_layout(template="plotly_white", height=380, margin=dict(l=12, r=12, t=24, b=12), xaxis_title="Recorded date", yaxis_title="Price")
     st.plotly_chart(fig, use_container_width=True)
     st.caption("Rolling average and volatility describe the available trade-price records; they are not live technical signals.")
     c1, c2 = st.columns(2)
     with c1:
         st.subheader("Observed price variation")
-        fig_vol = px.area(series, x="date", y="volatility", labels={"volatility": "Rolling variation (%)"}, template="plotly_dark")
+        fig_vol = px.area(series, x="date", y="volatility", labels={"volatility": "Rolling variation (%)"}, template="plotly_white")
         st.plotly_chart(fig_vol, use_container_width=True)
     with c2:
         st.subheader("Recorded price range")
@@ -513,7 +513,7 @@ def render_portfolio_analytics(df: pd.DataFrame) -> None:
         st.subheader("Trade count by asset")
         if "asset" in normalized.columns:
             counts = normalized["asset"].fillna("Unknown").value_counts().rename_axis("Asset").reset_index(name="Trades")
-            fig = px.bar(counts, x="Asset", y="Trades", template="plotly_dark")
+            fig = px.bar(counts, x="Asset", y="Trades", template="plotly_white")
             st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("Asset names are not available in these records.")
@@ -521,7 +521,7 @@ def render_portfolio_analytics(df: pd.DataFrame) -> None:
         st.subheader("Net P&L by asset")
         if "asset" in normalized.columns:
             by_asset = normalized.groupby("asset", dropna=False)["pnl"].sum().sort_values().rename_axis("Asset").reset_index(name="Net P&L")
-            fig = px.bar(by_asset, x="Net P&L", y="Asset", orientation="h", template="plotly_dark")
+            fig = px.bar(by_asset, x="Net P&L", y="Asset", orientation="h", template="plotly_white")
             st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("Asset names are not available in these records.")
@@ -588,7 +588,7 @@ def render_trade_predictions() -> None:
                 contributions = values[0]
                 ranking = sorted(zip(features, contributions), key=lambda item: abs(float(item[1])), reverse=True)
                 chart_df = pd.DataFrame({"Feature": [item[0].replace("_", " ").title() for item in ranking], "Contribution": [float(item[1]) for item in ranking]})
-                fig = px.bar(chart_df, x="Contribution", y="Feature", orientation="h", color="Contribution", color_continuous_midpoint=0, template="plotly_dark")
+                fig = px.bar(chart_df, x="Contribution", y="Feature", orientation="h", color="Contribution", color_continuous_midpoint=0, template="plotly_white")
                 fig.update_layout(height=320, margin=dict(l=8, r=8, t=16, b=8), coloraxis_showscale=False)
                 st.plotly_chart(fig, use_container_width=True)
             except Exception:
@@ -696,8 +696,8 @@ if st.session_state.is_guest:
             user_id_input = st.text_input("Username (User ID)")
             password_input = st.text_input("Password", type="password")
             submitted = st.form_submit_button("Login")
-            if submitted and user_id_input:
-                login(user_id_input)
+            if submitted and user_id_input and password_input:
+                login(user_id_input, password_input)
 else:
     display_id = str(st.session_state.user_id)
     st.sidebar.markdown(f"👤 **{display_id}**")
