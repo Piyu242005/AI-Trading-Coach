@@ -76,7 +76,7 @@ The Streamlit interface includes a dashboard, trade-history charts, a record-bas
 - Guest mode uses illustrative sample trades; it does not connect to live market prices.
 - Market charts only use recorded trade prices. Missing data is shown as unavailable rather than generated.
 - Prediction artifacts are trained on synthetic data for demonstration and must not be interpreted as real-market probabilities.
-- The current backend token endpoint accepts a user ID without password verification. Do not use sensitive account or portfolio data until proper authentication and authorization are implemented.
+- Backend login requires a configured PBKDF2 password-hash map and a strong JWT secret; no default credentials are shipped. Journal entries remain session-only.
 
 ---
 
@@ -243,7 +243,7 @@ docker-compose up --build
 
 This repository demonstrates a Streamlit + FastAPI architecture, data visualization, an XGBoost training workflow, model serialization, and test automation.
 
-**Important boundaries:** the bundled model is trained on synthetic data; the Streamlit coach uses deterministic record-based rules rather than an external LLM; the current API token endpoint does not verify a password; and journal entries are not persisted. These limitations must be addressed before describing the app as production-ready.
+**Important boundaries:** the bundled model is trained on synthetic data; the Streamlit coach uses deterministic record-based rules rather than an external LLM; API login requires configured password hashes and a strong JWT secret; and journal entries are not persisted. These limitations must be addressed before describing the app as production-ready.
 
 ## 💼 Resume Highlights
 
