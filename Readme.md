@@ -24,12 +24,10 @@ An AI-powered trading intelligence platform that helps traders improve decision-
 
 ## ✨ Core Features
 
-### 🤖 AI Trading Coach
-* Conversational trading assistant
-* Trading education
-* Market explanations
-* Portfolio guidance
-* AI-generated recommendations
+### 📊 Trading Insights Coach
+* Record-based summaries and historical metrics
+* Natural-language keyword routing to deterministic analytics
+* Clear disclosure that this version does not call an external LLM
 
 ### 📈 Trade Prediction Engine
 * XGBoost-powered prediction model
@@ -37,31 +35,25 @@ An AI-powered trading intelligence platform that helps traders improve decision-
 * Risk estimation
 * Confidence metrics
 
-### 🔍 Explainable AI
-* SHAP visualizations
-* Feature importance analysis
-* Transparent prediction explanations
-* Human-readable insights
+### 🔍 Model Explainability Sandbox
+* SHAP feature-contribution visualization when supported by the installed model/runtime
+* Explicit warning that model artifacts use synthetic training data
+* Graceful fallback when SHAP output is unavailable
 
-### 🧠 Behavioral Intelligence
-* Discipline Score
-* Patience Score
-* Risk Control Analysis
-* Emotional Trading Detection
-* Consistency Tracking
+### 🧠 Behavioral Analytics Readiness
+* Trade history normalization and outcome counts
+* Recorded strategy/confidence fields surfaced when present
+* Behavioral scores are not generated when supporting data is missing
 
-### 📊 Portfolio Intelligence
-* Portfolio Health Score
-* Asset Allocation Analysis
-* Performance Tracking
-* Diversification Analysis
-* Risk Monitoring
+### 📊 Trade Performance Analytics
+* Net P&L, historical win rate, profit factor, and drawdown
+* Trade count and P&L by asset
+* Clear distinction between trade-level statistics and a complete portfolio valuation
 
-### 📉 Market Analytics
-* Technical Indicators
-* Trend Analysis
-* Volatility Monitoring
-* Opportunity Detection
+### 📉 Trade-Price Analysis
+* Recorded entry-price charts and rolling averages
+* Descriptive price variation where enough records exist
+* No fabricated price history or claims of live market data
 
 ### 📓 Trading Journal
 * Trade Logging
@@ -113,12 +105,12 @@ graph TD
 
 Data Collection → Feature Engineering → Model Training → Prediction → Explainability → Portfolio Intelligence
 
-1. **Data Collection:** User trade histories and real-time market ticks are ingested and cleaned.
-2. **Feature Engineering:** Calculation of behavioral metrics (Emotion Score, Consistency), volatility proxies, and R:R ratios.
-3. **Model Training:** Synthetic and real-world trades are fit to an `XGBClassifier` to maximize predictive power.
-4. **Prediction:** Inference generates a precise Win Probability (%) for any simulated or upcoming trade.
-5. **Explainability:** `SHAP TreeExplainer` identifies the Top Positive/Negative factors driving the algorithm's decision.
-6. **Portfolio Intelligence:** Aggregates individual trade data into a holistic "Portfolio Health Score" and radar-based behavioral profile.
+1. **Data collection:** The current demo accepts sample trade records and API-provided records.
+2. **Feature engineering:** A deterministic synthetic dataset is generated for the model demonstration.
+3. **Model training:** An `XGBClassifier` is trained with a holdout split; preprocessing is fitted on training data only.
+4. **Prediction:** The app displays a model score for user-supplied synthetic-scale features.
+5. **Explainability:** SHAP contributions are rendered when compatible with the model and runtime.
+6. **Evaluation boundary:** Synthetic-data metrics are diagnostic only and are not evidence of real-world trading performance.
 
 ---
 
@@ -189,7 +181,7 @@ cd AI-Trading-Coach
 
 ### 2. Frontend Setup (Streamlit & ML)
 ```bash
-cd AI-Trading-Coach/frontend-streamlit
+cd frontend-streamlit
 python -m venv venv
 source venv/bin/activate  # On Windows: .\venv\Scripts\activate
 pip install -r requirements.txt
