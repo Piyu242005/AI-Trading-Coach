@@ -94,12 +94,23 @@ def verify_configured_user(user_id: str, password: str) -> bool:
     There is deliberately no insecure default user or password.
     """
     raw_users = os.getenv("AI_TRADING_COACH_USERS_JSON", "")
+    if not raw_users:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Authentication is not configured on this server",
+        )
     try:
         users = json.loads(raw_users)
-    except (TypeError, json.JSONDecodeError):
-        return False
+    except (TypeError, json.JSONDecodeError) as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Authentication configuration is invalid",
+        ) from exc
     if not isinstance(users, dict) or not users:
-        return False
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="No authenticated users are configured",
+        )
 
     encoded = users.get(user_id)
     if not isinstance(encoded, str) or ":" not in encoded:
