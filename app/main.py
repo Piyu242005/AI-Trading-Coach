@@ -15,7 +15,7 @@ import os
 
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(title="Piyu API")
+app = FastAPI(title="AI Trading Coach API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -32,7 +32,7 @@ def read_root():
         "project": "AI Trading Coach",
         "author": "Piyush Ramteke",
         "status": "🟢 API Online • Data Loaded Successfully",
-        "description": "Explainable Behavioral AI System for Reliable Financial Decision Support",
+        "description": "Portfolio prototype for historical trade analytics, authenticated journal persistence, and synthetic-model experimentation",
         "core_features": [
             "Behavioral Pathology Detection",
             "Retrieval-Augmented Coaching",
@@ -42,6 +42,7 @@ def read_root():
         ],
         "available_endpoints": {
             "trades": "/api/trades",
+            "journal": "/api/journal",
             "profiling": "/api/profiling/{userId}",
             "memory": "/api/memory/{userId}",
             "coaching": "/api/coaching/{userId}",
