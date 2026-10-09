@@ -286,7 +286,7 @@ def render_dashboard(df: pd.DataFrame) -> None:
         if "entryAt" in ordered.columns and ordered["entryAt"].notna().any():
             fig = px.line(ordered, x="entryAt", y="Cumulative P&L", template="plotly_white")
             fig.update_layout(margin=dict(l=12, r=12, t=24, b=12), height=330, xaxis_title="Trade date", yaxis_title="P&L")
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(style_figure(fig), use_container_width=True)
         else:
             st.caption("Add valid trade dates to display the cumulative P&L timeline.")
     with right:
@@ -294,7 +294,7 @@ def render_dashboard(df: pd.DataFrame) -> None:
         counts = normalize_trades(df)["outcome"].value_counts().rename_axis("Outcome").reset_index(name="Trades")
         fig = px.pie(counts, names="Outcome", values="Trades", hole=0.62, template="plotly_white")
         fig.update_layout(margin=dict(l=8, r=8, t=24, b=8), height=330, legend_title_text="")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(style_figure(fig), use_container_width=True)
         st.caption(f'{metrics["wins"]} wins · {metrics["losses"]} losses · {metrics["breakeven"]} breakeven')
     st.subheader("Trade history")
     columns = [c for c in ["entryAt", "asset", "direction", "entryPrice", "exitPrice", "pnl", "outcome"] if c in df.columns]
@@ -394,13 +394,13 @@ def render_market_analysis(df: pd.DataFrame) -> None:
     fig.add_trace(go.Scatter(x=series["date"], y=series["price"], name="Recorded price", mode="lines+markers"))
     fig.add_trace(go.Scatter(x=series["date"], y=series["moving_average"], name="Rolling average", mode="lines"))
     fig.update_layout(template="plotly_white", height=380, margin=dict(l=12, r=12, t=24, b=12), xaxis_title="Recorded date", yaxis_title="Price")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(style_figure(fig), use_container_width=True)
     st.caption("Rolling average and volatility describe the available trade-price records; they are not live technical signals.")
     c1, c2 = st.columns(2)
     with c1:
         st.subheader("Observed price variation")
         fig_vol = px.area(series, x="date", y="volatility", labels={"volatility": "Rolling variation (%)"}, template="plotly_white")
-        st.plotly_chart(fig_vol, use_container_width=True)
+        st.plotly_chart(style_figure(fig_vol), use_container_width=True)
     with c2:
         st.subheader("Recorded price range")
         st.metric("Lowest recorded price", f'{series["price"].min():,.2f}')
@@ -409,59 +409,133 @@ def render_market_analysis(df: pd.DataFrame) -> None:
 
 
 
+def load_journal_entries(force: bool = False) -> None:
+    """Fetch the signed-in user's persistent journal from the authenticated API."""
+    if st.session_state.is_guest:
+        return
+    user_id = str(st.session_state.user_id)
+    if not force and st.session_state.get("journal_loaded_for_user") == user_id:
+        return
+    try:
+        response = requests.get(
+            f"{get_api_url()}/api/journal",
+            headers=api_headers(),
+            timeout=10,
+        )
+        if response.status_code == 200:
+            st.session_state.journal_entries = response.json().get("entries", [])
+            st.session_state.journal_loaded_for_user = user_id
+        else:
+            st.error(f"Could not load journal entries (HTTP {response.status_code}).")
+    except requests.RequestException:
+        st.error("Journal service is unavailable. Your saved entries have not been changed.")
+
+
+def clear_journal_entries() -> bool:
+    """Clear persistent journal entries for the authenticated user only."""
+    if st.session_state.is_guest:
+        return False
+    try:
+        response = requests.delete(
+            f"{get_api_url()}/api/journal",
+            headers=api_headers(),
+            timeout=10,
+        )
+        if response.status_code == 200:
+            st.session_state.journal_entries = []
+            st.session_state.journal_loaded_for_user = str(st.session_state.user_id)
+            return True
+        st.error(f"Could not clear journal entries (HTTP {response.status_code}).")
+    except requests.RequestException:
+        st.error("Journal service is unavailable. Your saved entries were not cleared.")
+    return False
+
+
 def render_trading_journal(df: pd.DataFrame) -> None:
-    st.header("Trading Journal")
-    st.markdown("Log trades, strategies, and notes for review.")
-    st.caption("Journal entries are stored in the current Streamlit session only; persistent journal storage is not connected yet.")
+    st.markdown('<p class="editorial-kicker">Private workspace · Trade notes</p>', unsafe_allow_html=True)
+    st.title("Trading journal")
+    st.caption("Record the setup, outcome, and decision context behind each trade.")
+    if st.session_state.is_guest:
+        st.info("Guest demo is read-only for journal persistence. Sign in to save entries across sessions.")
+    else:
+        load_journal_entries()
 
-    with st.form("journal_entry"):
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            trade_date = st.date_input("Date", value=datetime.date.today())
-            asset = st.text_input("Asset")
+    with st.form("journal_entry", clear_on_submit=True):
+        st.subheader("New journal entry")
+        top1, top2, top3 = st.columns(3)
+        with top1:
+            trade_date = st.date_input("Trade date", value=datetime.date.today())
+            asset = st.text_input("Asset / symbol", placeholder="e.g. NIFTY")
             direction = st.selectbox("Direction", ["Long", "Short"])
-        with col2:
-            entry_price = st.number_input("Entry Price", min_value=0.0, step=0.01)
-            exit_price = st.number_input("Exit Price", min_value=0.0, step=0.01)
-            strategy = st.text_input("Strategy")
-        with col3:
-            pnl = st.number_input("P&L", step=0.01)
-            confidence = st.slider("Confidence", 1, 10, 6)
-        notes = st.text_area("Notes")
-        submitted = st.form_submit_button("Add to Journal")
+        with top2:
+            entry_price = st.number_input("Entry price (₹)", min_value=0.0, step=0.05, format="%.2f")
+            exit_price = st.number_input("Exit price (₹)", min_value=0.0, step=0.05, format="%.2f")
+            strategy = st.text_input("Strategy", placeholder="e.g. Breakout retest")
+        with top3:
+            pnl_input = st.number_input("Net P&L (₹)", step=0.05, format="%.2f", help="Enter realized P&L after costs. Leave at zero to estimate from price difference, without quantity or fees.")
+            confidence = st.slider("Confidence (1–10)", 1, 10, 6)
+        notes = st.text_area("Trade notes", placeholder="What was the setup? Did you follow your plan? What would you change next time?", max_chars=2000)
+        submitted = st.form_submit_button("Save journal entry", type="primary", use_container_width=True)
 
-        if submitted and asset:
-            if st.session_state.is_guest:
-                st.warning("🔒 Login Required: Sign in to save your progress and unlock full platform features.")
-            else:
-                computed_pnl = pnl
-                if pnl == 0 and entry_price and exit_price:
-                    computed_pnl = exit_price - entry_price
-                    if direction == "Short":
-                        computed_pnl = -computed_pnl
-
-                st.session_state.journal_entries.append(
-                    {
-                        "date": trade_date.isoformat(),
-                        "asset": asset,
-                        "direction": direction,
-                        "entry": entry_price,
-                        "exit": exit_price,
-                        "strategy": strategy,
-                        "pnl": computed_pnl,
-                        "confidence": confidence,
-                        "notes": notes,
-                    }
+    if submitted:
+        if st.session_state.is_guest:
+            st.warning("Sign in to persist journal entries. Guest mode does not save personal data.")
+        elif not asset.strip():
+            st.error("Enter an asset or symbol before saving.")
+        else:
+            computed_pnl = pnl_input
+            if pnl_input == 0 and entry_price and exit_price:
+                computed_pnl = exit_price - entry_price
+                if direction == "Short":
+                    computed_pnl = -computed_pnl
+            payload = {
+                "date": trade_date.isoformat(),
+                "asset": asset.strip().upper(),
+                "direction": direction,
+                "entry": entry_price,
+                "exit": exit_price,
+                "strategy": strategy.strip(),
+                "pnl": computed_pnl,
+                "confidence": confidence,
+                "notes": notes.strip(),
+            }
+            try:
+                response = requests.post(
+                    f"{get_api_url()}/api/journal",
+                    json=payload,
+                    headers=api_headers(),
+                    timeout=10,
                 )
-                st.success("Entry added.")
+                if response.status_code == 201:
+                    st.session_state.journal_entries.insert(0, response.json())
+                    st.session_state.journal_loaded_for_user = str(st.session_state.user_id)
+                    st.success("Journal entry saved to your account.")
+                else:
+                    st.error(f"Journal entry was not saved (HTTP {response.status_code}). Check your session and API configuration.")
+            except requests.RequestException:
+                st.error("Journal service is unavailable. The entry was not saved.")
 
-    if st.session_state.journal_entries:
-        st.subheader("Journal Entries")
-        st.dataframe(pd.DataFrame(st.session_state.journal_entries))
+    st.divider()
+    st.subheader("Saved entries")
+    entries = st.session_state.journal_entries
+    if entries:
+        table = pd.DataFrame(entries)
+        visible = [column for column in ["date", "asset", "direction", "entry", "exit", "pnl", "confidence", "strategy", "notes"] if column in table.columns]
+        st.dataframe(table[visible], use_container_width=True, hide_index=True)
+        csv = table[visible].to_csv(index=False).encode("utf-8")
+        st.download_button("Export journal CSV", data=csv, file_name="trading-journal.csv", mime="text/csv")
+        if st.button("Clear all saved entries", type="secondary"):
+            if clear_journal_entries():
+                st.success("Your journal entries were deleted.")
+                st.rerun()
+    else:
+        st.info("No saved entries yet. Add your first trade above to start building a reviewable history.")
 
     if not df.empty:
-        st.subheader("Imported Trades")
-        st.dataframe(df[[col for col in df.columns if col in ["entryAt", "asset", "direction", "pnl"]]])
+        with st.expander("Imported trade records"):
+            visible = [column for column in ["entryAt", "asset", "direction", "pnl", "outcome"] if column in df.columns]
+            st.dataframe(df[visible] if visible else df, use_container_width=True, hide_index=True)
+
 
 
 def render_portfolio_analytics(df: pd.DataFrame) -> None:
@@ -485,7 +559,7 @@ def render_portfolio_analytics(df: pd.DataFrame) -> None:
         if "asset" in normalized.columns:
             counts = normalized["asset"].fillna("Unknown").value_counts().rename_axis("Asset").reset_index(name="Trades")
             fig = px.bar(counts, x="Asset", y="Trades", template="plotly_white")
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(style_figure(fig), use_container_width=True)
         else:
             st.info("Asset names are not available in these records.")
     with right:
@@ -590,8 +664,8 @@ def render_settings() -> None:
             st.success("Chat cleared.")
     with col3:
         if st.button("Clear Journal"):
-            st.session_state.journal_entries = []
-            st.success("Journal cleared.")
+            if clear_journal_entries():
+                st.success("Journal cleared.")
 
     st.subheader("Behavioral Profiling")
     if st.button("Run Profiling"):
@@ -618,44 +692,57 @@ init_session_state()
 apply_editorial_theme()
 
 if not st.session_state.welcome_screen_passed:
-    st.image(str(LOGO_PATH), width=80)
-    st.title("Welcome to AI Trading Coach")
-    st.markdown("Explore the platform instantly with demo data.")
-    st.markdown("---")
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        st.subheader("Guest demo")
-        st.markdown("Instantly access a complete demo environment with sample trades, AI coaching, and portfolio analytics.")
-        if st.button("Continue as Guest", use_container_width=True, type="primary"):
+    if LOGO_PATH.exists():
+        st.image(str(LOGO_PATH), width=68)
+    st.markdown('<p class="editorial-kicker">ATC / Trading intelligence</p>', unsafe_allow_html=True)
+    st.title("Read the market.\nKnow your edge.")
+    st.markdown("A thoughtful workspace for reviewing recorded performance, risk, and trading decisions.")
+    st.caption("DEMO WORKSPACE · Illustrative trades only · No live market feed connected")
+    st.divider()
+
+    left, right = st.columns([1.35, 1], gap="large")
+    with left:
+        st.markdown('<div class="editorial-panel">', unsafe_allow_html=True)
+        st.subheader("A clearer view of your trading.")
+        st.write("Track historical trade outcomes, review price records, and capture the context behind your decisions.")
+        st.markdown("- Historical performance metrics")
+        st.markdown("- Explainable synthetic-model sandbox")
+        st.markdown("- Private journal for authenticated users")
+        st.markdown('</div>', unsafe_allow_html=True)
+        if st.button("Explore the demo", use_container_width=True, type="primary"):
             st.session_state.welcome_screen_passed = True
             st.session_state.is_guest = True
             st.rerun()
-            
-    with col2:
-        st.subheader("Backend test access")
-        with st.expander("Login for Full Access", expanded=False):
-            st.caption("Password verification is enabled only when AI_TRADING_COACH_USERS_JSON and a strong JWT_SECRET are configured on the backend. If login is not configured, use Guest demo.")
-            with st.form("welcome_login_form"):
-                user_id_input = st.text_input("Username (User ID)")
-                password_input = st.text_input("Password", type="password")
-                submitted = st.form_submit_button("Login")
-                if submitted and user_id_input:
-                    login(user_id_input, password_input)
-                    
+    with right:
+        st.markdown('<div class="editorial-panel">', unsafe_allow_html=True)
+        st.subheader("Sign in to your workspace")
+        st.caption("Authentication requires a configured API user and strong JWT secret.")
+        with st.form("welcome_login_form"):
+            user_id_input = st.text_input("User ID", placeholder="Your configured user ID")
+            password_input = st.text_input("Password", type="password")
+            submitted = st.form_submit_button("Sign in", type="primary", use_container_width=True)
+            if submitted:
+                if user_id_input.strip():
+                    login(user_id_input.strip(), password_input)
+                else:
+                    st.error("Enter your user ID to continue.")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+
     st.stop()
 
 # Sidebar Authentication
 st.sidebar.image(str(LOGO_PATH), width=50)
-st.sidebar.markdown("### AI Trading Coach")
-st.sidebar.markdown("*Enterprise AI Analytics*")
-st.sidebar.markdown("━━━━━━━━━━━━━━━")
+st.sidebar.markdown("<p class=\"editorial-kicker\">ATC / Research desk</p>", unsafe_allow_html=True)
+st.sidebar.title("Trading Coach")
+st.sidebar.caption("Trade history · Risk · Review")
+st.sidebar.divider()
 
 if st.session_state.is_guest:
-    st.sidebar.markdown("🟢 **Guest Mode**")
-    st.sidebar.markdown("Viewing Demo Portfolio")
-    with st.sidebar.expander("Login for Full Access"):
-        st.caption("Prototype access only: the backend currently issues tokens from a user ID and does not verify a password. Do not use sensitive or real account data.")
+    st.sidebar.markdown("**DEMO WORKSPACE**")
+    st.sidebar.caption("Sample portfolio · Read-only journal")
+    with st.sidebar.expander("Sign in"):
+        st.caption("Sign-in is available when the API is configured with a user password hash and strong JWT secret.")
         with st.form("sidebar_login_form"):
             user_id_input = st.text_input("Username (User ID)")
             password_input = st.text_input("Password", type="password")
@@ -665,25 +752,26 @@ if st.session_state.is_guest:
 else:
     display_id = str(st.session_state.user_id)
     st.sidebar.markdown(f"👤 **{display_id}**")
-    st.sidebar.markdown("Portfolio Owner")
+    st.sidebar.caption("Authenticated workspace")
     if st.sidebar.button("Logout"):
         st.session_state.token = None
         st.session_state.user_id = "guest_demo"
         st.session_state.is_guest = True
         st.session_state.trades_data = []
         st.session_state.journal_entries = []
+        st.session_state.pop("journal_loaded_for_user", None)
         st.session_state.coach_messages = []
         st.session_state.discipline_score = None
         st.rerun()
 
-st.sidebar.markdown("━━━━━━━━━━━━━━━")
+st.sidebar.divider()
 
 # Main Application
 load_user_trades()
 df_trades = build_trade_frame(st.session_state.trades_data)
 
 page = st.sidebar.radio(
-    "Navigate",
+    "WORKSPACE",
     [
         "Dashboard",
         "AI Coach",
