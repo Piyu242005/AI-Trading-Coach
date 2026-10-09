@@ -28,7 +28,7 @@ def create_journal_entry(
     claims: Dict[str, Any] = Depends(get_token_claims),
 ):
     user_id = str(claims["sub"])
-    record = payload.dict()
+    record = payload.model_dump()
     record["date"] = payload.date.isoformat()
     record.update({
         "id": str(uuid4()),
