@@ -168,9 +168,9 @@ def login(user_id: str, password: str) -> None:
         st.error("Could not reach the API. Check the service status and try again.")
 
 
-def load_user_trades(force: bool = False) -> None:
+def load_user_trades(force: bool = False) -> bool:
     if st.session_state.trades_data and not force:
-        return
+        return True
 
     if st.session_state.user_id == "guest_demo":
         st.session_state.trades_data = [
@@ -180,13 +180,13 @@ def load_user_trades(force: bool = False) -> None:
             {"tradeId": "t4", "asset": "ETH", "assetClass": "Crypto", "direction": "Long", "entryPrice": 3000, "exitPrice": 3100, "pnl": 500, "entryAt": (datetime.datetime.now() - datetime.timedelta(hours=2)).isoformat(), "outcome": "win"},
             {"tradeId": "t5", "asset": "NIFTY", "assetClass": "Indices", "direction": "Long", "entryPrice": 20000, "exitPrice": 20200, "pnl": 1000, "entryAt": (datetime.datetime.now() - datetime.timedelta(hours=1)).isoformat(), "outcome": "win"},
         ]
-        return
+        return True
 
     try:
         response = requests.get(f"{get_api_url()}/api/trades", headers=api_headers(), timeout=10)
         if response.status_code != 200:
-            st.error("Failed to load trades from backend.")
-            return
+            st.error(f"Failed to load trades from backend (HTTP {response.status_code}).")
+            return False
 
         data = response.json()
         traders = data.get("traders", [])
@@ -198,8 +198,10 @@ def load_user_trades(force: bool = False) -> None:
                     all_trades.extend(session.get("trades", []))
 
         st.session_state.trades_data = all_trades
+        return True
     except requests.RequestException:
         st.error("Could not load trades. Check the API service status and try again.")
+        return False
 
 
 
@@ -657,8 +659,8 @@ def render_settings() -> None:
     col1, col2, col3 = st.columns(3)
     with col1:
         if st.button("Refresh Trades"):
-            load_user_trades(force=True)
-            st.success("Trades refreshed.")
+            if load_user_trades(force=True):
+                st.success("Trades refreshed successfully.")
     with col2:
         if st.button("Clear Chat"):
             st.session_state.coach_messages = []
