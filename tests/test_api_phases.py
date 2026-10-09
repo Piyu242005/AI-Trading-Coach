@@ -171,3 +171,13 @@ def test_trades_endpoint_requires_auth_and_filters_by_user():
     body = response.json()
     assert all(str(item.get("userId")) == user_id for item in body["traders"])
     assert all(str(item.get("userId")) == user_id for item in body.get("groundTruthLabels", []))
+
+
+
+def test_auth_fails_closed_when_user_map_is_missing(monkeypatch):
+    monkeypatch.delenv("AI_TRADING_COACH_USERS_JSON", raising=False)
+    response = client.post(
+        "/api/auth/token",
+        json={"userId": "unconfigured-user", "password": "any-password"},
+    )
+    assert response.status_code == 503
