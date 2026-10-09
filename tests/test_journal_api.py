@@ -2,12 +2,12 @@ import hashlib
 import json
 import os
 
-os.environ.setdefault("JWT_SECRET", "unit-test-jwt-secret-key-with-at-least-32-bytes")
-
 import mongomock
 from fastapi.testclient import TestClient
 
-from app.main import app
+os.environ.setdefault("JWT_SECRET", "unit-test-jwt-secret-key-with-at-least-32-bytes")
+
+from app.main import app  # noqa: E402
 
 client = TestClient(app)
 TEST_PASSWORD = "journal-test-password"
