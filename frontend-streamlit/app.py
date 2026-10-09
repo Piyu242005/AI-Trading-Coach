@@ -19,26 +19,102 @@ LOGO_PATH = BASE_DIR / "assets" / "logo.jpg"
 MODEL_DIR = BASE_DIR / "models"
 DEFAULT_API_URL = os.getenv("AI_TRADING_COACH_API_URL", "https://ai-trading-coach-2vao.onrender.com").rstrip("/")
 
-st.set_page_config(page_title="AI Trading Coach", page_icon="📈", layout="wide")
+st.set_page_config(page_title="AI Trading Coach", page_icon="📈", layout="wide", initial_sidebar_state="expanded")
 
-def apply_dark_theme() -> None:
-    """Apply a consistent, responsive theme using stable Streamlit selectors."""
-    st.markdown("""
-    <style>
-    :root { color-scheme: dark; }
-    .stApp { background: #0b0d12; color: #eef2f7; }
-    [data-testid="stHeader"] { background: rgba(11, 13, 18, .92); }
-    [data-testid="stSidebar"] { background: #10141c; border-right: 1px solid #242b38; }
-    [data-testid="stMetric"] { background: #121824; border: 1px solid #273244; padding: 14px; border-radius: 12px; }
-    [data-testid="stMetricLabel"] { color: #aeb9c9; }
-    [data-testid="stMetricValue"] { color: #f4f7fb; }
-    div[data-testid="stMarkdownContainer"] h1, div[data-testid="stMarkdownContainer"] h2,
-    div[data-testid="stMarkdownContainer"] h3 { letter-spacing: -0.025em; }
-    .stButton > button, .stFormSubmitButton > button { border-radius: 10px; min-height: 2.65rem; font-weight: 600; }
-    [data-testid="stPlotlyChart"], [data-testid="stDataFrame"] { border: 1px solid #242b38; border-radius: 12px; overflow: hidden; }
-    @media (max-width: 768px) { .block-container { padding-top: 1.2rem; padding-left: 1rem; padding-right: 1rem; } }
-    </style>
-    """, unsafe_allow_html=True)
+def apply_editorial_theme() -> None:
+    """Apply the Editorial FinTech design system across the Streamlit application."""
+    st.markdown(
+        """
+        <style>
+        :root {
+          color-scheme: light;
+          --paper: #F4F1E8;
+          --surface: #FFFEFA;
+          --forest: #174C3C;
+          --ink: #202820;
+          --muted: #687067;
+          --amber: #E8A15A;
+          --line: #DED9CD;
+          --loss: #B54742;
+        }
+        .stApp { background: var(--paper); color: var(--ink); }
+        [data-testid="stHeader"] { background: rgba(244, 241, 232, .94); }
+        [data-testid="stSidebar"] {
+          background: #EAE6DA;
+          border-right: 1px solid var(--line);
+        }
+        [data-testid="stSidebar"] > div { padding-top: 1.25rem; }
+        .block-container { max-width: 1440px; padding-top: 2rem; padding-bottom: 3rem; }
+        h1, h2, h3 {
+          color: var(--ink) !important;
+          font-family: Georgia, "Times New Roman", serif !important;
+          letter-spacing: -.035em !important;
+        }
+        h1 { font-size: clamp(2.1rem, 4vw, 3.6rem) !important; line-height: 1.04 !important; }
+        h2 { font-size: clamp(1.55rem, 2.4vw, 2.2rem) !important; }
+        h3 { font-size: 1.35rem !important; }
+        p, label, .stMarkdown, .stCaption, [data-testid="stWidgetLabel"] {
+          color: var(--ink);
+          font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+        [data-testid="stCaptionContainer"] p { color: var(--muted) !important; }
+        [data-testid="stMetric"] {
+          background: var(--surface); border: 1px solid var(--line);
+          padding: 1.1rem 1.15rem; border-radius: 14px; box-shadow: 0 3px 14px rgba(32,40,32,.025);
+        }
+        [data-testid="stMetricLabel"] { color: var(--muted) !important; font-size: .78rem; text-transform: uppercase; letter-spacing: .07em; }
+        [data-testid="stMetricValue"] { color: var(--forest) !important; font-family: "SFMono-Regular", Consolas, monospace; font-size: clamp(1.35rem, 2vw, 2rem); }
+        .stButton > button, .stFormSubmitButton > button {
+          border-radius: 9px; min-height: 2.75rem; font-weight: 650;
+          border: 1px solid var(--forest); transition: transform .16s ease, box-shadow .16s ease;
+        }
+        .stButton > button[kind="primary"], .stFormSubmitButton > button[kind="primary"] {
+          background: var(--forest); color: #fffdf7;
+        }
+        .stButton > button:hover, .stFormSubmitButton > button:hover {
+          transform: translateY(-1px); box-shadow: 0 5px 16px rgba(23,76,60,.12); border-color: var(--forest);
+        }
+        input, textarea, [data-baseweb="select"] > div {
+          background: var(--surface) !important; border-color: var(--line) !important; border-radius: 8px !important;
+        }
+        [data-testid="stPlotlyChart"], [data-testid="stDataFrame"] {
+          background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+        }
+        [data-testid="stAlert"] { border-radius: 10px; }
+        hr { border-color: var(--line); }
+        .editorial-kicker { color: var(--forest); font-size: .72rem; font-weight: 750; letter-spacing: .16em; text-transform: uppercase; }
+        .editorial-panel { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 1.25rem; }
+        .editorial-note { color: var(--muted); font-size: .88rem; line-height: 1.55; }
+        @media (max-width: 768px) {
+          .block-container { padding: 1.2rem 1rem 2rem; }
+          [data-testid="stMetric"] { padding: .8rem; }
+          [data-testid="stMetricValue"] { font-size: 1.25rem; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def style_figure(fig, height: int | None = None):
+    """Keep Plotly charts visually consistent with the editorial paper palette."""
+    fig.update_layout(
+        template="plotly_white",
+        paper_bgcolor="#FFFEFA",
+        plot_bgcolor="#FFFEFA",
+        font={"family": "Inter, Arial, sans-serif", "color": "#202820", "size": 12},
+        margin={"l": 18, "r": 18, "t": 32, "b": 18},
+        hoverlabel={"bgcolor": "#202820", "font_color": "#FFFEFA"},
+        legend={"bgcolor": "rgba(255,254,250,0)", "font": {"color": "#202820"}},
+    )
+    fig.update_xaxes(showgrid=True, gridcolor="#E9E5DA", zerolinecolor="#DED9CD")
+    fig.update_yaxes(showgrid=True, gridcolor="#E9E5DA", zerolinecolor="#DED9CD")
+    if height:
+        fig.update_layout(height=height)
+    return fig
 
 
 
@@ -193,7 +269,7 @@ def render_dashboard(df: pd.DataFrame) -> None:
     cards[1].metric("Win rate", f'{metrics["win_rate"]:.1f}%')
     cards[2].metric("Net P&L", f'{prefix}${total_pnl:,.2f}')
     cards[3].metric("Profit factor", factor_label)
-    cards[4].metric("Max drawdown", f'${metrics["max_drawdown"]:,.2f}')
+    cards[4].metric("Max drawdown", f'₹{metrics["max_drawdown"]:,.2f}')
 
     st.divider()
     left, right = st.columns([1.7, 1], gap="large")
@@ -208,7 +284,7 @@ def render_dashboard(df: pd.DataFrame) -> None:
         ordered["pnl"] = pd.to_numeric(ordered["pnl"], errors="coerce").fillna(0)
         ordered["Cumulative P&L"] = ordered["pnl"].cumsum()
         if "entryAt" in ordered.columns and ordered["entryAt"].notna().any():
-            fig = px.line(ordered, x="entryAt", y="Cumulative P&L", template="plotly_dark")
+            fig = px.line(ordered, x="entryAt", y="Cumulative P&L", template="plotly_white")
             fig.update_layout(margin=dict(l=12, r=12, t=24, b=12), height=330, xaxis_title="Trade date", yaxis_title="P&L")
             st.plotly_chart(fig, use_container_width=True)
         else:
@@ -216,7 +292,7 @@ def render_dashboard(df: pd.DataFrame) -> None:
     with right:
         st.subheader("Trade outcomes")
         counts = normalize_trades(df)["outcome"].value_counts().rename_axis("Outcome").reset_index(name="Trades")
-        fig = px.pie(counts, names="Outcome", values="Trades", hole=0.62, template="plotly_dark")
+        fig = px.pie(counts, names="Outcome", values="Trades", hole=0.62, template="plotly_white")
         fig.update_layout(margin=dict(l=8, r=8, t=24, b=8), height=330, legend_title_text="")
         st.plotly_chart(fig, use_container_width=True)
         st.caption(f'{metrics["wins"]} wins · {metrics["losses"]} losses · {metrics["breakeven"]} breakeven')
@@ -317,13 +393,13 @@ def render_market_analysis(df: pd.DataFrame) -> None:
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=series["date"], y=series["price"], name="Recorded price", mode="lines+markers"))
     fig.add_trace(go.Scatter(x=series["date"], y=series["moving_average"], name="Rolling average", mode="lines"))
-    fig.update_layout(template="plotly_dark", height=380, margin=dict(l=12, r=12, t=24, b=12), xaxis_title="Recorded date", yaxis_title="Price")
+    fig.update_layout(template="plotly_white", height=380, margin=dict(l=12, r=12, t=24, b=12), xaxis_title="Recorded date", yaxis_title="Price")
     st.plotly_chart(fig, use_container_width=True)
     st.caption("Rolling average and volatility describe the available trade-price records; they are not live technical signals.")
     c1, c2 = st.columns(2)
     with c1:
         st.subheader("Observed price variation")
-        fig_vol = px.area(series, x="date", y="volatility", labels={"volatility": "Rolling variation (%)"}, template="plotly_dark")
+        fig_vol = px.area(series, x="date", y="volatility", labels={"volatility": "Rolling variation (%)"}, template="plotly_white")
         st.plotly_chart(fig_vol, use_container_width=True)
     with c2:
         st.subheader("Recorded price range")
@@ -396,9 +472,9 @@ def render_portfolio_analytics(df: pd.DataFrame) -> None:
         return
     m = calculate_trade_metrics(df)
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Net P&L", f'${m["total_pnl"]:,.2f}')
-    c2.metric("Average P&L / trade", f'${m["average_pnl"]:,.2f}')
-    c3.metric("Max drawdown", f'${m["max_drawdown"]:,.2f}')
+    c1.metric("Net P&L", f'₹{m["total_pnl"]:,.2f}')
+    c2.metric("Average P&L / trade", f'₹{m["average_pnl"]:,.2f}')
+    c3.metric("Max drawdown", f'₹{m["max_drawdown"]:,.2f}')
     factor = m["profit_factor"]
     c4.metric("Profit factor", "∞" if factor == float("inf") else "N/A" if factor is None else f"{factor:.2f}x")
     st.divider()
@@ -408,7 +484,7 @@ def render_portfolio_analytics(df: pd.DataFrame) -> None:
         st.subheader("Trade count by asset")
         if "asset" in normalized.columns:
             counts = normalized["asset"].fillna("Unknown").value_counts().rename_axis("Asset").reset_index(name="Trades")
-            fig = px.bar(counts, x="Asset", y="Trades", template="plotly_dark")
+            fig = px.bar(counts, x="Asset", y="Trades", template="plotly_white")
             st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("Asset names are not available in these records.")
@@ -416,7 +492,7 @@ def render_portfolio_analytics(df: pd.DataFrame) -> None:
         st.subheader("Net P&L by asset")
         if "asset" in normalized.columns:
             by_asset = normalized.groupby("asset", dropna=False)["pnl"].sum().sort_values().rename_axis("Asset").reset_index(name="Net P&L")
-            fig = px.bar(by_asset, x="Net P&L", y="Asset", orientation="h", template="plotly_dark")
+            fig = px.bar(by_asset, x="Net P&L", y="Asset", orientation="h", template="plotly_white")
             st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("Asset names are not available in these records.")
@@ -483,7 +559,7 @@ def render_trade_predictions() -> None:
                 contributions = values[0]
                 ranking = sorted(zip(features, contributions), key=lambda item: abs(float(item[1])), reverse=True)
                 chart_df = pd.DataFrame({"Feature": [item[0].replace("_", " ").title() for item in ranking], "Contribution": [float(item[1]) for item in ranking]})
-                fig = px.bar(chart_df, x="Contribution", y="Feature", orientation="h", color="Contribution", color_continuous_midpoint=0, template="plotly_dark")
+                fig = px.bar(chart_df, x="Contribution", y="Feature", orientation="h", color="Contribution", color_continuous_midpoint=0, template="plotly_white")
                 fig.update_layout(height=320, margin=dict(l=8, r=8, t=16, b=8), coloraxis_showscale=False)
                 st.plotly_chart(fig, use_container_width=True)
             except Exception:
@@ -539,7 +615,7 @@ def render_settings() -> None:
 
 
 init_session_state()
-apply_dark_theme()
+apply_editorial_theme()
 
 if not st.session_state.welcome_screen_passed:
     st.image(str(LOGO_PATH), width=80)
@@ -585,7 +661,7 @@ if st.session_state.is_guest:
             password_input = st.text_input("Password", type="password")
             submitted = st.form_submit_button("Login")
             if submitted and user_id_input:
-                login(user_id_input)
+                login(user_id_input, password_input)
 else:
     display_id = str(st.session_state.user_id)
     st.sidebar.markdown(f"👤 **{display_id}**")
